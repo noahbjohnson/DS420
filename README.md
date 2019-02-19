@@ -1,8 +1,10 @@
-# DS420 Final Project
-Completed by Noah B Johnson and Tristan Shaffer at Luther College
+# Food Desert Classification
+Completed by Noah B Johnson and Tristan Shaffer for DS420 (Machine Learning) at Luther College
 
 ## Overview
-We will use the United States Department of Agriculture's Economic Research Service [Food Enviroment Atlas](https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation-downloads/) to classify areas as 'food deserts.'
+We will use the United States Department of Agriculture's Economic Research Service [Food Environment Atlas](https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation-downloads/) to classify areas as 'food deserts.'
+
+We will use the USDA definition to categorize the county-level data. Once initially classified, we will use the variables not included in the USDA formula to build a classification model with our computed categories as the response.
 
 ### The Issue
 According to the [American Nutrition Association](http://americannutritionassociation.org/), a food desert is an area, especially one with low-income residents, that has limited access to affordable and nutritious food. [Their site says](http://americannutritionassociation.org/newsletter/usda-defines-food-deserts):
@@ -11,6 +13,9 @@ According to the [American Nutrition Association](http://americannutritionassoci
 In addition to obesity, many other health issues are associated with poor access to affordable healthy foods.
 
 ### The Data
+
+#### Atlas Data
+
 > [From the Atlas Site](https://www.ers.usda.gov/data-products/food-environment-atlas/about-the-atlas/)
 
 Food environment factors—such as store/restaurant proximity, food prices, food and nutrition assistance programs, and community characteristics—interact to influence food choices and diet quality. Research has been documenting the complexity of these interactions, but more research is needed to identify causal relationships and effective policy interventions.
@@ -21,6 +26,9 @@ The objectives of the Atlas are:
   
   - to provide a spatial overview of a community's ability to access healthy food and its success in doing so.
 
+#### Other Data
+
+If the data included from the USDA's dataset is not sufficient to build our model, we can use datasets from the [US Census Bureau](https://census.gov) or other US agencies and reporting organizations to provide more features.
 
 ### The Classification
 The USDA defines what's considered a food desert and which areas will be helped by this initiative:  To qualify as a “low-access community,” at least 500 people and/or at least 33 percent of the census tract's population must reside more than one mile from a supermarket or large grocery store.([from the ANA](http://americannutritionassociation.org/newsletter/usda-defines-food-deserts))
