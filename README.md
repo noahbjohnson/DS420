@@ -1,5 +1,5 @@
 # DS420 Final Project
-Completed by Noah B Johnson and Tristan Schaffer at Luther College
+Completed by Noah B Johnson and Tristan Shaffer at Luther College
 
 ## Overview
 We will use the United States Department of Agriculture's Economic Research Service [Food Enviroment Atlas](https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation-downloads/) to classify areas as 'food deserts.'
