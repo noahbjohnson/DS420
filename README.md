@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/noahbjohnson/DS420.svg?branch=master)](https://travis-ci.com/noahbjohnson/DS420)
+[![codecov](https://codecov.io/gh/noahbjohnson/DS420/branch/master/graph/badge.svg)](https://codecov.io/gh/noahbjohnson/DS420)
+
 # Food Desert Classification
 Completed by Noah B Johnson and Tristan Shaffer for DS420 (Machine Learning) at Luther College
 
