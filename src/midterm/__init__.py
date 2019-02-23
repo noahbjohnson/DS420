@@ -62,8 +62,12 @@ class FoodAtlasRetriever:
     def clean(self):
         """Removes the temporary download files and raw copy of the data. Does not delete the .data"""
         self.workbook = None
-        self.excel.close()
-        self.excel = None
+        try:
+            self.excel.close()
+            self.excel = None
+        except AttributeError:
+            pass
+
 
     def save(self, filename: str):
         """Saves the data from the atlas retriever to a pickle file.
