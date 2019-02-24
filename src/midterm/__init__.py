@@ -68,7 +68,6 @@ class FoodAtlasRetriever:
         except AttributeError:
             pass
 
-
     def save(self, filename: str):
         """Saves the data from the atlas retriever to a pickle file.
 
@@ -91,7 +90,7 @@ class FoodAtlasRetriever:
 
         :param filename: Pickle file containing the previously downloaded data
         """
-        with open(filename) as f:
+        with open(filename, 'rb') as f:
             self.data = pickle.load(f)
 
 
