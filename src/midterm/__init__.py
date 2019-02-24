@@ -53,11 +53,8 @@ class FoodAtlasRetriever:
 
     def __create_frames(self):
         print("creating data frames")
-        readme = 0
         for sheet in range(len(self.workbook.sheet_names())):
             sheet_name = self.workbook.sheet_names()[sheet]
-            self.data[sheet_name] = _pd.read_excel(self.excel.name, sheet_name=sheet, header=readme)
-            readme = 1
             self.data[sheet_name] = _pd.read_excel(self.excel.name, sheet_name=sheet)
 
     def clean(self):
