@@ -1,21 +1,22 @@
 import pickle
+from os import path
 from shutil import copyfileobj
 from tempfile import NamedTemporaryFile
 from urllib.request import urlopen
+
 import pandas as pd
+import pkg_resources
 import requests
 from bs4 import BeautifulSoup
 # from pandas.tests.extension.test_datetime import data
 from xlrd import open_workbook
-import pkg_resources
-from os import path
 
 
-def list_isinstance(item_list, instance_type:type):
+def list_isinstance(item_list, instance_type: type):
     return [isinstance(x, instance_type) for x in item_list]
 
 
-def all_isinstances(item_list, instance_type:type):
+def all_isinstances(item_list, instance_type: type):
     for item in list_isinstance(item_list, instance_type):
         if not item:
             return False
@@ -26,6 +27,7 @@ def all_isinstances(item_list, instance_type:type):
 # TODO: Complete FoodAtlasRetriever test coverage
 class FoodAtlasRetriever:
     """A class to retrieve the most recent data from the USDA's Food Environment Atlas"""
+
     def __init__(self):
         self.url = "https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation" \
                    "-downloads"
@@ -111,8 +113,17 @@ class FoodAtlasRetriever:
 # TODO: Document DataDictionary usage
 # TODO: Complete DataDictionary test coverage
 class DataDictionary(pd.DataFrame):
-    def __init__(self, atlas_obj):
+    """Creates a single data frame acting as a data dictionary for the food atlas data
 
+    :param atlas_obj: The FoodAtlasRetriever object to build a dictionary for
+    """
+
+    def __init__(self, atlas_obj):
+        """
+        Creates the data dictionary
+
+        :type atlas_obj: FoodAtlasRetriever
+        """
         if not isinstance(atlas_obj, FoodAtlasRetriever):
             raise TypeError("DataDictionary object must take FoodAtlasRetriever object as parameter")
         else:
@@ -121,12 +132,29 @@ class DataDictionary(pd.DataFrame):
             super().__init__(frame)
 
     def get_props(self) -> list:
+        """
+        Returns a list of all the properties (columns) in the data dictionary
+
+        :return: list
+        """
         return self.columns.to_list()
 
     def get_vars(self) -> list:
+        """
+        Returns a list of all the variables (rows index) in the data dictionary
+
+        :return: list
+        """
         return self.index.to_list()
 
     def get_variable_properties(self, variable: str, prop_list=None):
+        """
+        Takes the name of a variable and returns the specified properties for it
+
+        :param variable: The variable to get properties of
+        :param prop_list: The properties to return
+        :return: dict
+        """
         if isinstance(prop_list, list):
             get_props = prop_list
         elif prop_list:
@@ -149,11 +177,13 @@ class DataDictionary(pd.DataFrame):
 # TODO: Document AtlasCountyParser usage
 # TODO: Complete AtlasCountyParser test coverage
 class AtlasCountyParser:
-    """Creates a single data frame from a FoodAtlasRetriever object with county-level data
+    """Creates a single data frame from a FoodAtlasRetriever object with county-level data. If loading from cache, \
+    data from the package will be used unless another file is specified
 
     :param use_cached: If true, the parser will attempt to load cached data.
     :param custom_cache_file: If true, the parser will attempt to load cached data.
     """
+
     def __init__(self,
                  use_cached=True,
                  custom_cache_file=""
@@ -168,7 +198,7 @@ class AtlasCountyParser:
                 self.atlas.load(custom_cache_file)
             else:
                 data_path = pkg_resources.resource_filename(__name__,
-                                                          "data/atlas_data.pickle")
+                                                            "data/atlas_data.pickle")
                 self.atlas.load(data_path)
 
         self.dataFrame = pd.DataFrame()
@@ -176,10 +206,13 @@ class AtlasCountyParser:
         self.data_dictionary = DataDictionary(self.atlas)
 
         self.fips_reference = pd.read_csv(pkg_resources.resource_filename(__name__,
-                                                                        "data/county.csv"),
+                                                                          "data/county.csv"),
                                           encoding='latin-1')
 
-    def join_tables(self):
+        self._join_tables()
+
+    def _join_tables(self):
+        """Joins all of the county-level tables into a single data frame"""
         to_join = [x for x in self.atlas.data.keys()
                    if x not in
                    ['Read_Me', 'Variable List', 'Supplemental Data - County', 'Supplemental Data - State']]
