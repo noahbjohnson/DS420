@@ -12,7 +12,7 @@ install:
   - pip install -r requirements.txt
   - pip install codecov travis-sphinx
 script:
-  - pytest --cov tests
+  - pytest --cov
   - travis-sphinx build
 
 after_success:
