@@ -2,12 +2,28 @@ import pickle
 from shutil import copyfileobj
 from tempfile import NamedTemporaryFile
 from urllib.request import urlopen
-import pandas as _pd
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+# from pandas.tests.extension.test_datetime import data
 from xlrd import open_workbook
+import pkg_resources
+from os import path
 
 
+def list_isinstance(item_list, instance_type:type):
+    return [isinstance(x, instance_type) for x in item_list]
+
+
+def all_isinstances(item_list, instance_type:type):
+    for item in list_isinstance(item_list, instance_type):
+        if not item:
+            return False
+    return True
+
+
+# TODO: Document FoodAtlasRetriever usage
+# TODO: Complete FoodAtlasRetriever test coverage
 class FoodAtlasRetriever:
     """A class to retrieve the most recent data from the USDA's Food Environment Atlas"""
     def __init__(self):
@@ -55,7 +71,7 @@ class FoodAtlasRetriever:
         print("creating data frames")
         for sheet in range(len(self.workbook.sheet_names())):
             sheet_name = self.workbook.sheet_names()[sheet]
-            self.data[sheet_name] = _pd.read_excel(self.excel.name, sheet_name=sheet)
+            self.data[sheet_name] = pd.read_excel(self.excel.name, sheet_name=sheet)
 
     def clean(self):
         """Removes the temporary download files and raw copy of the data. Does not delete the .data"""
@@ -90,6 +106,91 @@ class FoodAtlasRetriever:
         """
         with open(filename, 'rb') as f:
             self.data = pickle.load(f)
+
+
+# TODO: Document DataDictionary usage
+# TODO: Complete DataDictionary test coverage
+class DataDictionary(pd.DataFrame):
+    def __init__(self, atlas_obj):
+
+        if not isinstance(atlas_obj, FoodAtlasRetriever):
+            raise TypeError("DataDictionary object must take FoodAtlasRetriever object as parameter")
+        else:
+            frame = atlas_obj.data['Variable List']
+            frame.index = frame['Variable Code']
+            super().__init__(frame)
+
+    def get_props(self) -> list:
+        return self.columns.to_list()
+
+    def get_vars(self) -> list:
+        return self.index.to_list()
+
+    def get_variable_properties(self, variable: str, prop_list=None):
+        if isinstance(prop_list, list):
+            get_props = prop_list
+        elif prop_list:
+            raise TypeError("prop_list argument must be a list")
+        else:
+            get_props = self.get_props()
+
+        if variable in self.get_vars():
+            row_bool = self[self.index == self.variable]
+        else:
+            raise IndexError("{} not in variable list: {}".format(variable, self.get_vars()))
+        variable_row = self[row_bool].to_dict()
+        result = {}
+        for p in get_props:
+            if p in self.properties:
+                result[p] = variable_row[p]
+        return result
+
+
+# TODO: Document AtlasCountyParser usage
+# TODO: Complete AtlasCountyParser test coverage
+class AtlasCountyParser:
+    """Creates a single data frame from a FoodAtlasRetriever object with county-level data
+
+    :param use_cached: If true, the parser will attempt to load cached data.
+    :param custom_cache_file: If true, the parser will attempt to load cached data.
+    """
+    def __init__(self,
+                 use_cached=True,
+                 custom_cache_file=""
+                 ):
+
+        self.atlas = FoodAtlasRetriever()
+
+        if not use_cached:
+            self.atlas.get()
+        else:
+            if path.isfile(custom_cache_file):
+                self.atlas.load(custom_cache_file)
+            else:
+                data_path = pkg_resources.resource_filename(__name__,
+                                                          "data/atlas_data.pickle")
+                self.atlas.load(data_path)
+
+        self.dataFrame = pd.DataFrame()
+
+        self.data_dictionary = DataDictionary(self.atlas)
+
+        self.fips_reference = pd.read_csv(pkg_resources.resource_filename(__name__,
+                                                                        "data/county.csv"),
+                                          encoding='latin-1')
+
+    def join_tables(self):
+        to_join = [x for x in self.atlas.data.keys()
+                   if x not in
+                   ['Read_Me', 'Variable List', 'Supplemental Data - County', 'Supplemental Data - State']]
+
+        self.dataFrame = pd.DataFrame(index=self.fips_reference['FIPS Code'].unique())
+
+        for df in to_join:
+            d_prime = self.atlas.data[df]
+            d_prime.index = d_prime['FIPS']
+            d_prime = d_prime.drop(['FIPS', 'State', 'County'], axis='columns')
+            self.dataFrame = self.dataFrame.join(d_prime)
 
 
 if __name__ == '__main__':
