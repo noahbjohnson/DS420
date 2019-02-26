@@ -168,11 +168,9 @@ class DataDictionary(pd.DataFrame):
         else:
             get_props = self.get_props()
 
-        if variable in self.get_vars():
-            row_bool = self.index == variable
-        else:
+        if variable not in self.get_vars():
             raise IndexError("{} not in variable list: {}".format(variable, self.get_vars()))
-        variable_row = self[row_bool].to_dict()
+        variable_row = self.loc[variable].to_dict()
         result = {}
         for p in get_props:
             if p in self.get_props():
