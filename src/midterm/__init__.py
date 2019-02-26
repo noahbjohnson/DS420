@@ -101,12 +101,18 @@ class FoodAtlasRetriever:
         self.__parse_excel()
         self.__create_frames()
 
-    def load(self, filename: str):
-        """Loads downloaded and saved data file pickle.
+    def load(self, filename=""):
+        """Loads downloaded and saved data file pickle. Defaults to package data
 
         :param filename: Pickle file containing the previously downloaded data
+        :type filename: str
         """
-        with open(filename, 'rb') as f:
+        if filename != "":
+            file_path = filename
+        else:
+            file_path = pkg_resources.resource_filename(__name__,
+                                                        "data/atlas_data.pickle")
+        with open(file_path, 'rb') as f:
             self.data = pickle.load(f)
 
 
@@ -137,7 +143,7 @@ class DataDictionary(pd.DataFrame):
 
         :return: list
         """
-        return self.columns.to_list()
+        return self.columns.tolist()
 
     def get_vars(self) -> list:
         """
@@ -145,7 +151,7 @@ class DataDictionary(pd.DataFrame):
 
         :return: list
         """
-        return self.index.to_list()
+        return self.index.tolist()
 
     def get_variable_properties(self, variable: str, prop_list=None):
         """
@@ -163,13 +169,13 @@ class DataDictionary(pd.DataFrame):
             get_props = self.get_props()
 
         if variable in self.get_vars():
-            row_bool = self[self.index == self.variable]
+            row_bool = self.index == variable
         else:
             raise IndexError("{} not in variable list: {}".format(variable, self.get_vars()))
         variable_row = self[row_bool].to_dict()
         result = {}
         for p in get_props:
-            if p in self.properties:
+            if p in self.get_props():
                 result[p] = variable_row[p]
         return result
 
