@@ -1,6 +1,6 @@
-===========
+==================
 Midterm
-===========
+==================
 
 .. contents::
    :depth: 1
@@ -12,11 +12,11 @@ Midterm
 .. highlight:: console
 
 Usage
-~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 Module Documentation
-~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: midterm
     :members:
