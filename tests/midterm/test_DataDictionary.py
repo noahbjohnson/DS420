@@ -4,6 +4,12 @@ import unittest
 import random
 
 
+class TestAtlasObjException(unittest.TestCase):
+    def runTest(self):
+        with self.assertRaises(TypeError):
+            DataDictionary('foo')
+
+
 class TestDataDictionary(unittest.TestCase):
     def setUp(self):
         """
@@ -19,6 +25,18 @@ class TestDataDictionary(unittest.TestCase):
         """
         self.atlas.clean()
         self.atlas = None
+
+
+class TestPropObjException(TestDataDictionary):
+    def runTest(self):
+        with self.assertRaises(TypeError):
+            self.data_dictionary.get_variable_properties('foo', 'bar')
+
+
+class TestVarObjException(TestDataDictionary):
+    def runTest(self):
+        with self.assertRaises(IndexError):
+            self.data_dictionary.get_variable_properties('foo')
 
 
 # Test methods

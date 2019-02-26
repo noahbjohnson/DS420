@@ -11,26 +11,16 @@ from bs4 import BeautifulSoup
 # from pandas.tests.extension.test_datetime import data
 from xlrd import open_workbook
 
-
-def list_isinstance(item_list, instance_type: type):
-    return [isinstance(x, instance_type) for x in item_list]
-
-
-def all_isinstances(item_list, instance_type: type):
-    for item in list_isinstance(item_list, instance_type):
-        if not item:
-            return False
-    return True
+atlas_url = "https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation" \
+                   "-downloads"
 
 
 # TODO: Document FoodAtlasRetriever usage
-# TODO: Complete FoodAtlasRetriever test coverage
 class FoodAtlasRetriever:
     """A class to retrieve the most recent data from the USDA's Food Environment Atlas"""
 
-    def __init__(self):
-        self.url = "https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation" \
-                   "-downloads"
+    def __init__(self, url=atlas_url):
+        self.url = url
         self.workbook = None
         self.data = {}
         self.excel_url = None
@@ -44,33 +34,26 @@ class FoodAtlasRetriever:
             raise requests.exceptions.ConnectionError("Could not connect to the USDA site")
 
         # Parse download page
-        soup = BeautifulSoup(page.text, 'html.parser')
-        row = soup.find("td", {
-            "class": "DataFileItem"
-        })
-        link = row.find("a")
-
-        if link.text != "Data Download":
+        try:
+            soup = BeautifulSoup(page.text, 'html.parser')
+            row = soup.find("td", {
+                "class": "DataFileItem"
+            })
+            link = row.find("a")
+            assert link.text == "Data Download"
+        except (AssertionError, AttributeError):
             raise FileNotFoundError("Could not find the USDA source file")
         else:
             self.excel_url = "https://www.ers.usda.gov{}".format(link["href"])
-            print("url found")
 
     def __download_excel(self):
-        print("downloading file")
-
         with urlopen(self.excel_url) as fsrc:
             copyfileobj(fsrc, self.excel)
 
-        print("file downloaded")
-
     def __parse_excel(self):
-        print("parsing file")
         self.workbook = open_workbook(self.excel.name)
-        print("file parsed")
 
     def __create_frames(self):
-        print("creating data frames")
         for sheet in range(len(self.workbook.sheet_names())):
             sheet_name = self.workbook.sheet_names()[sheet]
             self.data[sheet_name] = pd.read_excel(self.excel.name, sheet_name=sheet)
@@ -82,17 +65,15 @@ class FoodAtlasRetriever:
             self.excel.close()
             self.excel = None
         except AttributeError:
-            pass
+            return False
 
     def save(self, filename: str):
         """Saves the data from the atlas retriever to a pickle file.
 
         :param filename: The pickle file name to save the data to
         """
-        print("saving data")
         with open(filename, "wb") as f:
             pickle.dump(self.data, f)
-        print("data saved to disk as: {}".format(filename))
 
     def get(self):
         """Queries the USDA site for the newest version of the atlas data and downloads it."""
@@ -117,7 +98,6 @@ class FoodAtlasRetriever:
 
 
 # TODO: Document DataDictionary usage
-# TODO: Complete DataDictionary test coverage
 class DataDictionary(pd.DataFrame):
     """Creates a single data frame acting as a data dictionary for the food atlas data
 

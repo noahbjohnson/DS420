@@ -5,6 +5,26 @@ import os
 import tempfile
 
 
+class TestUrlException(unittest.TestCase):
+    def runTest(self):
+        self.atlas = FoodAtlasRetriever(url="http://thisisabrokendomain.foo")
+        with self.assertRaises(requests.exceptions.ConnectionError):
+            self.atlas.get()
+
+
+class TestFileException(unittest.TestCase):
+    def runTest(self):
+        self.atlas = FoodAtlasRetriever(url="https://google.com/")
+        with self.assertRaises(FileNotFoundError):
+            self.atlas.get()
+
+
+class TestCleanException(unittest.TestCase):
+    def runTest(self):
+        self.atlas = FoodAtlasRetriever()
+        self.assertFalse(self.atlas.clean())
+
+
 class TestFoodAtlasRetriever(unittest.TestCase):
     def setUp(self):
         """
@@ -76,22 +96,24 @@ class TestGet(TestFoodAtlasRetriever):
         self.assertIsNotNone(self.atlas.excel_url)
         self.assertTrue(self.atlas.excel.file.readable())
 
-    def saveTester(self):
+
+class TestSave(TestFoodAtlasRetriever):
+    def testSave(self):
         """
         Tests that save method writes a reasonably sized file to disk
         """
+        self.atlas.load()
         self.atlas.clean()
         self.assertIsNone(self.atlas.excel)
         self.atlas.save(self.pickle)
         self.assertGreater(os.path.getsize(self.pickle), 1000000)
 
-        self.loadTester()
 
-    def loadTester(self):
+class TestLoad(TestFoodAtlasRetriever):
+    def testLoad(self):
         """
         Tests that the load method retrieves at least one data frame
         """
-        self.atlas = FoodAtlasRetriever()
         self.atlas.load(self.pickle)
         self.assertGreater(len(self.atlas.data), 1)
 
