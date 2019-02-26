@@ -181,9 +181,7 @@ class AtlasCountyParser:
             if path.isfile(custom_cache_file):
                 self.atlas.load(custom_cache_file)
             else:
-                data_path = pkg_resources.resource_filename(__name__,
-                                                            "data/atlas_data.pickle")
-                self.atlas.load(data_path)
+                self.atlas.load()
 
         self.dataFrame = pd.DataFrame()
 

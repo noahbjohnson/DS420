@@ -1,4 +1,3 @@
-import os
 from src.midterm import FoodAtlasRetriever, DataDictionary
 import unittest
 import random
@@ -62,6 +61,11 @@ class TestAll(TestDataDictionary):
         """
         self.assertIsInstance(self.data_dictionary.get_variable_properties(
             random.choice(self.data_dictionary.get_vars())
+        ),
+            dict)
+        self.assertIsInstance(self.data_dictionary.get_variable_properties(
+            random.choice(self.data_dictionary.get_vars()),
+            [random.choice(self.data_dictionary.get_props())]
         ),
             dict)
 
