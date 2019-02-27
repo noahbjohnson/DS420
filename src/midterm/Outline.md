@@ -31,6 +31,8 @@ The objectives of the Atlas are:
 
 If the data included from the USDA's dataset is not sufficient to build our model, we can use datasets from the [US Census Bureau](https://census.gov) or other US agencies and reporting organizations to provide more features.
 
+[FIPS (geographic identifiers) dataset](https://www.census.gov/geographies/reference-files/2017/demo/popest/2017-fips.html) located at `/src/midterm/data/us_zip_fips_county.csv`
+
 ### The Classification
 The USDA defines what's considered a food desert and which areas will be helped by this initiative:  To qualify as a “low-access community,” at least 500 people and/or at least 33 percent of the census tract's population must reside more than one mile from a supermarket or large grocery store.([from the ANA](http://americannutritionassociation.org/newsletter/usda-defines-food-deserts))
 

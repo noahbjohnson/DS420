@@ -6,3 +6,4 @@
 docs/build/
 .DS_Store
 src/midterm/__pycache__/*
+*.pyc

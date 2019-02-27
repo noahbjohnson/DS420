@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.com/noahbjohnson/DS420.svg?branch=master)](https://travis-ci.com/noahbjohnson/DS420)
-[![codecov](https://codecov.io/gh/noahbjohnson/DS420/branch/master/graph/badge.svg)](https://codecov.io/gh/noahbjohnson/DS420)
-![codev-chart](https://codecov.io/gh/noahbjohnson/DS420/branch/master/graphs/commits.svg)
+[![Build Status](https://travis-ci.com/noahbjohnson/DS420.svg?branch=dev)](https://travis-ci.com/noahbjohnson/DS420)
+[![codecov](https://codecov.io/gh/noahbjohnson/DS420/branch/dev/graph/badge.svg)](https://codecov.io/gh/noahbjohnson/DS420)
+![codev-chart](https://codecov.io/gh/noahbjohnson/DS420/branch/dev/graphs/commits.svg)
 
 # DS420 Projects
 Completed by Noah B Johnson and Tristan Shaffer for DS420 (Machine Learning) at Luther College
