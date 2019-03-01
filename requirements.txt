@@ -40,10 +40,12 @@ numpy==1.16.1
 openpyxl==2.6.0
 packaging==19.0
 pandas==0.24.1
+pandoc==1.0.2
 pandocfilters==1.4.2
 pexpect==4.6.0
 pickleshare==0.7.5
 pluggy==0.8.1
+ply==3.11
 prometheus-client==0.6.0
 prompt-toolkit==1.0.15
 ptyprocess==0.6.0
