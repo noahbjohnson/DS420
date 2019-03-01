@@ -19,9 +19,16 @@ Install the requirements
 pip install -r requirements.txt
 ```
 
+## Run Tests
+```bash
+pytest --cov
+```
+
 ## Build Documentation
 ```bash
 cd docs
 make html
 open build/html/index.html
 ```
+
+
