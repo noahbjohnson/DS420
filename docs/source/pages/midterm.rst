@@ -8,11 +8,9 @@ Midterm
    :backlinks: none
 
 .. toctree::
+    notebooks/Module Examples.ipynb
 
 .. highlight:: console
-
-Usage
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 Module Documentation
