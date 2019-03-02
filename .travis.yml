@@ -13,11 +13,9 @@ install:
   - sudo apt-get install pandoc
 script:
   - pytest --cov
-  - travis-sphinx build
-
 after_success:
   - codecov -t $CODECOV_TOKEN
-
+  - cd docs && make html
 deploy:
   provider: pages
   skip-cleanup: true
