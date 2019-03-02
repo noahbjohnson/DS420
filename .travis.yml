@@ -10,7 +10,7 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install codecov travis-sphinx
-  - apt-get install pandoc
+  - sudo apt-get install pandoc
 script:
   - pytest --cov
   - travis-sphinx build
