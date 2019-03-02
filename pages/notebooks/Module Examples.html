@@ -1,0 +1,673 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Module Usage &#8212; DS420 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Midterm" href="../midterm.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 5ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s2">&quot;../../&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">midterm</span> <span class="k">import</span> <span class="n">AtlasCountyParser</span><span class="p">,</span> <span class="n">DataDictionary</span><span class="p">,</span> <span class="n">FoodAtlasRetriever</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Module-Usage">
+<h1>Module Usage<a class="headerlink" href="#Module-Usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Atlas-County-Parser">
+<h2>Atlas County Parser<a class="headerlink" href="#Atlas-County-Parser" title="Permalink to this headline">¶</a></h2>
+<p>This is essentially the only object that needs to be directly created. The other objects can be accessed through this wrapper object.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Default values will load cached data from module files</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">AtlasCountyParser</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># The county-level dataframe is accessed through the dataFrame prop</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">dataFrame</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>LACCESS_POP10</th>
+      <th>LACCESS_POP15</th>
+      <th>PCH_LACCESS_POP_10_15</th>
+      <th>PCT_LACCESS_POP10</th>
+      <th>PCT_LACCESS_POP15</th>
+      <th>LACCESS_LOWI10</th>
+      <th>LACCESS_LOWI15</th>
+      <th>PCH_LACCESS_LOWI_10_15</th>
+      <th>PCT_LACCESS_LOWI10</th>
+      <th>PCT_LACCESS_LOWI15</th>
+      <th>...</th>
+      <th>PCT_NHPI10</th>
+      <th>PCT_65OLDER10</th>
+      <th>PCT_18YOUNGER10</th>
+      <th>MEDHHINC15</th>
+      <th>POVRATE15</th>
+      <th>PERPOV10</th>
+      <th>CHILDPOVRATE15</th>
+      <th>PERCHLDPOV10</th>
+      <th>METRO13</th>
+      <th>POPLOSS10</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>36103</th>
+      <td>453547.724578</td>
+      <td>380951.607555</td>
+      <td>-16.006280</td>
+      <td>30.371160</td>
+      <td>25.509868</td>
+      <td>62976.169009</td>
+      <td>58308.524326</td>
+      <td>-7.411763</td>
+      <td>4.217107</td>
+      <td>3.904545</td>
+      <td>...</td>
+      <td>0.018415</td>
+      <td>13.512773</td>
+      <td>23.950849</td>
+      <td>87634.0</td>
+      <td>7.8</td>
+      <td>0.0</td>
+      <td>10.7</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>36061</th>
+      <td>2.000000</td>
+      <td>2.000000</td>
+      <td>0.000000</td>
+      <td>0.000126</td>
+      <td>0.000126</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.033609</td>
+      <td>13.503793</td>
+      <td>14.782710</td>
+      <td>75136.0</td>
+      <td>17.6</td>
+      <td>0.0</td>
+      <td>24.9</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>36085</th>
+      <td>22938.268406</td>
+      <td>4248.678501</td>
+      <td>-81.477771</td>
+      <td>4.893706</td>
+      <td>0.906423</td>
+      <td>5810.399714</td>
+      <td>806.547375</td>
+      <td>-86.118900</td>
+      <td>1.239605</td>
+      <td>0.172071</td>
+      <td>...</td>
+      <td>0.029228</td>
+      <td>12.660594</td>
+      <td>23.297207</td>
+      <td>71058.0</td>
+      <td>14.2</td>
+      <td>0.0</td>
+      <td>18.3</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>36005</th>
+      <td>12461.685079</td>
+      <td>7135.332473</td>
+      <td>-42.741833</td>
+      <td>0.899690</td>
+      <td>0.515146</td>
+      <td>846.616493</td>
+      <td>12.741068</td>
+      <td>-98.495060</td>
+      <td>0.061123</td>
+      <td>0.000920</td>
+      <td>...</td>
+      <td>0.028734</td>
+      <td>10.532175</td>
+      <td>26.582476</td>
+      <td>35102.0</td>
+      <td>30.3</td>
+      <td>1.0</td>
+      <td>42.6</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>36119</th>
+      <td>142030.083025</td>
+      <td>140483.706796</td>
+      <td>-1.088767</td>
+      <td>14.964507</td>
+      <td>14.801579</td>
+      <td>12044.982499</td>
+      <td>13090.026891</td>
+      <td>8.676180</td>
+      <td>1.269078</td>
+      <td>1.379185</td>
+      <td>...</td>
+      <td>0.022969</td>
+      <td>14.658107</td>
+      <td>24.022429</td>
+      <td>85688.0</td>
+      <td>10.1</td>
+      <td>0.0</td>
+      <td>13.1</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 277 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># To define the column headers, use the data_dictionary</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">data_dictionary</span><span class="o">.</span><span class="n">get_variable_properties</span><span class="p">(</span>
+    <span class="s1">&#39;PCH_LACCESS_POP_10_15&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>{&#39;Category Name&#39;: &#39;Access and Proximity to Grocery Store&#39;,
+ &#39;Category Code&#39;: &#39;ACCESS&#39;,
+ &#39;Subcategory Name&#39;: &#39;Overall&#39;,
+ &#39;Variable Name&#39;: &#39;Population, low access to store (% change), 2010 -15&#39;,
+ &#39;Variable Code&#39;: &#39;PCH_LACCESS_POP_10_15&#39;,
+ &#39;Geography&#39;: &#39;CNTY10&#39;,
+ &#39;Units&#39;: &#39;% change&#39;}
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># To lookup a FIPS code metadata, use fips_reference</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">fips_reference</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Zip Code</th>
+      <th>State Name</th>
+      <th>State Abrv</th>
+      <th>State Code</th>
+      <th>County Name</th>
+      <th>County Code</th>
+      <th>FIPS Code</th>
+      <th>ANSI Code</th>
+      <th>Centroid Lat</th>
+      <th>Centroid Long</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>501</td>
+      <td>New York</td>
+      <td>NY</td>
+      <td>36</td>
+      <td>Suffolk County</td>
+      <td>103</td>
+      <td>36103</td>
+      <td>974149</td>
+      <td>40.943554</td>
+      <td>-72.692218</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>544</td>
+      <td>New York</td>
+      <td>NY</td>
+      <td>36</td>
+      <td>Suffolk County</td>
+      <td>103</td>
+      <td>36103</td>
+      <td>974149</td>
+      <td>40.943554</td>
+      <td>-72.692218</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6390</td>
+      <td>New York</td>
+      <td>NY</td>
+      <td>36</td>
+      <td>Suffolk County</td>
+      <td>103</td>
+      <td>36103</td>
+      <td>974149</td>
+      <td>40.943554</td>
+      <td>-72.692218</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>11701</td>
+      <td>New York</td>
+      <td>NY</td>
+      <td>36</td>
+      <td>Suffolk County</td>
+      <td>103</td>
+      <td>36103</td>
+      <td>974149</td>
+      <td>40.943554</td>
+      <td>-72.692218</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>11702</td>
+      <td>New York</td>
+      <td>NY</td>
+      <td>36</td>
+      <td>Suffolk County</td>
+      <td>103</td>
+      <td>36103</td>
+      <td>974149</td>
+      <td>40.943554</td>
+      <td>-72.692218</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">DS420</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Setup</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../midterm.html">Midterm</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Module Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../midterm.html#module-midterm">Module Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../midterm.html">Midterm</a><ul>
+      <li>Previous: <a href="../midterm.html" title="previous chapter">Midterm</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Noah B Johnson & Tristan Shaffer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/pages/notebooks/Module Examples.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
