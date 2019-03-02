@@ -1,16 +1,16 @@
 sudo:
-  false
+  true
 language:
   python
 python:
   - "3.5"
-  - "3.5-dev"
   - "3.6"
   - "3.6-dev"
   - "3.7-dev"
 install:
   - pip install -r requirements.txt
   - pip install codecov travis-sphinx
+  - apt-get install pandoc
 script:
   - pytest --cov
   - travis-sphinx build
