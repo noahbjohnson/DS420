@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Module Usage &#8212; DS420 0.0.0 documentation</title>
+    <title>Classifying based off the USDA Definition &#8212; DS420 0.0.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -16,7 +16,6 @@
     <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="Midterm" href="../midterm.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
@@ -241,31 +240,34 @@ div.rendered_html tbody tr:hover {
 <span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s2">&quot;../../../..&quot;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">src.midterm</span> <span class="k">import</span> <span class="n">AtlasCountyParser</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="Module-Usage">
-<h1>Module Usage<a class="headerlink" href="#Module-Usage" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="Atlas-County-Parser">
-<h2>Atlas County Parser<a class="headerlink" href="#Atlas-County-Parser" title="Permalink to this headline">¶</a></h2>
-<p>This is essentially the only object that needs to be directly created. The other objects can be accessed through this wrapper object.</p>
+<div class="section" id="Classifying-based-off-the-USDA-Definition">
+<h1>Classifying based off the USDA Definition<a class="headerlink" href="#Classifying-based-off-the-USDA-Definition" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div>To qualify as a “low-access community,” at least 500 people and/or at least 33 percent of the census tract’s population must reside more than one mile from a supermarket or large grocery store.</div></blockquote>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Default values will load cached data from module files</span>
-<span class="n">parser</span> <span class="o">=</span> <span class="n">AtlasCountyParser</span><span class="p">()</span>
+<span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">AtlasCountyParser</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
+<div class="section" id="500-People-With-Low-Access-(2015)">
+<h2>500 People With Low Access (2015)<a class="headerlink" href="#500-People-With-Low-Access-(2015)" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>LACCESS_POP15</div></blockquote>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># The county-level dataframe is accessed through the dataFrame prop</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">dataFrame</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span></span><span class="n">five_hundred_bool</span> <span class="o">=</span> <span class="p">[</span> <span class="n">parser</span><span class="o">.</span><span class="n">dataFrame</span><span class="p">[</span><span class="s1">&#39;LACCESS_POP15&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">500</span> <span class="p">]</span>
+<span class="nb">sum</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">five_hundred_bool</span> <span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -273,182 +275,23 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>LACCESS_POP10</th>
-      <th>LACCESS_POP15</th>
-      <th>PCH_LACCESS_POP_10_15</th>
-      <th>PCT_LACCESS_POP10</th>
-      <th>PCT_LACCESS_POP15</th>
-      <th>LACCESS_LOWI10</th>
-      <th>LACCESS_LOWI15</th>
-      <th>PCH_LACCESS_LOWI_10_15</th>
-      <th>PCT_LACCESS_LOWI10</th>
-      <th>PCT_LACCESS_LOWI15</th>
-      <th>...</th>
-      <th>PCT_NHPI10</th>
-      <th>PCT_65OLDER10</th>
-      <th>PCT_18YOUNGER10</th>
-      <th>MEDHHINC15</th>
-      <th>POVRATE15</th>
-      <th>PERPOV10</th>
-      <th>CHILDPOVRATE15</th>
-      <th>PERCHLDPOV10</th>
-      <th>METRO13</th>
-      <th>POPLOSS10</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>36103</th>
-      <td>453547.724578</td>
-      <td>380951.607555</td>
-      <td>-16.006280</td>
-      <td>30.371160</td>
-      <td>25.509868</td>
-      <td>62976.169009</td>
-      <td>58308.524326</td>
-      <td>-7.411763</td>
-      <td>4.217107</td>
-      <td>3.904545</td>
-      <td>...</td>
-      <td>0.018415</td>
-      <td>13.512773</td>
-      <td>23.950849</td>
-      <td>87634.0</td>
-      <td>7.8</td>
-      <td>0.0</td>
-      <td>10.7</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>36061</th>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>0.000000</td>
-      <td>0.000126</td>
-      <td>0.000126</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>...</td>
-      <td>0.033609</td>
-      <td>13.503793</td>
-      <td>14.782710</td>
-      <td>75136.0</td>
-      <td>17.6</td>
-      <td>0.0</td>
-      <td>24.9</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>36085</th>
-      <td>22938.268406</td>
-      <td>4248.678501</td>
-      <td>-81.477771</td>
-      <td>4.893706</td>
-      <td>0.906423</td>
-      <td>5810.399714</td>
-      <td>806.547375</td>
-      <td>-86.118900</td>
-      <td>1.239605</td>
-      <td>0.172071</td>
-      <td>...</td>
-      <td>0.029228</td>
-      <td>12.660594</td>
-      <td>23.297207</td>
-      <td>71058.0</td>
-      <td>14.2</td>
-      <td>0.0</td>
-      <td>18.3</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>36005</th>
-      <td>12461.685079</td>
-      <td>7135.332473</td>
-      <td>-42.741833</td>
-      <td>0.899690</td>
-      <td>0.515146</td>
-      <td>846.616493</td>
-      <td>12.741068</td>
-      <td>-98.495060</td>
-      <td>0.061123</td>
-      <td>0.000920</td>
-      <td>...</td>
-      <td>0.028734</td>
-      <td>10.532175</td>
-      <td>26.582476</td>
-      <td>35102.0</td>
-      <td>30.3</td>
-      <td>1.0</td>
-      <td>42.6</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>36119</th>
-      <td>142030.083025</td>
-      <td>140483.706796</td>
-      <td>-1.088767</td>
-      <td>14.964507</td>
-      <td>14.801579</td>
-      <td>12044.982499</td>
-      <td>13090.026891</td>
-      <td>8.676180</td>
-      <td>1.269078</td>
-      <td>1.379185</td>
-      <td>...</td>
-      <td>0.022969</td>
-      <td>14.658107</td>
-      <td>24.022429</td>
-      <td>85688.0</td>
-      <td>10.1</td>
-      <td>0.0</td>
-      <td>13.1</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 277 columns</p>
-</div></div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>2848
+</pre></div>
 </div>
+</div>
+</div>
+<div class="section" id="33%-Population-With-Low-Access-(2015)">
+<h2>33% Population With Low Access (2015)<a class="headerlink" href="#33%-Population-With-Low-Access-(2015)" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>PCT_LACCESS_POP15</div></blockquote>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># To define the column headers, use the data_dictionary</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">data_dictionary</span><span class="o">.</span><span class="n">get_variable_properties</span><span class="p">(</span>
-    <span class="s1">&#39;PCH_LACCESS_POP_10_15&#39;</span><span class="p">)</span>
+<span></span><span class="n">thirty_three_percent_bool</span> <span class="o">=</span> <span class="p">[</span> <span class="n">parser</span><span class="o">.</span><span class="n">dataFrame</span><span class="p">[</span><span class="s1">&#39;PCT_LACCESS_POP15&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">33</span> <span class="p">]</span>
+<span class="nb">sum</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">thirty_three_percent_bool</span> <span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -457,130 +300,62 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>{&#39;Category Name&#39;: &#39;Access and Proximity to Grocery Store&#39;,
- &#39;Category Code&#39;: &#39;ACCESS&#39;,
- &#39;Subcategory Name&#39;: &#39;Overall&#39;,
- &#39;Variable Name&#39;: &#39;Population, low access to store (% change), 2010 -15&#39;,
- &#39;Variable Code&#39;: &#39;PCH_LACCESS_POP_10_15&#39;,
- &#39;Geography&#39;: &#39;CNTY10&#39;,
- &#39;Units&#39;: &#39;% change&#39;}
+<span></span>568
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+</div>
+<div class="section" id="Combined-Mask">
+<h2>Combined Mask<a class="headerlink" href="#Combined-Mask" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># To lookup a FIPS code metadata, use fips_reference</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">fips_reference</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span></span><span class="n">or_mask</span> <span class="o">=</span> <span class="p">[</span><span class="nb">any</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">thirty_three_percent_bool</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">five_hundred_bool</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Zip Code</th>
-      <th>State Name</th>
-      <th>State Abrv</th>
-      <th>State Code</th>
-      <th>County Name</th>
-      <th>County Code</th>
-      <th>FIPS Code</th>
-      <th>ANSI Code</th>
-      <th>Centroid Lat</th>
-      <th>Centroid Long</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>501</td>
-      <td>New York</td>
-      <td>NY</td>
-      <td>36</td>
-      <td>Suffolk County</td>
-      <td>103</td>
-      <td>36103</td>
-      <td>974149</td>
-      <td>40.943554</td>
-      <td>-72.692218</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>544</td>
-      <td>New York</td>
-      <td>NY</td>
-      <td>36</td>
-      <td>Suffolk County</td>
-      <td>103</td>
-      <td>36103</td>
-      <td>974149</td>
-      <td>40.943554</td>
-      <td>-72.692218</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>6390</td>
-      <td>New York</td>
-      <td>NY</td>
-      <td>36</td>
-      <td>Suffolk County</td>
-      <td>103</td>
-      <td>36103</td>
-      <td>974149</td>
-      <td>40.943554</td>
-      <td>-72.692218</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>11701</td>
-      <td>New York</td>
-      <td>NY</td>
-      <td>36</td>
-      <td>Suffolk County</td>
-      <td>103</td>
-      <td>36103</td>
-      <td>974149</td>
-      <td>40.943554</td>
-      <td>-72.692218</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>11702</td>
-      <td>New York</td>
-      <td>NY</td>
-      <td>36</td>
-      <td>Suffolk County</td>
-      <td>103</td>
-      <td>36103</td>
-      <td>974149</td>
-      <td>40.943554</td>
-      <td>-72.692218</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">and_mask</span> <span class="o">=</span> <span class="p">[</span><span class="nb">all</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">thirty_three_percent_bool</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">five_hundred_bool</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Mask-Information">
+<h3>Mask Information<a class="headerlink" href="#Mask-Information" title="Permalink to this headline">¶</a></h3>
+<p>There are {{ sum(or_mask) }} FIPS codes that meet either criteria.</p>
+<p>There are {{ sum(and_mask) }} FIPS codes that meet both criteria.</p>
+</div>
+</div>
+<div class="section" id="Initial-Model">
+<h2>Initial Model<a class="headerlink" href="#Initial-Model" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>We determined that the best initial model for the USDA definition of food desert would be &gt;=33% of the tract living more than a mile from a grocery store.</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">parser</span><span class="o">.</span><span class="n">dataFrame</span><span class="p">[</span><span class="s1">&#39;USDA Model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">thirty_three_percent_bool</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Save-the-new-data">
+<h2>Save the new data<a class="headerlink" href="#Save-the-new-data" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">parser</span><span class="o">.</span><span class="n">dataFrame</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;src/midterm/data/initial_model.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -603,22 +378,15 @@ div.rendered_html tbody tr:hover {
 
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Table of Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Setup</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../midterm.html">Midterm</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Module Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../midterm.html#module-midterm">Module Documentation</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../midterm.html">Midterm</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../midterm.html">Midterm</a><ul>
-      <li>Previous: <a href="../midterm.html" title="previous chapter">Midterm</a></li>
-  </ul></li>
   </ul></li>
 </ul>
 </div>
@@ -654,7 +422,7 @@ div.rendered_html tbody tr:hover {
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../../_sources/pages/notebooks/Module Examples.ipynb.txt"
+      <a href="../../_sources/pages/notebooks/Initial Classification.ipynb.txt"
           rel="nofollow">Page source</a>
     </div>
 

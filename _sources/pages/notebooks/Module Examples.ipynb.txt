@@ -7,16 +7,8 @@
    "outputs": [],
    "source": [
     "import os\n",
-    "os.chdir(\"../../\")"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "from midterm import AtlasCountyParser, DataDictionary, FoodAtlasRetriever"
+    "os.chdir(\"../../../..\")\n",
+    "from src.midterm import AtlasCountyParser"
    ]
   },
   {
@@ -30,7 +22,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 2,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -40,7 +32,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 3,
    "metadata": {},
    "outputs": [
     {
@@ -252,7 +244,7 @@
        "[5 rows x 277 columns]"
       ]
      },
-     "execution_count": 4,
+     "execution_count": 3,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -264,7 +256,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": 4,
    "metadata": {},
    "outputs": [
     {
@@ -279,7 +271,7 @@
        " 'Units': '% change'}"
       ]
      },
-     "execution_count": 5,
+     "execution_count": 4,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -292,7 +284,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 5,
    "metadata": {},
    "outputs": [
     {
@@ -414,7 +406,7 @@
        "4      36103     974149     40.943554     -72.692218  "
       ]
      },
-     "execution_count": 6,
+     "execution_count": 5,
      "metadata": {},
      "output_type": "execute_result"
     }
