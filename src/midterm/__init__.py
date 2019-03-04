@@ -2,7 +2,7 @@ import pickle
 from os import path
 from shutil import copyfileobj
 from tempfile import NamedTemporaryFile
-from urllib.request import urlopen
+from urllib3.request import RequestMethods
 
 import pandas as pd
 import pkg_resources
@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from xlrd import open_workbook
 
 atlas_url = "https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation" \
-                   "-downloads"
+    "-downloads"
 
 
 # TODO: Document FoodAtlasRetriever usage
@@ -31,7 +31,8 @@ class FoodAtlasRetriever:
         try:
             page = requests.get(self.url)
         except ConnectionError:
-            raise requests.exceptions.ConnectionError("Could not connect to the USDA site")
+            raise requests.exceptions.ConnectionError(
+                "Could not connect to the USDA site")
 
         # Parse download page
         try:
@@ -47,7 +48,7 @@ class FoodAtlasRetriever:
             self.excel_url = "https://www.ers.usda.gov{}".format(link["href"])
 
     def __download_excel(self):
-        with urlopen(self.excel_url) as fsrc:
+        with RequestMethods.urlopen(self.excel_url) as fsrc:
             copyfileobj(fsrc, self.excel)
 
     def __parse_excel(self):
@@ -56,7 +57,8 @@ class FoodAtlasRetriever:
     def __create_frames(self):
         for sheet in range(len(self.workbook.sheet_names())):
             sheet_name = self.workbook.sheet_names()[sheet]
-            self.data[sheet_name] = pd.read_excel(self.excel.name, sheet_name=sheet)
+            self.data[sheet_name] = pd.read_excel(
+                self.excel.name, sheet_name=sheet)
 
     def clean(self):
         """Removes the temporary download files and raw copy of the data. Does not delete the .data"""
@@ -67,10 +69,11 @@ class FoodAtlasRetriever:
         except AttributeError:
             return False
 
-    def save(self, filename: str):
+    def save(self, filename):
         """Saves the data from the atlas retriever to a pickle file.
 
         :param filename: The pickle file name to save the data to
+        :type filename: str
         """
         with open(filename, "wb") as f:
             pickle.dump(self.data, f)
@@ -111,13 +114,14 @@ class DataDictionary(pd.DataFrame):
         :type atlas_obj: FoodAtlasRetriever
         """
         if not isinstance(atlas_obj, FoodAtlasRetriever):
-            raise TypeError("DataDictionary object must take FoodAtlasRetriever object as parameter")
+            raise TypeError(
+                "DataDictionary object must take FoodAtlasRetriever object as parameter")
         else:
             frame = atlas_obj.data['Variable List']
             frame.index = frame['Variable Code']
             super().__init__(frame)
 
-    def get_props(self) -> list:
+    def get_props(self):
         """
         Returns a list of all the properties (columns) in the data dictionary
 
@@ -125,7 +129,7 @@ class DataDictionary(pd.DataFrame):
         """
         return self.columns.tolist()
 
-    def get_vars(self) -> list:
+    def get_vars(self):
         """
         Returns a list of all the variables (rows index) in the data dictionary
 
@@ -133,11 +137,12 @@ class DataDictionary(pd.DataFrame):
         """
         return self.index.tolist()
 
-    def get_variable_properties(self, variable: str, prop_list=None):
+    def get_variable_properties(self, variable, prop_list=None):
         """
         Takes the name of a variable and returns the specified properties for it
 
         :param variable: The variable to get properties of
+        :type variable: str
         :param prop_list: The properties to return
         :return: dict
         """
@@ -149,7 +154,8 @@ class DataDictionary(pd.DataFrame):
             get_props = self.get_props()
 
         if variable not in self.get_vars():
-            raise IndexError("{} not in variable list: {}".format(variable, self.get_vars()))
+            raise IndexError("{} not in variable list: {}".format(
+                variable, self.get_vars()))
         variable_row = self.loc[variable].to_dict()
         result = {}
         for p in get_props:
@@ -199,7 +205,8 @@ class AtlasCountyParser:
                    if x not in
                    ['Read_Me', 'Variable List', 'Supplemental Data - County', 'Supplemental Data - State']]
 
-        self.dataFrame = pd.DataFrame(index=self.fips_reference['FIPS Code'].unique())
+        self.dataFrame = pd.DataFrame(
+            index=self.fips_reference['FIPS Code'].unique())
 
         for df in to_join:
             d_prime = self.atlas.data[df]
