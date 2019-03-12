@@ -38,6 +38,42 @@ The USDA defines what's considered a food desert and which areas will be helped 
 
 Our goal is to see if we can build a model to predict this classification on a county level.
 
-### Milestones
- - visualize the data as it stands to understand the USDA classification effectivenes
- - redetermine parameters for food desert definition
+### Milestones🎯
+
+#### Midterm
+    ☑︎ Write a module to parse the food atlas data
+  
+    ☑︎ Spot check data integrity
+  
+    ☑︎ Classify data using USDA criteria
+  
+    ☐ Visualize the USDA classification
+  
+    ☐ Analyze the USDA classification
+  
+      ☐ Model with the USDA classification as the response (basic logistic regression)
+    
+      ☐ Assess model(s) fit and residuals
+
+#### Final
+    ☐ Analyze logistic model factors
+  
+    ☐ Complex modeling:
+  
+      ☐ Logistic regression with interactions
+    
+      ☐ SVM (Linear SVC, SVC, nuSVC)
+      
+      ☐ Nearest neighbors
+      
+      ☐ SGD
+    
+    ☐ Find a better classification (exploratory clustering)
+      
+      ☐ Mean shift
+      
+      ☐ K-Means
+      
+      ☐ GMM/Spectral clustering
+      
+    ☐ Synthesize final report from findings
