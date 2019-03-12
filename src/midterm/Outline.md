@@ -37,3 +37,7 @@ If the data included from the USDA's dataset is not sufficient to build our mode
 The USDA defines what's considered a food desert and which areas will be helped by this initiative:  To qualify as a “low-access community,” at least 500 people and/or at least 33 percent of the census tract's population must reside more than one mile from a supermarket or large grocery store.([from the ANA](http://americannutritionassociation.org/newsletter/usda-defines-food-deserts))
 
 Our goal is to see if we can build a model to predict this classification on a county level.
+
+### Milestones
+ - visualize the data as it stands to understand the USDA classification effectivenes
+ - redetermine parameters for food desert definition
