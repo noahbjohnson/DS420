@@ -2,7 +2,7 @@ import pickle
 from os import path
 from shutil import copyfileobj
 from tempfile import NamedTemporaryFile
-from urllib3.request import RequestMethods
+from urllib.request import urlopen
 
 import pandas as pd
 import pkg_resources
@@ -48,7 +48,7 @@ class FoodAtlasRetriever:
             self.excel_url = "https://www.ers.usda.gov{}".format(link["href"])
 
     def __download_excel(self):
-        with RequestMethods.urlopen(self.excel_url) as fsrc:
+        with urlopen(self.excel_url) as fsrc:
             copyfileobj(fsrc, self.excel)
 
     def __parse_excel(self):
