@@ -47,7 +47,7 @@
 <span class="kn">from</span> <span class="nn">xlrd</span> <span class="k">import</span> <span class="n">open_workbook</span>
 
 <span class="n">atlas_url</span> <span class="o">=</span> <span class="s2">&quot;https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation&quot;</span> \
-                   <span class="s2">&quot;-downloads&quot;</span>
+    <span class="s2">&quot;-downloads&quot;</span>
 
 
 <span class="c1"># TODO: Document FoodAtlasRetriever usage</span>
@@ -66,7 +66,8 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">page</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ConnectionError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">(</span><span class="s2">&quot;Could not connect to the USDA site&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">(</span>
+                <span class="s2">&quot;Could not connect to the USDA site&quot;</span><span class="p">)</span>
 
         <span class="c1"># Parse download page</span>
         <span class="k">try</span><span class="p">:</span>
@@ -91,7 +92,8 @@
     <span class="k">def</span> <span class="nf">__create_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">sheet</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workbook</span><span class="o">.</span><span class="n">sheet_names</span><span class="p">())):</span>
             <span class="n">sheet_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">workbook</span><span class="o">.</span><span class="n">sheet_names</span><span class="p">()[</span><span class="n">sheet</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">sheet_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">excel</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">sheet</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">sheet_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">excel</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">sheet</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FoodAtlasRetriever.clean"><a class="viewcode-back" href="../pages/midterm.html#midterm.FoodAtlasRetriever.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Removes the temporary download files and raw copy of the data. Does not delete the .data&quot;&quot;&quot;</span>
@@ -102,10 +104,11 @@
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="FoodAtlasRetriever.save"><a class="viewcode-back" href="../pages/midterm.html#midterm.FoodAtlasRetriever.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="FoodAtlasRetriever.save"><a class="viewcode-back" href="../pages/midterm.html#midterm.FoodAtlasRetriever.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Saves the data from the atlas retriever to a pickle file.</span>
 
 <span class="sd">        :param filename: The pickle file name to save the data to</span>
+<span class="sd">        :type filename: str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
@@ -146,13 +149,14 @@
 <span class="sd">        :type atlas_obj: FoodAtlasRetriever</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">atlas_obj</span><span class="p">,</span> <span class="n">FoodAtlasRetriever</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;DataDictionary object must take FoodAtlasRetriever object as parameter&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;DataDictionary object must take FoodAtlasRetriever object as parameter&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">frame</span> <span class="o">=</span> <span class="n">atlas_obj</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Variable List&#39;</span><span class="p">]</span>
             <span class="n">frame</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="s1">&#39;Variable Code&#39;</span><span class="p">]</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DataDictionary.get_props"><a class="viewcode-back" href="../pages/midterm.html#midterm.DataDictionary.get_props">[docs]</a>    <span class="k">def</span> <span class="nf">get_props</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="DataDictionary.get_props"><a class="viewcode-back" href="../pages/midterm.html#midterm.DataDictionary.get_props">[docs]</a>    <span class="k">def</span> <span class="nf">get_props</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a list of all the properties (columns) in the data dictionary</span>
 
@@ -160,7 +164,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DataDictionary.get_vars"><a class="viewcode-back" href="../pages/midterm.html#midterm.DataDictionary.get_vars">[docs]</a>    <span class="k">def</span> <span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="DataDictionary.get_vars"><a class="viewcode-back" href="../pages/midterm.html#midterm.DataDictionary.get_vars">[docs]</a>    <span class="k">def</span> <span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a list of all the variables (rows index) in the data dictionary</span>
 
@@ -168,11 +172,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DataDictionary.get_variable_properties"><a class="viewcode-back" href="../pages/midterm.html#midterm.DataDictionary.get_variable_properties">[docs]</a>    <span class="k">def</span> <span class="nf">get_variable_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prop_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DataDictionary.get_variable_properties"><a class="viewcode-back" href="../pages/midterm.html#midterm.DataDictionary.get_variable_properties">[docs]</a>    <span class="k">def</span> <span class="nf">get_variable_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">prop_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Takes the name of a variable and returns the specified properties for it</span>
 
 <span class="sd">        :param variable: The variable to get properties of</span>
+<span class="sd">        :type variable: str</span>
 <span class="sd">        :param prop_list: The properties to return</span>
 <span class="sd">        :return: dict</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -184,7 +189,8 @@
             <span class="n">get_props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">variable</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_vars</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> not in variable list: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_vars</span><span class="p">()))</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> not in variable list: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">variable</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_vars</span><span class="p">()))</span>
         <span class="n">variable_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">get_props</span><span class="p">:</span>
@@ -234,7 +240,8 @@
                    <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span>
                    <span class="p">[</span><span class="s1">&#39;Read_Me&#39;</span><span class="p">,</span> <span class="s1">&#39;Variable List&#39;</span><span class="p">,</span> <span class="s1">&#39;Supplemental Data - County&#39;</span><span class="p">,</span> <span class="s1">&#39;Supplemental Data - State&#39;</span><span class="p">]]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">dataFrame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fips_reference</span><span class="p">[</span><span class="s1">&#39;FIPS Code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataFrame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fips_reference</span><span class="p">[</span><span class="s1">&#39;FIPS Code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
 
         <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">to_join</span><span class="p">:</span>
             <span class="n">d_prime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">df</span><span class="p">]</span>

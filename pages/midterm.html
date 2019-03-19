@@ -113,7 +113,7 @@
 
 <dl class="method">
 <dt id="midterm.DataDictionary.get_props">
-<code class="descname">get_props</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="../_modules/midterm.html#DataDictionary.get_props"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#midterm.DataDictionary.get_props" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_props</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/midterm.html#DataDictionary.get_props"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#midterm.DataDictionary.get_props" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of all the properties (columns) in the data dictionary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -127,14 +127,14 @@
 
 <dl class="method">
 <dt id="midterm.DataDictionary.get_variable_properties">
-<code class="descname">get_variable_properties</code><span class="sig-paren">(</span><em>variable: str</em>, <em>prop_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/midterm.html#DataDictionary.get_variable_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#midterm.DataDictionary.get_variable_properties" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_variable_properties</code><span class="sig-paren">(</span><em>variable</em>, <em>prop_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/midterm.html#DataDictionary.get_variable_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#midterm.DataDictionary.get_variable_properties" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes the name of a variable and returns the specified properties for it</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>variable</strong> – The variable to get properties of</li>
+<li><strong>variable</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The variable to get properties of</li>
 <li><strong>prop_list</strong> – The properties to return</li>
 </ul>
 </td>
@@ -148,7 +148,7 @@
 
 <dl class="method">
 <dt id="midterm.DataDictionary.get_vars">
-<code class="descname">get_vars</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="../_modules/midterm.html#DataDictionary.get_vars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#midterm.DataDictionary.get_vars" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_vars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/midterm.html#DataDictionary.get_vars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#midterm.DataDictionary.get_vars" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of all the variables (rows index) in the data dictionary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -206,13 +206,13 @@
 
 <dl class="method">
 <dt id="midterm.FoodAtlasRetriever.save">
-<code class="descname">save</code><span class="sig-paren">(</span><em>filename: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/midterm.html#FoodAtlasRetriever.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#midterm.FoodAtlasRetriever.save" title="Permalink to this definition">¶</a></dt>
+<code class="descname">save</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/midterm.html#FoodAtlasRetriever.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#midterm.FoodAtlasRetriever.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the data from the atlas retriever to a pickle file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – The pickle file name to save the data to</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The pickle file name to save the data to</td>
 </tr>
 </tbody>
 </table>
