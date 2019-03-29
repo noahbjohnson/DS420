@@ -1,4 +1,4 @@
-.PHONY: clean data lint requirements
+.PHONY: clean data lint requirements docs notebooks
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -27,6 +27,15 @@ requirements: test_environment
 ## Make Dataset
 data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py
+
+## Make Notebooks
+notebooks:
+	jupyter nbconvert --execute --to rst notebooks/0.ipynb --output ../docs/notebooks/0.rst
+
+## Make Docs
+docs: notebooks
+	cd docs && make html && cd ..
+	echo "file://$(PWD)/docs/_build/html/index.html"
 
 ## Delete all compiled Python files
 clean:

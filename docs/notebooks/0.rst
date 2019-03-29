@@ -1,0 +1,160 @@
+
+1: Classifying based off the USDA Definition
+============================================
+
+    To qualify as a “low-access community,” at least 500 people and/or
+    at least 33 percent of the census tract's population must reside
+    more than one mile from a supermarket or large grocery store.
+
+.. code:: ipython3
+
+    """ Notebook Setup/Imports
+    """
+    
+    # Project path setup
+    from pathlib import Path
+    project_dir = Path(__name__).resolve().parents[1]
+    
+    # Library import
+    import pandas as pd
+    
+    # Print strings as markdown
+    from IPython.display import Markdown
+    
+    # Data variables
+    dataset = pd.read_pickle(Path.joinpath(project_dir, "data/interim/usda.pickle"))
+    data_dictionary = pd.read_pickle(Path.joinpath(project_dir, "data/interim/usda_dictionary.pickle"))
+
+Relevant Variables
+------------------
+
+Number of residents with low access
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    LACCESS\_POP10 (2010)
+
+    LACCESS\_POP15 (2015)
+
+Percent of residents with low access
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    PCT\_LACCESS\_POP10 (2010)
+
+    PCT\_LACCESS\_POP15 (2015)
+
+Possible Models
+---------------
+
+-  **Only** 500 people or more with low access
+-  **Only** 33% of the population or more with low access
+-  **Both** 500 people or more and 33% of the population or more with
+   low access
+-  **Either** 500 people or more or 33% of the population or more with
+   low access
+
+.. code:: ipython3
+
+    """ Model creation
+    """
+    
+    # County mask for 500 people or more with low access
+    five_hundred_bool = [ dataset['LACCESS_POP15'].astype(float) >= 500 ]
+    five_hundren_count = sum(sum([ x for x in five_hundred_bool ]))
+    
+    # County mask for 33% of the population or more with low access
+    thirty_three_percent_bool = [ dataset['PCT_LACCESS_POP15'].astype(float) >= 33 ]
+    thirty_three_percent_count = sum(sum([ x for x in thirty_three_percent_bool ]))
+    
+    # 500 people or more or 33% of the population or more with low access
+    or_mask = [any(tup) for tup in zip(thirty_three_percent_bool[0], five_hundred_bool[0])]
+    
+    # 500 people or more and 33% of the population or more with low access
+    and_mask = [all(tup) for tup in zip(thirty_three_percent_bool[0], five_hundred_bool[0])]
+
+.. code:: ipython3
+
+    Markdown(f"""### Mask Information
+                 - Only 500 people or more with low access
+                    - There are { five_hundren_count } FIPS codes that meet this criteria.
+                 - Only 33% of the population or more with low access
+                    - There are { thirty_three_percent_count } FIPS codes that meet this criteria.
+                 - Both 500 people or more and 33% of the population or more with low access
+                    - There are { sum(and_mask) } FIPS codes that meet this criteria.
+                 - Either 500 people or more or 33% of the population or more with low access
+                    - There are { sum(or_mask) } FIPS codes that meet this criteria.""")
+
+
+
+
+Mask Information
+~~~~~~~~~~~~~~~~
+
+::
+
+             - Only 500 people or more with low access
+                - There are 2848 FIPS codes that meet this criteria.
+             - Only 33% of the population or more with low access
+                - There are 568 FIPS codes that meet this criteria.
+             - Both 500 people or more and 33% of the population or more with low access
+                - There are 562 FIPS codes that meet this criteria.
+             - Either 500 people or more or 33% of the population or more with low access
+                - There are 2854 FIPS codes that meet this criteria.
+
+
+
+Initial Model
+-------------
+
+    We determined that the best initial model for the USDA definition of
+    food desert would be >=33% of the tract living more than a mile from
+    a grocery store. However, all possible models will be included for
+    further analysis.
+
+.. code:: ipython3
+
+    dataset['USDA Model Percent'] = thirty_three_percent_bool[0]
+    dataset['USDA Model Count'] = five_hundred_bool[0]
+    dataset['USDA Model And'] = and_mask
+    dataset['USDA Model Or'] = or_mask
+
+Save the new data
+-----------------
+
+.. code:: ipython3
+
+    dataset.to_pickle(Path.joinpath(project_dir, "data/processed/initial_model.pickle"))
+
+Add variables to Data Dictionary
+--------------------------------
+
+.. code:: ipython3
+
+    data_dictionary = data_dictionary.append([
+        {"Variable Code":"USDA Model Percent",
+        "Variable Name":"33% of the population or more with low access"},
+        {"Variable Code":"USDA Model Count",
+        "Variable Name":"500 people or more with low access"},
+        {"Variable Code":"USDA Model And",
+        "Variable Name":"Both 500 people or more and 33% of the population or more with low access"},
+        {"Variable Code":"USDA Model Or",
+        "Variable Name":"Either 500 people or more or 33% of the population or more with low access"}],
+        ignore_index=True)
+
+
+.. parsed-literal::
+
+    /anaconda3/lib/python3.7/site-packages/pandas/core/indexing.py:1494: FutureWarning: 
+    Passing list-likes to .loc or [] with any missing label will raise
+    KeyError in the future, you can use .reindex() as an alternative.
+    
+    See the documentation here:
+    https://pandas.pydata.org/pandas-docs/stable/indexing.html#deprecate-loc-reindex-listlike
+      return self._getitem_tuple(key)
+
+
+Save Updated Data Dictionary
+----------------------------
+
+.. code:: ipython3
+
+    data_dictionary.to_pickle(Path.joinpath(project_dir, "data/processed/data_dictionary.pickle"))
