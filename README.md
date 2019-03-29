@@ -5,8 +5,8 @@
 # DS420 Projects
 Completed by Noah B Johnson and Tristan Shaffer for DS420 (Machine Learning) at Luther College
 
-### Midterm
-[Outline/Proposal](/src/midterm/Outline.md)
+# View The Projects
+View our master branch build [here](https://noahbjohnson.github.io/DS420/)
 
 ## Installation
 Clone the repository
@@ -24,11 +24,9 @@ pip install -r requirements.txt
 pytest --cov
 ```
 
-## Build Documentation
+## Build Documentation/Report
 ```bash
 cd docs
 make html
 open build/html/index.html
 ```
-
-
