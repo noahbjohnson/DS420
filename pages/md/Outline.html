@@ -1,0 +1,163 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>&lt;no title&gt; &#8212; DS420 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <p># Food Desert Classification
+Completed by Noah B Johnson and Tristan Shaffer for DS420 (Machine Learning) at Luther College</p>
+<p>## Overview
+We will use the United States Department of Agriculture’s Economic Research Service [Food Environment Atlas](<a class="reference external" href="https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation-downloads/">https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation-downloads/</a>) to classify areas as ‘food deserts.’</p>
+<p>We will use the USDA definition to categorize the county-level data. Once initially classified, we will use the variables not included in the USDA formula to build a classification model with our computed categories as the response.</p>
+<p>### The Issue
+According to the [American Nutrition Association](<a class="reference external" href="http://americannutritionassociation.org/">http://americannutritionassociation.org/</a>), a food desert is an area, especially one with low-income residents, that has limited access to affordable and nutritious food. [Their site says](<a class="reference external" href="http://americannutritionassociation.org/newsletter/usda-defines-food-deserts">http://americannutritionassociation.org/newsletter/usda-defines-food-deserts</a>):
+&gt; This has become a big problem because while food deserts are often short on whole food providers, especially fresh fruits and vegetables, instead, they are heavy on local quickie marts that provide a wealth of processed, sugar, and fat laden foods that are known contributors to our nation’s obesity epidemic.</p>
+<p>In addition to obesity, many other health issues are associated with poor access to affordable healthy foods.</p>
+<p>### The Data</p>
+<p>#### Atlas Data</p>
+<p>&gt; [From the Atlas Site](<a class="reference external" href="https://www.ers.usda.gov/data-products/food-environment-atlas/about-the-atlas/">https://www.ers.usda.gov/data-products/food-environment-atlas/about-the-atlas/</a>)</p>
+<p>Food environment factors—such as store/restaurant proximity, food prices, food and nutrition assistance programs, and community characteristics—interact to influence food choices and diet quality. Research has been documenting the complexity of these interactions, but more research is needed to identify causal relationships and effective policy interventions.</p>
+<p>The objectives of the Atlas are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>to assemble statistics on food environment indicators to stimulate research on the determinants of food choices and diet quality, and</li>
+<li>to provide a spatial overview of a community’s ability to access healthy food and its success in doing so.</li>
+</ul>
+</div></blockquote>
+<p>#### Other Data</p>
+<p>If the data included from the USDA’s dataset is not sufficient to build our model, we can use datasets from the [US Census Bureau](<a class="reference external" href="https://census.gov">https://census.gov</a>) or other US agencies and reporting organizations to provide more features.</p>
+<p>[FIPS (geographic identifiers) dataset](<a class="reference external" href="https://www.census.gov/geographies/reference-files/2017/demo/popest/2017-fips.html">https://www.census.gov/geographies/reference-files/2017/demo/popest/2017-fips.html</a>) located at <cite>/src/midterm/data/us_zip_fips_county.csv</cite></p>
+<p>### The Classification
+The USDA defines what’s considered a food desert and which areas will be helped by this initiative:  To qualify as a “low-access community,” at least 500 people and/or at least 33 percent of the census tract’s population must reside more than one mile from a supermarket or large grocery store.([from the ANA](<a class="reference external" href="http://americannutritionassociation.org/newsletter/usda-defines-food-deserts">http://americannutritionassociation.org/newsletter/usda-defines-food-deserts</a>))</p>
+<p>Our goal is to see if we can build a model to predict this classification on a county level.</p>
+<p>### Milestones🎯</p>
+<dl class="docutils">
+<dt>#### Midterm</dt>
+<dd><p class="first">☑︎ Write a module to parse the food atlas data</p>
+<p>☑︎ Spot check data integrity</p>
+<p>☑︎ Classify data using USDA criteria</p>
+<p>☐ Visualize the USDA classification</p>
+<p>☐ Analyze the USDA classification</p>
+<blockquote class="last">
+<div><p>☐ Model with the USDA classification as the response (basic logistic regression)</p>
+<p>☐ Assess model(s) fit and residuals</p>
+</div></blockquote>
+</dd>
+<dt>#### Final</dt>
+<dd><p class="first">☐ Analyze logistic model factors</p>
+<p>☐ Complex modeling:</p>
+<blockquote>
+<div><p>☐ Logistic regression with interactions</p>
+<p>☐ SVM (Linear SVC, SVC, nuSVC)</p>
+<p>☐ Nearest neighbors</p>
+<p>☐ SGD</p>
+</div></blockquote>
+<p>☐ Find a better classification (exploratory clustering)</p>
+<blockquote>
+<div><p>☐ Mean shift</p>
+<p>☐ K-Means</p>
+<p>☐ GMM/Spectral clustering</p>
+</div></blockquote>
+<p class="last">☐ Synthesize final report from findings</p>
+</dd>
+</dl>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">DS420</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../midterm.html">Midterm</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Noah B Johnson & Tristan Shaffer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/pages/md/Outline.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
