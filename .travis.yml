@@ -7,7 +7,7 @@ python:
   - "3.6"
   - "3.7-dev"
 install:
-  - pip install pandoc
+  - make requirements
   - make data
 script:
   - make docs
