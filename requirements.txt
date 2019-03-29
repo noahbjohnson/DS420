@@ -54,10 +54,9 @@ numpy==1.16.1
 openpyxl==2.6.0
 packaging==19.0
 pandas==0.24.1
-pandoc==1.0.2
+pandoc
 pandocfilters==1.4.2
 pexpect==4.6.0
-pandoc
 pickleshare==0.7.5
 plotly==3.6.1
 pluggy==0.8.1
