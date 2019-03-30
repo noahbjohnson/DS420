@@ -1,10 +1,13 @@
-Project Usage
+Project Overview
 ================
 
- - Create a virtual environment
- - Activate it
- - Make data
- - Run notebooks
+
+Project Information
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. toctree::
+
+    guidelines
+    outline
 
 Make
 ~~~~~~~~~
@@ -30,6 +33,10 @@ The Makefile contains the central entry points for common tasks related to this 
 | test_environment    | Test python environment is setup correctly                                                    |
 +---------------------+-----------------------------------------------------------------------------------------------+
 
+Data Profile
+~~~~~~~~~~~~~
+`Data Profile Document <_static/profile.html>`__
+
 Notebooks
 ~~~~~~~~~~
 
@@ -37,3 +44,4 @@ Notebooks
     :glob:
 
     notebooks/*
+

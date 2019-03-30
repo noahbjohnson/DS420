@@ -11,7 +11,6 @@ Contents:
 .. toctree::
    :maxdepth: 3
 
-   md/project_guidelines.md
    getting-started
 
 

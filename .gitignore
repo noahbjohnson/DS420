@@ -92,3 +92,4 @@ data/processed/data_dictionary.pickle
 data/processed/initial_model.csv
 data/processed/initial_model.pickle
 data/raw/usda.xlsx
+docs/_static/profile.html
