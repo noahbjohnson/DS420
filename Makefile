@@ -19,6 +19,10 @@ endif
 # COMMANDS                                                                      #
 #################################################################################
 
+## Make Project (requirements, notebooks, docs)
+project: docs
+
+
 ## Install Python Dependencies
 requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
@@ -29,7 +33,7 @@ data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py
 
 ## Make Notebooks
-notebooks:
+notebooks: data
 	jupyter nbconvert --execute --to rst notebooks/0.ipynb --output ../docs/notebooks/0.rst
 
 ## Make Docs
@@ -37,10 +41,20 @@ docs: notebooks
 	cd docs && make html && cd ..
 	echo "file://$(PWD)/docs/_build/html/index.html"
 
-## Delete all compiled Python files
+## Delete all compiled Python files, Virtual Environments, and downloaded data
 clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
+	rm -f data/interim/*
+	rm -f data/processed/*
+	rm -f data/raw/*
+ifeq (True,$(HAS_CONDA))
+	conda remove --name $(PROJECT_NAME) --all -y
+else
+	deactivate
+	rmvirtualenv $(PROJECT_NAME)
+	workon
+endif
 
 ## Lint using flake8
 lint:
@@ -48,21 +62,22 @@ lint:
 
 ## Set up python interpreter environment
 create_environment:
-	ifeq (True,$(HAS_CONDA))
-			@echo ">>> Detected conda, creating conda environment."
-	ifeq (3,$(findstring 3,$(PYTHON_INTERPRETER)))
-		conda create --name $(PROJECT_NAME) python=3
-	else
-		conda create --name $(PROJECT_NAME) python=2.7
-	endif
-			@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
-	else
-		$(PYTHON_INTERPRETER) -m pip install -q virtualenv virtualenvwrapper
-		@echo ">>> Installing virtualenvwrapper if not already intalled.\nMake sure the following lines are in shell startup file\n\
-		export WORKON_HOME=$$HOME/.virtualenvs\nexport PROJECT_HOME=$$HOME/Devel\nsource /usr/local/bin/virtualenvwrapper.sh\n"
-		@bash -c "source `which virtualenvwrapper.sh`;mkvirtualenv $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER)"
-		@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
-	endif
+ifeq (True,$(HAS_CONDA))
+		@echo ">>> Detected conda, creating conda environment."
+ifeq (3,$(findstring 3,$(PYTHON_INTERPRETER)))
+	conda create --name $(PROJECT_NAME) python=3 -y
+else
+	conda create --name $(PROJECT_NAME) python=2.7 -y
+endif
+		@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
+else
+	$(PYTHON_INTERPRETER) -m pip install -q virtualenv virtualenvwrapper
+	@echo ">>> Installing virtualenvwrapper if not already intalled.\nMake sure the following lines are in shell startup file\n\
+	export WORKON_HOME=$$HOME/.virtualenvs\nexport PROJECT_HOME=$$HOME/Devel\nsource /usr/local/bin/virtualenvwrapper.sh\n"
+	@bash -c "source `which virtualenvwrapper.sh`;mkvirtualenv $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER)"
+	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
+endif
+		@echo ">>> After activating your environment run make project or debug with other options."
 
 ## Test python environment is setup correctly
 test_environment:

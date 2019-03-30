@@ -16,7 +16,9 @@ The Makefile contains the central entry points for common tasks related to this 
 +---------------------+-----------------------------------------------------------------------------------------------+
 | Command             | Description                                                                                   |
 +=====================+===============================================================================================+
-| clean               | Delete all compiled Python files (does not remove created data files)                         |
+| clean               | Delete all compiled Python files, Virtual Environments, and downloaded data                   |
++---------------------+-----------------------------------------------------------------------------------------------+
+| project             | Builds the datasets, docs, and reports                                                        |
 +---------------------+-----------------------------------------------------------------------------------------------+
 | notebooks           | Run notebooks and output rst to docs (RUN BEFORE DOCS)                                        |
 +---------------------+-----------------------------------------------------------------------------------------------+
