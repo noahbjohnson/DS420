@@ -3,16 +3,13 @@ import logging
 from pathlib import Path
 from shutil import copyfileobj
 from urllib.request import urlopen
+
 import pandas as pd
-import pkg_resources
 import requests
 from bs4 import BeautifulSoup
 from xlrd import open_workbook
 
 
-# @click.command()
-# @click.argument('input_filepath', type=click.Path(exists=True))
-# @click.argument('output_filepath', type=click.Path())
 def main():
     """ Runs data processing scripts to download USDA data and parse it into pandas
     """
@@ -73,10 +70,13 @@ def main():
     # State supplemental data
     state_frame = pd.DataFrame(
         index=fips_reference['FIPS Code'].unique())
-    state_frame['StateFIPS'] = [int(str(x)[:2]) for x in state_frame.index.get_values()]
-    state_frame = state_frame.join(data['Supplemental Data - State'], on='StateFIPS', rsuffix=" STATE")
-    state_frame = state_frame.drop(['State', 'StateFIPS'], axis='columns')
-    out_frame = out_frame.join(state_frame)
+    state_frame['StateFIPS'] = [int(str(x)[:2])
+                                for x in state_frame.index.get_values()]
+    state_frame = state_frame.join(data['Supplemental Data - State'],
+                                   on='StateFIPS', rsuffix=" ")
+    state_frame = state_frame.drop(['State', 'StateFIPS'],
+                                   axis='columns')
+    out_frame = out_frame.join(state_frame, rsuffix=" STATE")
 
     # Save the dataframe to pickle file
     logger.info('Saving dataset to pickle')
@@ -98,21 +98,21 @@ if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     logging.basicConfig(level=logging.INFO, format=log_fmt)
 
-    # not used in this stub but often useful for finding various files
     project_dir = Path(__file__).resolve().parents[2]
 
-    atlas_url = "https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation" \
-                "-downloads"
-    excel_file_name = Path.joinpath(project_dir, "data/raw/usda.xlsx")
-    interim_pickle = Path.joinpath(project_dir, "data/interim/usda.pickle")
-    interim_pickle_dd = Path.joinpath(project_dir, "data/interim/usda_dictionary.pickle")
-    fips_file = Path.joinpath(project_dir, "data/external/county.csv")
+    atlas_url = "https://www.ers.usda.gov/" \
+                "data-products/food-environment-atlas/" \
+                "data-access-and-documentation-downloads"
+    excel_file_name = Path.joinpath(project_dir,
+                                    "data/raw/usda.xlsx")
+    interim_pickle = Path.joinpath(project_dir,
+                                   "data/interim/usda.pickle")
+    interim_pickle_dd = Path.joinpath(project_dir,
+                                      "data/interim/usda_dictionary.pickle")
+    fips_file = Path.joinpath(project_dir,
+                              "data/external/county.csv")
 
     logger = logging.getLogger(__name__)
     logger.info('Getting data from the USDA')
-
-    # find .env automagically by walking up directories until it's found, then
-    # load up the .env entries as environment variables
-    # load_dotenv(find_dotenv())
 
     main()
