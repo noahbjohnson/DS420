@@ -75,7 +75,7 @@ def main():
         index=fips_reference['FIPS Code'].unique())
     state_frame['StateFIPS'] = [int(str(x)[:2]) for x in state_frame.index.get_values()]
     state_frame = state_frame.join(data['Supplemental Data - State'], on='StateFIPS', rsuffix=" STATE")
-    state_frame = state_frame.drop(['State'], axis='columns')
+    state_frame = state_frame.drop(['State', 'StateFIPS'], axis='columns')
     out_frame = out_frame.join(state_frame)
 
     # Save the dataframe to pickle file
