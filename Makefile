@@ -20,7 +20,7 @@ endif
 #################################################################################
 
 ## Make Project (requirements, notebooks, docs)
-project: docs
+project: data notebooks docs
 
 
 ## Install Python Dependencies
@@ -33,11 +33,13 @@ data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py
 
 ## Make Notebooks
-notebooks: data
-	jupyter nbconvert --execute --to rst notebooks/0.ipynb --output ../docs/notebooks/0.rst
+notebooks:
+	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/0.ipynb --output ../docs/notebooks/0.rst
+	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/1.ipynb --output ../docs/notebooks/1.rst
+
 
 ## Make Docs
-docs: notebooks
+docs:
 	cd docs && make html && cd ..
 	echo "file://$(PWD)/docs/_build/html/index.html"
 

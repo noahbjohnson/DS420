@@ -126,7 +126,7 @@ Save the new data
 
 .. code:: ipython3
 
-    dataset.to_pickle(Path.joinpath(project_dir, "data/processed/initial_model.pickle"))
+    dataset.to_pickle(Path.joinpath(project_dir, "data/processed/0_data.pickle"))
 
 Add variables to Data Dictionary
 --------------------------------
@@ -161,4 +161,4 @@ Save Updated Data Dictionary
 
 .. code:: ipython3
 
-    data_dictionary.to_pickle(Path.joinpath(project_dir, "data/processed/data_dictionary.pickle"))
+    data_dictionary.to_pickle(Path.joinpath(project_dir, "data/processed/0_data_dictionary.pickle"))
