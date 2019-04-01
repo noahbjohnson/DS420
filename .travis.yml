@@ -3,24 +3,19 @@ sudo:
 language:
   python
 python:
-  - "3.5"
   - "3.6"
-  - "3.6-dev"
   - "3.7-dev"
 install:
-  - pip install -r requirements.txt
-  - pip install codecov travis-sphinx
   - sudo apt-get install pandoc
+  - make requirements
+  - make data
 script:
-  - pytest --cov
-after_success:
-  - codecov -t $CODECOV_TOKEN
-  - cd docs && make html
+  - make docs
 deploy:
   provider: pages
   skip-cleanup: true
   github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
   keep-history: true
-  local-dir: docs/build/html
+  local-dir: docs/_build/html
   on:
     branch: master
