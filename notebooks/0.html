@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>1: Classifying based off the USDA Definition &#8212; DS420 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Project Proposal" href="../outline.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../outline.html" title="Project Proposal"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DS420 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../getting-started.html" accesskey="U">Project Overview</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="classifying-based-off-the-usda-definition">
+<h1>1: Classifying based off the USDA Definition<a class="headerlink" href="#classifying-based-off-the-usda-definition" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>To qualify as a “low-access community,” at least 500 people and/or at
+least 33 percent of the census tract’s population must reside more
+than one mile from a supermarket or large grocery store.</p>
+</div></blockquote>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Notebook Setup/Imports</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Project path setup</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="n">project_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Library import</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Print strings as markdown</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">Markdown</span>
+
+<span class="c1"># Data variables</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/interim/usda.pickle&quot;</span><span class="p">))</span>
+<span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/interim/usda_dictionary.pickle&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="section" id="relevant-variables">
+<h2>Relevant Variables<a class="headerlink" href="#relevant-variables" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="number-of-residents-with-low-access">
+<h3>Number of residents with low access<a class="headerlink" href="#number-of-residents-with-low-access" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>LACCESS_POP10 (2010)</p>
+</div></blockquote>
+<blockquote>
+<div><p>LACCESS_POP15 (2015)</p>
+</div></blockquote>
+</div>
+<div class="section" id="percent-of-residents-with-low-access">
+<h3>Percent of residents with low access<a class="headerlink" href="#percent-of-residents-with-low-access" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>PCT_LACCESS_POP10 (2010)</p>
+</div></blockquote>
+<blockquote>
+<div><p>PCT_LACCESS_POP15 (2015)</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="possible-models">
+<h2>Possible Models<a class="headerlink" href="#possible-models" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Only</strong> 500 people or more with low access</p></li>
+<li><p><strong>Only</strong> 33% of the population or more with low access</p></li>
+<li><p><strong>Both</strong> 500 people or more and 33% of the population or more with
+low access</p></li>
+<li><p><strong>Either</strong> 500 people or more or 33% of the population or more with
+low access</p></li>
+</ul>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Model creation</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># County mask for 500 people or more with low access</span>
+<span class="n">five_hundred_bool</span> <span class="o">=</span> <span class="p">[</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;LACCESS_POP15&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">500</span> <span class="p">]</span>
+<span class="n">five_hundren_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">five_hundred_bool</span> <span class="p">]))</span>
+
+<span class="c1"># County mask for 33% of the population or more with low access</span>
+<span class="n">thirty_three_percent_bool</span> <span class="o">=</span> <span class="p">[</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;PCT_LACCESS_POP15&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">33</span> <span class="p">]</span>
+<span class="n">thirty_three_percent_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">thirty_three_percent_bool</span> <span class="p">]))</span>
+
+<span class="c1"># 500 people or more or 33% of the population or more with low access</span>
+<span class="n">or_mask</span> <span class="o">=</span> <span class="p">[</span><span class="nb">any</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">thirty_three_percent_bool</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">five_hundred_bool</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+
+<span class="c1"># 500 people or more and 33% of the population or more with low access</span>
+<span class="n">and_mask</span> <span class="o">=</span> <span class="p">[</span><span class="nb">all</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">thirty_three_percent_bool</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">five_hundred_bool</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Markdown</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&quot;&quot;### Mask Information</span>
+<span class="s2">             - Only 500 people or more with low access</span>
+<span class="s2">                - There are { five_hundren_count } FIPS codes that meet this criteria.</span>
+<span class="s2">             - Only 33</span><span class="si">% o</span><span class="s2">f the population or more with low access</span>
+<span class="s2">                - There are { thirty_three_percent_count } FIPS codes that meet this criteria.</span>
+<span class="s2">             - Both 500 people or more and 33</span><span class="si">% o</span><span class="s2">f the population or more with low access</span>
+<span class="s2">                - There are { sum(and_mask) } FIPS codes that meet this criteria.</span>
+<span class="s2">             - Either 500 people or more or 33</span><span class="si">% o</span><span class="s2">f the population or more with low access</span>
+<span class="s2">                - There are { sum(or_mask) } FIPS codes that meet this criteria.&quot;&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="mask-information">
+<h3>Mask Information<a class="headerlink" href="#mask-information" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Only</span> <span class="mi">500</span> <span class="n">people</span> <span class="ow">or</span> <span class="n">more</span> <span class="k">with</span> <span class="n">low</span> <span class="n">access</span>
+   <span class="o">-</span> <span class="n">There</span> <span class="n">are</span> <span class="mi">2848</span> <span class="n">FIPS</span> <span class="n">codes</span> <span class="n">that</span> <span class="n">meet</span> <span class="n">this</span> <span class="n">criteria</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Only</span> <span class="mi">33</span><span class="o">%</span> <span class="n">of</span> <span class="n">the</span> <span class="n">population</span> <span class="ow">or</span> <span class="n">more</span> <span class="k">with</span> <span class="n">low</span> <span class="n">access</span>
+   <span class="o">-</span> <span class="n">There</span> <span class="n">are</span> <span class="mi">568</span> <span class="n">FIPS</span> <span class="n">codes</span> <span class="n">that</span> <span class="n">meet</span> <span class="n">this</span> <span class="n">criteria</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Both</span> <span class="mi">500</span> <span class="n">people</span> <span class="ow">or</span> <span class="n">more</span> <span class="ow">and</span> <span class="mi">33</span><span class="o">%</span> <span class="n">of</span> <span class="n">the</span> <span class="n">population</span> <span class="ow">or</span> <span class="n">more</span> <span class="k">with</span> <span class="n">low</span> <span class="n">access</span>
+   <span class="o">-</span> <span class="n">There</span> <span class="n">are</span> <span class="mi">562</span> <span class="n">FIPS</span> <span class="n">codes</span> <span class="n">that</span> <span class="n">meet</span> <span class="n">this</span> <span class="n">criteria</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Either</span> <span class="mi">500</span> <span class="n">people</span> <span class="ow">or</span> <span class="n">more</span> <span class="ow">or</span> <span class="mi">33</span><span class="o">%</span> <span class="n">of</span> <span class="n">the</span> <span class="n">population</span> <span class="ow">or</span> <span class="n">more</span> <span class="k">with</span> <span class="n">low</span> <span class="n">access</span>
+   <span class="o">-</span> <span class="n">There</span> <span class="n">are</span> <span class="mi">2854</span> <span class="n">FIPS</span> <span class="n">codes</span> <span class="n">that</span> <span class="n">meet</span> <span class="n">this</span> <span class="n">criteria</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="initial-model">
+<h2>Initial Model<a class="headerlink" href="#initial-model" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>We determined that the best initial model for the USDA definition of
+food desert would be &gt;=33% of the tract living more than a mile from
+a grocery store. However, all possible models will be included for
+further analysis.</p>
+</div></blockquote>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;USDA Model Percent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">thirty_three_percent_bool</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;USDA Model Count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">five_hundred_bool</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;USDA Model And&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">and_mask</span>
+<span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;USDA Model Or&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">or_mask</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="save-the-new-data">
+<h2>Save the new data<a class="headerlink" href="#save-the-new-data" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/0_data.pickle&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-variables-to-data-dictionary">
+<h2>Add variables to Data Dictionary<a class="headerlink" href="#add-variables-to-data-dictionary" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">data_dictionary</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+    <span class="p">{</span><span class="s2">&quot;Variable Code&quot;</span><span class="p">:</span><span class="s2">&quot;USDA Model Percent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Variable Name&quot;</span><span class="p">:</span><span class="s2">&quot;33</span><span class="si">% o</span><span class="s2">f the population or more with low access&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Variable Code&quot;</span><span class="p">:</span><span class="s2">&quot;USDA Model Count&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Variable Name&quot;</span><span class="p">:</span><span class="s2">&quot;500 people or more with low access&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Variable Code&quot;</span><span class="p">:</span><span class="s2">&quot;USDA Model And&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Variable Name&quot;</span><span class="p">:</span><span class="s2">&quot;Both 500 people or more and 33</span><span class="si">% o</span><span class="s2">f the population or more with low access&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Variable Code&quot;</span><span class="p">:</span><span class="s2">&quot;USDA Model Or&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Variable Name&quot;</span><span class="p">:</span><span class="s2">&quot;Either 500 people or more or 33</span><span class="si">% o</span><span class="s2">f the population or more with low access&quot;</span><span class="p">}],</span>
+    <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">DS420</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">pandas</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">indexing</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1494</span><span class="p">:</span> <span class="ne">FutureWarning</span><span class="p">:</span>
+<span class="n">Passing</span> <span class="nb">list</span><span class="o">-</span><span class="n">likes</span> <span class="n">to</span> <span class="o">.</span><span class="n">loc</span> <span class="ow">or</span> <span class="p">[]</span> <span class="k">with</span> <span class="nb">any</span> <span class="n">missing</span> <span class="n">label</span> <span class="n">will</span> <span class="k">raise</span>
+<span class="ne">KeyError</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">future</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">use</span> <span class="o">.</span><span class="n">reindex</span><span class="p">()</span> <span class="k">as</span> <span class="n">an</span> <span class="n">alternative</span><span class="o">.</span>
+
+<span class="n">See</span> <span class="n">the</span> <span class="n">documentation</span> <span class="n">here</span><span class="p">:</span>
+<span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pandas</span><span class="o">.</span><span class="n">pydata</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">pandas</span><span class="o">-</span><span class="n">docs</span><span class="o">/</span><span class="n">stable</span><span class="o">/</span><span class="n">indexing</span><span class="o">.</span><span class="n">html</span><span class="c1">#deprecate-loc-reindex-listlike</span>
+  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getitem_tuple</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="save-updated-data-dictionary">
+<h2>Save Updated Data Dictionary<a class="headerlink" href="#save-updated-data-dictionary" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/0_data_dictionary.pickle&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1: Classifying based off the USDA Definition</a><ul>
+<li><a class="reference internal" href="#relevant-variables">Relevant Variables</a><ul>
+<li><a class="reference internal" href="#number-of-residents-with-low-access">Number of residents with low access</a></li>
+<li><a class="reference internal" href="#percent-of-residents-with-low-access">Percent of residents with low access</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#possible-models">Possible Models</a><ul>
+<li><a class="reference internal" href="#mask-information">Mask Information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#initial-model">Initial Model</a></li>
+<li><a class="reference internal" href="#save-the-new-data">Save the new data</a></li>
+<li><a class="reference internal" href="#add-variables-to-data-dictionary">Add variables to Data Dictionary</a></li>
+<li><a class="reference internal" href="#save-updated-data-dictionary">Save Updated Data Dictionary</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../outline.html"
+                        title="previous chapter">Project Proposal</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/notebooks/0.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../outline.html" title="Project Proposal"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DS420 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../getting-started.html" >Project Overview</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Noah B Johnson &amp; Tristan Shaffer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
+    </div>
+  </body>
+</html>
