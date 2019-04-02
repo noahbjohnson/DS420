@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>2. 2: Cleaning and Profiling &#8212; DS420 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="1. 1: Classifying based off the USDA Definition" href="0.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="0.html" title="1. 1: Classifying based off the USDA Definition"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DS420 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../getting-started.html" accesskey="U">Project Overview</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="cleaning-and-profiling">
+<h1>2. 2: Cleaning and Profiling<a class="headerlink" href="#cleaning-and-profiling" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Notebook Setup/Imports</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Project path setup</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="n">project_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Library import</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas_profiling</span>
+
+<span class="c1"># Print strings as markdown</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">Markdown</span>
+
+<span class="c1"># Data variables from previous notebook</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/0_data.pickle&quot;</span><span class="p">))</span>
+<span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/0_data_dictionary.pickle&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="section" id="data-type-validation-cleaning">
+<h2>2.1. Data Type Validation &amp; Cleaning<a class="headerlink" href="#data-type-validation-cleaning" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Get the count for data types in the dataset</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">dtypes</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">get_dtype_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">bool</span>         <span class="mi">4</span>
+<span class="n">float64</span>    <span class="mi">314</span>
+<span class="nb">object</span>       <span class="mi">9</span>
+<span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Find columns as strings or other objects</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">object_columns</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">d</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">object_columns</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;2010 Census Population&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2011&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2012&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2013&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2014&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2015&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2016&#39;</span><span class="p">,</span> <span class="s1">&#39;School Breakfast Program participants FY 2011&#39;</span><span class="p">,</span> <span class="s1">&#39;School Breakfast Program participants, FY 2012&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Parse objects to float</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">object_columns</span><span class="p">:</span>
+    <span class="n">sub</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">dataset</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Check types</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">get_dtype_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">bool</span>         <span class="mi">4</span>
+<span class="n">float64</span>    <span class="mi">323</span>
+<span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Save the cleaned data</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data.pickle&quot;</span><span class="p">))</span>
+<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data_dictionary.pickle&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Create the data profile object and save it to an HTML file</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">pandas_profiling</span><span class="o">.</span><span class="n">ProfileReport</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">check_recoded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">profile</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">outputfile</span><span class="o">=</span><span class="s2">&quot;../docs/profile.html&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. 2: Cleaning and Profiling</a><ul>
+<li><a class="reference internal" href="#data-type-validation-cleaning">2.1. Data Type Validation &amp; Cleaning</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="0.html"
+                        title="previous chapter">1. 1: Classifying based off the USDA Definition</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/notebooks/1.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="0.html" title="1. 1: Classifying based off the USDA Definition"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DS420 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../getting-started.html" >Project Overview</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Noah B Johnson &amp; Tristan Shaffer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
+    </div>
+  </body>
+</html>

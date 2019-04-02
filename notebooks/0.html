@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>1: Classifying based off the USDA Definition &#8212; DS420 0.0.0 documentation</title>
+    <title>1. 1: Classifying based off the USDA Definition &#8212; DS420 0.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -16,7 +16,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Project Proposal" href="../outline.html" /> 
+    <link rel="next" title="2. 2: Cleaning and Profiling" href="1.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../profile.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,7 +26,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../outline.html" title="Project Proposal"
+          <a href="1.html" title="2. 2: Cleaning and Profiling"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../profile.html" title="&lt;no title&gt;"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">DS420 0.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../getting-started.html" accesskey="U">Project Overview</a> &#187;</li> 
@@ -38,11 +42,11 @@
           <div class="body" role="main">
             
   <div class="section" id="classifying-based-off-the-usda-definition">
-<h1>1: Classifying based off the USDA Definition<a class="headerlink" href="#classifying-based-off-the-usda-definition" title="Permalink to this headline">¶</a></h1>
+<h1>1. 1: Classifying based off the USDA Definition<a class="headerlink" href="#classifying-based-off-the-usda-definition" title="Permalink to this headline">¶</a></h1>
 <blockquote>
-<div><p>To qualify as a “low-access community,” at least 500 people and/or at
-least 33 percent of the census tract’s population must reside more
-than one mile from a supermarket or large grocery store.</p>
+<div><p>To qualify as a “low-access community,” at least 500 people and/or
+at least 33 percent of the census tract’s population must reside
+more than one mile from a supermarket or large grocery store.</p>
 </div></blockquote>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Notebook Setup/Imports</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -63,28 +67,24 @@ than one mile from a supermarket or large grocery store.</p>
 </pre></div>
 </div>
 <div class="section" id="relevant-variables">
-<h2>Relevant Variables<a class="headerlink" href="#relevant-variables" title="Permalink to this headline">¶</a></h2>
+<h2>1.1. Relevant Variables<a class="headerlink" href="#relevant-variables" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="number-of-residents-with-low-access">
-<h3>Number of residents with low access<a class="headerlink" href="#number-of-residents-with-low-access" title="Permalink to this headline">¶</a></h3>
+<h3>1.1.1. Number of residents with low access<a class="headerlink" href="#number-of-residents-with-low-access" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>LACCESS_POP10 (2010)</p>
-</div></blockquote>
-<blockquote>
-<div><p>LACCESS_POP15 (2015)</p>
+<p>LACCESS_POP15 (2015)</p>
 </div></blockquote>
 </div>
 <div class="section" id="percent-of-residents-with-low-access">
-<h3>Percent of residents with low access<a class="headerlink" href="#percent-of-residents-with-low-access" title="Permalink to this headline">¶</a></h3>
+<h3>1.1.2. Percent of residents with low access<a class="headerlink" href="#percent-of-residents-with-low-access" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>PCT_LACCESS_POP10 (2010)</p>
-</div></blockquote>
-<blockquote>
-<div><p>PCT_LACCESS_POP15 (2015)</p>
+<p>PCT_LACCESS_POP15 (2015)</p>
 </div></blockquote>
 </div>
 </div>
 <div class="section" id="possible-models">
-<h2>Possible Models<a class="headerlink" href="#possible-models" title="Permalink to this headline">¶</a></h2>
+<h2>1.2. Possible Models<a class="headerlink" href="#possible-models" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><strong>Only</strong> 500 people or more with low access</p></li>
 <li><p><strong>Only</strong> 33% of the population or more with low access</p></li>
@@ -123,7 +123,7 @@ low access</p></li>
 </pre></div>
 </div>
 <div class="section" id="mask-information">
-<h3>Mask Information<a class="headerlink" href="#mask-information" title="Permalink to this headline">¶</a></h3>
+<h3>1.2.1. Mask Information<a class="headerlink" href="#mask-information" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Only</span> <span class="mi">500</span> <span class="n">people</span> <span class="ow">or</span> <span class="n">more</span> <span class="k">with</span> <span class="n">low</span> <span class="n">access</span>
    <span class="o">-</span> <span class="n">There</span> <span class="n">are</span> <span class="mi">2848</span> <span class="n">FIPS</span> <span class="n">codes</span> <span class="n">that</span> <span class="n">meet</span> <span class="n">this</span> <span class="n">criteria</span><span class="o">.</span>
 <span class="o">-</span> <span class="n">Only</span> <span class="mi">33</span><span class="o">%</span> <span class="n">of</span> <span class="n">the</span> <span class="n">population</span> <span class="ow">or</span> <span class="n">more</span> <span class="k">with</span> <span class="n">low</span> <span class="n">access</span>
@@ -137,7 +137,7 @@ low access</p></li>
 </div>
 </div>
 <div class="section" id="initial-model">
-<h2>Initial Model<a class="headerlink" href="#initial-model" title="Permalink to this headline">¶</a></h2>
+<h2>1.3. Initial Model<a class="headerlink" href="#initial-model" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>We determined that the best initial model for the USDA definition of
 food desert would be &gt;=33% of the tract living more than a mile from
@@ -152,13 +152,13 @@ further analysis.</p>
 </div>
 </div>
 <div class="section" id="save-the-new-data">
-<h2>Save the new data<a class="headerlink" href="#save-the-new-data" title="Permalink to this headline">¶</a></h2>
+<h2>1.4. Save the new data<a class="headerlink" href="#save-the-new-data" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/0_data.pickle&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="add-variables-to-data-dictionary">
-<h2>Add variables to Data Dictionary<a class="headerlink" href="#add-variables-to-data-dictionary" title="Permalink to this headline">¶</a></h2>
+<h2>1.5. Add variables to Data Dictionary<a class="headerlink" href="#add-variables-to-data-dictionary" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">data_dictionary</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
     <span class="p">{</span><span class="s2">&quot;Variable Code&quot;</span><span class="p">:</span><span class="s2">&quot;USDA Model Percent&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Variable Name&quot;</span><span class="p">:</span><span class="s2">&quot;33</span><span class="si">% o</span><span class="s2">f the population or more with low access&quot;</span><span class="p">},</span>
@@ -171,7 +171,7 @@ further analysis.</p>
     <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">DS420</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">pandas</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">indexing</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1494</span><span class="p">:</span> <span class="ne">FutureWarning</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">virtualenv</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">dev</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">pandas</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">indexing</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1494</span><span class="p">:</span> <span class="ne">FutureWarning</span><span class="p">:</span>
 <span class="n">Passing</span> <span class="nb">list</span><span class="o">-</span><span class="n">likes</span> <span class="n">to</span> <span class="o">.</span><span class="n">loc</span> <span class="ow">or</span> <span class="p">[]</span> <span class="k">with</span> <span class="nb">any</span> <span class="n">missing</span> <span class="n">label</span> <span class="n">will</span> <span class="k">raise</span>
 <span class="ne">KeyError</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">future</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">use</span> <span class="o">.</span><span class="n">reindex</span><span class="p">()</span> <span class="k">as</span> <span class="n">an</span> <span class="n">alternative</span><span class="o">.</span>
 
@@ -182,7 +182,7 @@ further analysis.</p>
 </div>
 </div>
 <div class="section" id="save-updated-data-dictionary">
-<h2>Save Updated Data Dictionary<a class="headerlink" href="#save-updated-data-dictionary" title="Permalink to this headline">¶</a></h2>
+<h2>1.6. Save Updated Data Dictionary<a class="headerlink" href="#save-updated-data-dictionary" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/0_data_dictionary.pickle&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -197,27 +197,30 @@ further analysis.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">1: Classifying based off the USDA Definition</a><ul>
-<li><a class="reference internal" href="#relevant-variables">Relevant Variables</a><ul>
-<li><a class="reference internal" href="#number-of-residents-with-low-access">Number of residents with low access</a></li>
-<li><a class="reference internal" href="#percent-of-residents-with-low-access">Percent of residents with low access</a></li>
+<li><a class="reference internal" href="#">1. 1: Classifying based off the USDA Definition</a><ul>
+<li><a class="reference internal" href="#relevant-variables">1.1. Relevant Variables</a><ul>
+<li><a class="reference internal" href="#number-of-residents-with-low-access">1.1.1. Number of residents with low access</a></li>
+<li><a class="reference internal" href="#percent-of-residents-with-low-access">1.1.2. Percent of residents with low access</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#possible-models">Possible Models</a><ul>
-<li><a class="reference internal" href="#mask-information">Mask Information</a></li>
+<li><a class="reference internal" href="#possible-models">1.2. Possible Models</a><ul>
+<li><a class="reference internal" href="#mask-information">1.2.1. Mask Information</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#initial-model">Initial Model</a></li>
-<li><a class="reference internal" href="#save-the-new-data">Save the new data</a></li>
-<li><a class="reference internal" href="#add-variables-to-data-dictionary">Add variables to Data Dictionary</a></li>
-<li><a class="reference internal" href="#save-updated-data-dictionary">Save Updated Data Dictionary</a></li>
+<li><a class="reference internal" href="#initial-model">1.3. Initial Model</a></li>
+<li><a class="reference internal" href="#save-the-new-data">1.4. Save the new data</a></li>
+<li><a class="reference internal" href="#add-variables-to-data-dictionary">1.5. Add variables to Data Dictionary</a></li>
+<li><a class="reference internal" href="#save-updated-data-dictionary">1.6. Save Updated Data Dictionary</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../outline.html"
-                        title="previous chapter">Project Proposal</a></p>
+  <p class="topless"><a href="../profile.html"
+                        title="previous chapter">&lt;no title&gt;</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="1.html"
+                        title="next chapter">2. 2: Cleaning and Profiling</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -246,7 +249,10 @@ further analysis.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../outline.html" title="Project Proposal"
+          <a href="1.html" title="2. 2: Cleaning and Profiling"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../profile.html" title="&lt;no title&gt;"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">DS420 0.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../getting-started.html" >Project Overview</a> &#187;</li> 

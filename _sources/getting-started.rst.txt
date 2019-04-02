@@ -37,13 +37,15 @@ The Makefile contains the central entry points for common tasks related to this 
 
 Data Profile
 ~~~~~~~~~~~~~
-`Data Profile Document <_static/profile.html>`__
+.. toctree::
+
+    Data Profile Report <profile>
 
 Notebooks
 ~~~~~~~~~~
 
 .. toctree::
     :glob:
+    :numbered:
 
     notebooks/*
-
