@@ -20,7 +20,7 @@ endif
 #################################################################################
 
 ## Make Project (requirements, notebooks, docs)
-project: data notebooks docs
+project: data docs
 
 
 ## Install Python Dependencies
@@ -39,7 +39,7 @@ notebooks:
 
 
 ## Make Docs
-docs:
+docs: notebooks
 	cd docs && make html && cd ..
 	echo "file://$(PWD)/docs/_build/html/index.html"
 
