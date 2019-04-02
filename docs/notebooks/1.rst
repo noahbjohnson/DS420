@@ -1,0 +1,98 @@
+
+2: Cleaning and Profiling
+=========================
+
+.. code:: ipython3
+
+    """ Notebook Setup/Imports
+    """
+    
+    # Project path setup
+    from pathlib import Path
+    project_dir = Path(__name__).resolve().parents[1]
+    
+    # Library import
+    import pandas as pd
+    import numpy as np
+    import pandas_profiling
+    
+    # Print strings as markdown
+    from IPython.display import Markdown
+    
+    # Data variables from previous notebook
+    dataset = pd.read_pickle(Path.joinpath(project_dir, "data/processed/0_data.pickle"))
+    data_dictionary = pd.read_pickle(Path.joinpath(project_dir, "data/processed/0_data_dictionary.pickle"))
+
+Data Type Validation & Cleaning
+-------------------------------
+
+.. code:: ipython3
+
+    """ Get the count for data types in the dataset
+    """
+    d = dataset.dtypes
+    dataset.get_dtype_counts()
+
+
+
+
+.. parsed-literal::
+
+    bool         4
+    float64    314
+    object       9
+    dtype: int64
+
+
+
+.. code:: ipython3
+
+    """ Find columns as strings or other objects
+    """
+    object_columns = d[d == 'object'].index.to_list()
+    print(object_columns)
+
+
+.. parsed-literal::
+
+    ['2010 Census Population', 'Population Estimate, 2011', 'Population Estimate, 2012', 'Population Estimate, 2013', 'Population Estimate, 2014', 'Population Estimate, 2015', 'Population Estimate, 2016', 'School Breakfast Program participants FY 2011', 'School Breakfast Program participants, FY 2012']
+
+
+.. code:: ipython3
+
+    """ Parse objects to float
+    """
+    for column in object_columns:
+        sub = dataset[column].str.replace(",","").str.replace("-","").str.strip().apply(lambda x: np.nan if x == "" else x)
+        dataset[column] = sub.astype(float)
+
+.. code:: ipython3
+
+    """ Check types
+    """
+    dataset.get_dtype_counts()
+
+
+
+
+.. parsed-literal::
+
+    bool         4
+    float64    323
+    dtype: int64
+
+
+
+.. code:: ipython3
+
+    """ Save the cleaned data
+    """
+    dataset.to_pickle(Path.joinpath(project_dir, "data/processed/1_data.pickle"))
+    data_dictionary.to_pickle(Path.joinpath(project_dir, "data/processed/1_data_dictionary.pickle"))
+
+.. code:: ipython3
+
+    """ Create the data profile object and save it to an HTML file
+    """
+    profile = pandas_profiling.ProfileReport(dataset, check_recoded=True)
+    profile.to_file(outputfile="../docs/profile.html")
