@@ -15,3 +15,6 @@ nbsphinx
 notebook
 jupyter_contrib_nbextensions
 pandas-profiling
+geopandas
+pyshp
+shapely
