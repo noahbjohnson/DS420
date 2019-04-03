@@ -15,6 +15,8 @@
     import pandas as pd
     import numpy as np
     import pandas_profiling
+    import plotly
+    import plotly.figure_factory as ff
     
     # Print strings as markdown
     from IPython.display import Markdown
@@ -106,3 +108,46 @@ Variable Selection
     """ Create a list of rejected variables with > .975 correlation from the profile analysis
     """
     rejected_variables = profile.get_rejected_variables(.975)
+
+Plot USDA Model
+---------------
+
+.. code:: ipython3
+
+    scl = ["#0000FF","#ff0000"]
+    
+    endpts = list(np.linspace(0,1,len(scl) -1))
+    fips = dataset.index.tolist()
+    values= dataset["USDA Model Percent"].tolist()
+    
+    fig = ff.create_choropleth(
+        fips=fips,
+        values=values,
+        scope=['usa'], 
+        binning_endpoints=endpts,
+        colorscale=scl,
+        show_state_data=False, 
+        show_hover=False,
+        centroid_marker={'opacity':0},
+        asp=2.9,
+        title="Food Deserts"
+    )
+    plotly.offline.iplot(fig, filename='choropleth_full_usa')
+
+
+.. parsed-literal::
+
+    /home/travis/virtualenv/python3.7-dev/lib/python3.7/site-packages/pandas/core/frame.py:6692: FutureWarning:
+    
+    Sorting because non-concatenation axis is not aligned. A future version
+    of pandas will change to not sort by default.
+    
+    To accept the future behavior, pass 'sort=False'.
+    
+    To retain the current behavior and silence the warning, pass 'sort=True'.
+    
+    
+
+
+
+
