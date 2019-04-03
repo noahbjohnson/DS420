@@ -3,7 +3,6 @@ sudo:
 language:
   python
 python:
-  - "3.6"
   - "3.7-dev"
 install:
   - sudo apt-get install pandoc
