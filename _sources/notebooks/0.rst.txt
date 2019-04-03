@@ -143,7 +143,7 @@ Add variables to Data Dictionary
 
 .. parsed-literal::
 
-    /home/travis/virtualenv/python3.7-dev/lib/python3.7/site-packages/pandas/core/indexing.py:1494: FutureWarning: 
+    /home/travis/virtualenv/python3.6.3/lib/python3.6/site-packages/pandas/core/indexing.py:1494: FutureWarning: 
     Passing list-likes to .loc or [] with any missing label will raise
     KeyError in the future, you can use .reindex() as an alternative.
     
