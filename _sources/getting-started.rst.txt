@@ -37,9 +37,8 @@ The Makefile contains the central entry points for common tasks related to this 
 
 Data Profile
 ~~~~~~~~~~~~~
-.. toctree::
 
-    Data Profile Report <profile>
+`Data Profile Report <_static/profile.html>`_
 
 Notebooks
 ~~~~~~~~~~

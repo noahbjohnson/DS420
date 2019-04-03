@@ -108,7 +108,16 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Create the data profile object and save it to an HTML file</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">profile</span> <span class="o">=</span> <span class="n">pandas_profiling</span><span class="o">.</span><span class="n">ProfileReport</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">check_recoded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">profile</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">outputfile</span><span class="o">=</span><span class="s2">&quot;../docs/profile.html&quot;</span><span class="p">)</span>
+<span class="n">profile</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">outputfile</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span>
+                                      <span class="s2">&quot;docs/_static/profile.html&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="variable-selection">
+<h2>2.2. Variable Selection<a class="headerlink" href="#variable-selection" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Create a list of rejected variables with &gt; .975 correlation from the profile analysis</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">rejected_variables</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_rejected_variables</span><span class="p">(</span><span class="o">.</span><span class="mi">975</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -124,6 +133,7 @@
   <ul>
 <li><a class="reference internal" href="#">2. 2: Cleaning and Profiling</a><ul>
 <li><a class="reference internal" href="#data-type-validation-cleaning">2.1. Data Type Validation &amp; Cleaning</a></li>
+<li><a class="reference internal" href="#variable-selection">2.2. Variable Selection</a></li>
 </ul>
 </li>
 </ul>

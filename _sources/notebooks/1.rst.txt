@@ -95,4 +95,14 @@ Data Type Validation & Cleaning
     """ Create the data profile object and save it to an HTML file
     """
     profile = pandas_profiling.ProfileReport(dataset, check_recoded=True)
-    profile.to_file(outputfile="../docs/profile.html")
+    profile.to_file(outputfile = Path.joinpath(project_dir,
+                                          "docs/_static/profile.html"))
+
+Variable Selection
+------------------
+
+.. code:: ipython3
+
+    """ Create a list of rejected variables with > .975 correlation from the profile analysis
+    """
+    rejected_variables = profile.get_rejected_variables(.975)
