@@ -18,3 +18,4 @@ pandas-profiling
 geopandas
 pyshp
 shapely
+plotly
