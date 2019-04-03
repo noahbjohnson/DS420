@@ -101,35 +101,57 @@
 <span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Save the cleaned data</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">dataset</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data.pickle&quot;</span><span class="p">))</span>
-<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data_dictionary.pickle&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Create the data profile object and save it to an HTML file</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">profile</span> <span class="o">=</span> <span class="n">pandas_profiling</span><span class="o">.</span><span class="n">ProfileReport</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">check_recoded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">profile</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">outputfile</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span>
-                                      <span class="s2">&quot;docs/_static/profile.html&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
 </div>
 <div class="section" id="variable-selection">
 <h2>2.2. Variable Selection<a class="headerlink" href="#variable-selection" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Create a list of rejected variables with &gt; .975 correlation from the profile analysis</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">pandas_profiling</span><span class="o">.</span><span class="n">ProfileReport</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">check_recoded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">rejected_variables</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_rejected_variables</span><span class="p">(</span><span class="o">.</span><span class="mi">975</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; List of columns to keep</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">keep_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rejected_variables</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; New dataframe with the columns to keep</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">dataset_clean</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">keep_columns</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Set the USDA Model to the percentage</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">dataset_clean</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;USDA Model Count&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset_clean</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s2">&quot;USDA Model Percent&quot;</span><span class="p">:</span><span class="s2">&quot;USDA Model&quot;</span><span class="p">},</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Save the cleaned data</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">dataset_clean</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data.pickle&quot;</span><span class="p">))</span>
+<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data_dictionary.pickle&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cleaned-data-profile">
+<h2>2.3. Cleaned Data Profile<a class="headerlink" href="#cleaned-data-profile" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Create the data profile object and save it to an HTML file</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">pandas_profiling</span><span class="o">.</span><span class="n">ProfileReport</span><span class="p">(</span><span class="n">dataset_clean</span><span class="p">,</span> <span class="n">check_recoded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">profile</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">outputfile</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span>
+                                      <span class="s2">&quot;docs/_static/profile.html&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="plot-usda-model">
-<h2>2.3. Plot USDA Model<a class="headerlink" href="#plot-usda-model" title="Permalink to this headline">¶</a></h2>
+<h2>2.4. Plot USDA Model<a class="headerlink" href="#plot-usda-model" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scl</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#0000FF&quot;</span><span class="p">,</span><span class="s2">&quot;#ff0000&quot;</span><span class="p">]</span>
 
 <span class="n">endpts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">scl</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">fips</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="n">values</span><span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;USDA Model Percent&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">fips</span> <span class="o">=</span> <span class="n">dataset_clean</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">values</span><span class="o">=</span> <span class="n">dataset_clean</span><span class="p">[</span><span class="s2">&quot;USDA Model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">ff</span><span class="o">.</span><span class="n">create_choropleth</span><span class="p">(</span>
     <span class="n">fips</span><span class="o">=</span><span class="n">fips</span><span class="p">,</span>
@@ -170,7 +192,8 @@
 <li><a class="reference internal" href="#">2. 2: Cleaning and Profiling</a><ul>
 <li><a class="reference internal" href="#data-type-validation-cleaning">2.1. Data Type Validation &amp; Cleaning</a></li>
 <li><a class="reference internal" href="#variable-selection">2.2. Variable Selection</a></li>
-<li><a class="reference internal" href="#plot-usda-model">2.3. Plot USDA Model</a></li>
+<li><a class="reference internal" href="#cleaned-data-profile">2.3. Cleaned Data Profile</a></li>
+<li><a class="reference internal" href="#plot-usda-model">2.4. Plot USDA Model</a></li>
 </ul>
 </li>
 </ul>
