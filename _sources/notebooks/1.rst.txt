@@ -1,6 +1,6 @@
 
-2: Cleaning and Profiling
-=========================
+Cleaning and Profiling
+======================
 
 .. code:: ipython3
 
@@ -15,8 +15,6 @@
     import pandas as pd
     import numpy as np
     import pandas_profiling
-    import plotly
-    import plotly.figure_factory as ff
     
     # Print strings as markdown
     from IPython.display import Markdown
@@ -113,9 +111,29 @@ Variable Selection
     """
     dataset_clean.drop("USDA Model Count", axis="columns", inplace=True)
 
+
+.. parsed-literal::
+
+    /home/travis/virtualenv/python3.7-dev/lib/python3.7/site-packages/pandas/core/frame.py:3940: SettingWithCopyWarning: 
+    A value is trying to be set on a copy of a slice from a DataFrame
+    
+    See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+      errors=errors)
+
+
 .. code:: ipython3
 
     dataset_clean.rename({"USDA Model Percent":"USDA Model"},axis="columns",inplace=True)
+
+
+.. parsed-literal::
+
+    /home/travis/virtualenv/python3.7-dev/lib/python3.7/site-packages/pandas/core/frame.py:4025: SettingWithCopyWarning: 
+    A value is trying to be set on a copy of a slice from a DataFrame
+    
+    See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+      return super(DataFrame, self).rename(**kwargs)
+
 
 .. code:: ipython3
 
@@ -134,46 +152,5 @@ Cleaned Data Profile
     profile = pandas_profiling.ProfileReport(dataset_clean, check_recoded=True)
     profile.to_file(outputfile = Path.joinpath(project_dir,
                                           "docs/_static/profile.html"))
-
-Plot USDA Model
----------------
-
-.. code:: ipython3
-
-    scl = ["#0000FF","#ff0000"]
-    
-    endpts = list(np.linspace(0,1,len(scl) -1))
-    fips = dataset_clean.index.tolist()
-    values= dataset_clean["USDA Model"].tolist()
-    
-    fig = ff.create_choropleth(
-        fips=fips,
-        values=values,
-        scope=['usa'], 
-        binning_endpoints=endpts,
-        colorscale=scl,
-        show_state_data=False, 
-        show_hover=False,
-        centroid_marker={'opacity':0},
-        asp=2.9,
-        title="Food Deserts"
-    )
-    plotly.offline.iplot(fig, filename='choropleth_full_usa')
-
-
-.. parsed-literal::
-
-    /home/travis/virtualenv/python3.7-dev/lib/python3.7/site-packages/pandas/core/frame.py:6692: FutureWarning:
-    
-    Sorting because non-concatenation axis is not aligned. A future version
-    of pandas will change to not sort by default.
-    
-    To accept the future behavior, pass 'sort=False'.
-    
-    To retain the current behavior and silence the warning, pass 'sort=True'.
-    
-    
-
-
 
 

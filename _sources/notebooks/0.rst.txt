@@ -1,6 +1,6 @@
 
-1: Classifying based off the USDA Definition
-============================================
+Classifying based off the USDA Definition
+=========================================
 
     To qualify as a “low-access community,” at least 500 people and/or
     at least 33 percent of the census tract's population must reside
