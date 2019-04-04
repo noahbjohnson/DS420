@@ -94,14 +94,15 @@ Midterm
 
     [] Visualize the USDA classification
 
-    [] Analyze the USDA classification
-
-      [] Model with the USDA classification as the response (basic logistic regression)
-
-      [] Assess model(s) fit and residuals
 
 Final
 **********
+
+    [] Analyze the USDA classification
+
+    [] Model with the USDA classification as the response (basic logistic regression)
+
+    [] Assess model(s) fit and residuals
 
     [] Analyze logistic model factors
 
