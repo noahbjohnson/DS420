@@ -36,6 +36,7 @@ data: requirements
 notebooks:
 	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/0.ipynb --output ../docs/notebooks/0.rst
 	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/1.ipynb --output ../docs/notebooks/1.rst
+	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/2.ipynb --output ../docs/notebooks/2.rst
 
 
 ## Make Docs
