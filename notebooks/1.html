@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>2. 2: Cleaning and Profiling &#8212; Food Desert Classification</title>
+    <title>2. Cleaning and Profiling &#8212; Food Desert Classification</title>
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,18 +14,21 @@
     <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="1. 1: Classifying based off the USDA Definition" href="0.html" /> 
+    <link rel="next" title="3. County Supplemental Data" href="2.html" />
+    <link rel="prev" title="1. Classifying based off the USDA Definition" href="0.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
           <span>Food Desert Classification</span></a></h1>
-        <h2 class="heading"><span>2. 2: Cleaning and Profiling</span></h2>
+        <h2 class="heading"><span>2. Cleaning and Profiling</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
       
         <p>
-        «&#160;&#160;<a href="0.html">1. 1: Classifying based off the USDA Definition</a>
+        «&#160;&#160;<a href="0.html">1. Classifying based off the USDA Definition</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="2.html">3. County Supplemental Data</a>&#160;&#160;»
         </p>
 
       </div>
@@ -33,7 +36,7 @@
         
         
   <div class="section" id="cleaning-and-profiling">
-<h1>2. 2: Cleaning and Profiling<a class="headerlink" href="#cleaning-and-profiling" title="Permalink to this headline">¶</a></h1>
+<h1>2. Cleaning and Profiling<a class="headerlink" href="#cleaning-and-profiling" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Notebook Setup/Imports</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -94,25 +97,61 @@
 <span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Save the cleaned data</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">dataset</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data.pickle&quot;</span><span class="p">))</span>
-<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data_dictionary.pickle&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Create the data profile object and save it to an HTML file</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">profile</span> <span class="o">=</span> <span class="n">pandas_profiling</span><span class="o">.</span><span class="n">ProfileReport</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">check_recoded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">profile</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">outputfile</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span>
-                                      <span class="s2">&quot;docs/_static/profile.html&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
 </div>
 <div class="section" id="variable-selection">
 <h2>2.2. Variable Selection<a class="headerlink" href="#variable-selection" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Create a list of rejected variables with &gt; .975 correlation from the profile analysis</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">pandas_profiling</span><span class="o">.</span><span class="n">ProfileReport</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">check_recoded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">rejected_variables</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_rejected_variables</span><span class="p">(</span><span class="o">.</span><span class="mi">975</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; List of columns to keep</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">keep_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rejected_variables</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; New dataframe with the columns to keep</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">dataset_clean</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">keep_columns</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Set the USDA Model to the percentage</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">dataset_clean</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;USDA Model Count&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">noah</span><span class="o">/</span><span class="n">Documents</span><span class="o">/</span><span class="n">DS420</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">6</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">pandas</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">frame</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">3940</span><span class="p">:</span> <span class="n">SettingWithCopyWarning</span><span class="p">:</span>
+<span class="n">A</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">trying</span> <span class="n">to</span> <span class="n">be</span> <span class="nb">set</span> <span class="n">on</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">a</span> <span class="nb">slice</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">DataFrame</span>
+
+<span class="n">See</span> <span class="n">the</span> <span class="n">caveats</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">documentation</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">pandas</span><span class="o">.</span><span class="n">pydata</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">pandas</span><span class="o">-</span><span class="n">docs</span><span class="o">/</span><span class="n">stable</span><span class="o">/</span><span class="n">indexing</span><span class="o">.</span><span class="n">html</span><span class="c1">#indexing-view-versus-copy</span>
+  <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset_clean</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s2">&quot;USDA Model Percent&quot;</span><span class="p">:</span><span class="s2">&quot;USDA Model&quot;</span><span class="p">},</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">noah</span><span class="o">/</span><span class="n">Documents</span><span class="o">/</span><span class="n">DS420</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">6</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">pandas</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">frame</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4025</span><span class="p">:</span> <span class="n">SettingWithCopyWarning</span><span class="p">:</span>
+<span class="n">A</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">trying</span> <span class="n">to</span> <span class="n">be</span> <span class="nb">set</span> <span class="n">on</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">a</span> <span class="nb">slice</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">DataFrame</span>
+
+<span class="n">See</span> <span class="n">the</span> <span class="n">caveats</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">documentation</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">pandas</span><span class="o">.</span><span class="n">pydata</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">pandas</span><span class="o">-</span><span class="n">docs</span><span class="o">/</span><span class="n">stable</span><span class="o">/</span><span class="n">indexing</span><span class="o">.</span><span class="n">html</span><span class="c1">#indexing-view-versus-copy</span>
+  <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">DataFrame</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Save the cleaned data</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">dataset_clean</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data.pickle&quot;</span><span class="p">))</span>
+<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data_dictionary.pickle&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cleaned-data-profile">
+<h2>2.3. Cleaned Data Profile<a class="headerlink" href="#cleaned-data-profile" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Create the data profile object and save it to an HTML file</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">pandas_profiling</span><span class="o">.</span><span class="n">ProfileReport</span><span class="p">(</span><span class="n">dataset_clean</span><span class="p">,</span> <span class="n">check_recoded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">profile</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">outputfile</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span>
+                                      <span class="s2">&quot;docs/_static/profile.html&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -123,9 +162,11 @@
       <div class="bottomnav" role="navigation" aria-label="bottom navigation">
       
         <p>
-        «&#160;&#160;<a href="0.html">1. 1: Classifying based off the USDA Definition</a>
+        «&#160;&#160;<a href="0.html">1. Classifying based off the USDA Definition</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="2.html">3. County Supplemental Data</a>&#160;&#160;»
         </p>
 
       </div>

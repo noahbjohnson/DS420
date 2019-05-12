@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>3. County Supplemental Data &#8212; Food Desert Classification</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="2. Cleaning and Profiling" href="1.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>Food Desert Classification</span></a></h1>
+        <h2 class="heading"><span>3. County Supplemental Data</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="1.html">2. Cleaning and Profiling</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="county-supplemental-data">
+<h1>3. County Supplemental Data<a class="headerlink" href="#county-supplemental-data" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Notebook Setup/Imports</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Project path setup</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="n">project_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Library import</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Print strings as markdown</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">Markdown</span>
+
+<span class="c1"># Data variables from previous notebook</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data.pickle&quot;</span><span class="p">))</span>
+<span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data_dictionary.pickle&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="section" id="additional-county-data">
+<h2>3.1. Additional County Data<a class="headerlink" href="#additional-county-data" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p><a class="reference external" href="https://www.ers.usda.gov/data-products/county-level-data-sets/download-data/">https://www.ers.usda.gov/data-products/county-level-data-sets/download-data/</a></p>
+</div></blockquote>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">education</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/external/Education.csv&quot;</span><span class="p">,</span>
+                                 <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin-1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;FIPS Code&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">poverty</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/external/PovertyEstimates.csv&quot;</span><span class="p">,</span>
+                                 <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin-1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;FIPStxt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unemployment</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;../data/external/Unemployment.xls&quot;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+                                 <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin-1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;FIPStxt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ed_keep_cols</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ed_cols</span> <span class="o">=</span> <span class="n">education</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">ed_cols</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1970&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1980&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+        <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1990&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2000&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2003&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span> <span class="o">!=</span> <span class="s1">&#39;State&#39;</span>
+       <span class="ow">and</span> <span class="n">col</span> <span class="o">!=</span> <span class="s2">&quot;Area name&quot;</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2013 &quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Unnamed&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">ed_keep_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">education</span> <span class="o">=</span> <span class="n">education</span><span class="p">[</span><span class="n">ed_keep_cols</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pov_keep_cols</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">pov_cols</span> <span class="o">=</span> <span class="n">poverty</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">pov_cols</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1970&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1980&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+        <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1990&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2000&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2003&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span> <span class="o">!=</span> <span class="s1">&#39;State&#39;</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2013 &quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Unnamed&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2013&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">pov_keep_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">poverty</span> <span class="o">=</span> <span class="n">poverty</span><span class="p">[</span><span class="n">pov_keep_cols</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unemployment_keep_cols</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">unemployment_cols</span> <span class="o">=</span> <span class="n">unemployment</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">unemployment_cols</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1970&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1980&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+        <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1990&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2000&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2003&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span> <span class="o">!=</span> <span class="s1">&#39;State&#39;</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2013 &quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Unnamed&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2013&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2007&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2008&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2009&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2010&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2011&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2012&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2014&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2016&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2017&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">unemployment_keep_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unemployment</span> <span class="o">=</span> <span class="n">unemployment</span><span class="p">[</span><span class="n">unemployment_keep_cols</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">county_data</span> <span class="o">=</span> <span class="n">education</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">poverty</span><span class="p">,</span><span class="n">rsuffix</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">unemployment</span><span class="p">,</span><span class="n">rsuffix</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">full_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">county_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pov_dd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;../data/external/PovertyEstimates.xls&quot;</span><span class="p">,</span><span class="n">sheet_name</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">33</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pov_dd</span> <span class="o">=</span> <span class="n">pov_dd</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span>
+    <span class="s2">&quot;Column variable name&quot;</span><span class="p">:</span><span class="s2">&quot;Variable Code&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Description&quot;</span><span class="p">:</span><span class="s2">&quot;Variable Name&quot;</span>
+<span class="p">},</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Notes&quot;</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data_dictionary</span><span class="p">,</span><span class="n">pov_dd</span><span class="p">],</span><span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">un_dd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;../data/external/Unemployment.xls&quot;</span><span class="p">,</span><span class="n">sheet_name</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">un_dd</span> <span class="o">=</span> <span class="n">un_dd</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">51</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span>
+    <span class="s2">&quot;Variable&quot;</span><span class="p">:</span><span class="s2">&quot;Variable Code&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Description&quot;</span><span class="p">:</span><span class="s2">&quot;Variable Name&quot;</span>
+<span class="p">},</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data_dictionary</span><span class="p">,</span><span class="n">un_dd</span><span class="p">],</span><span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save data</span>
+<span class="n">full_dataset</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/data.pickle&quot;</span><span class="p">)</span>
+<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/data_dictionary.pickle&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save data</span>
+<span class="n">full_dataset</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../data/production/data.csv&quot;</span><span class="p">)</span>
+<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../data/production/data_dictionary.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="1.html">2. Cleaning and Profiling</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Noah B Johnson &amp; Tristan Shaffer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

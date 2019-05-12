@@ -1,6 +1,6 @@
 
-2: Cleaning and Profiling
-=========================
+Cleaning and Profiling
+======================
 
 .. code:: ipython3
 
@@ -83,21 +83,6 @@ Data Type Validation & Cleaning
 
 
 
-.. code:: ipython3
-
-    """ Save the cleaned data
-    """
-    dataset.to_pickle(Path.joinpath(project_dir, "data/processed/1_data.pickle"))
-    data_dictionary.to_pickle(Path.joinpath(project_dir, "data/processed/1_data_dictionary.pickle"))
-
-.. code:: ipython3
-
-    """ Create the data profile object and save it to an HTML file
-    """
-    profile = pandas_profiling.ProfileReport(dataset, check_recoded=True)
-    profile.to_file(outputfile = Path.joinpath(project_dir,
-                                          "docs/_static/profile.html"))
-
 Variable Selection
 ------------------
 
@@ -105,4 +90,67 @@ Variable Selection
 
     """ Create a list of rejected variables with > .975 correlation from the profile analysis
     """
+    profile = pandas_profiling.ProfileReport(dataset, check_recoded=True)
     rejected_variables = profile.get_rejected_variables(.975)
+
+.. code:: ipython3
+
+    """ List of columns to keep
+    """
+    keep_columns = [x for x in dataset.columns if x not in rejected_variables]
+
+.. code:: ipython3
+
+    """ New dataframe with the columns to keep
+    """
+    dataset_clean = dataset[keep_columns]
+
+.. code:: ipython3
+
+    """ Set the USDA Model to the percentage 
+    """
+    dataset_clean.drop("USDA Model Count", axis="columns", inplace=True)
+
+
+.. parsed-literal::
+
+    /home/noah/Documents/DS420/venv/lib/python3.6/site-packages/pandas/core/frame.py:3940: SettingWithCopyWarning: 
+    A value is trying to be set on a copy of a slice from a DataFrame
+    
+    See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+      errors=errors)
+
+
+.. code:: ipython3
+
+    dataset_clean.rename({"USDA Model Percent":"USDA Model"},axis="columns",inplace=True)
+
+
+.. parsed-literal::
+
+    /home/noah/Documents/DS420/venv/lib/python3.6/site-packages/pandas/core/frame.py:4025: SettingWithCopyWarning: 
+    A value is trying to be set on a copy of a slice from a DataFrame
+    
+    See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+      return super(DataFrame, self).rename(**kwargs)
+
+
+.. code:: ipython3
+
+    """ Save the cleaned data
+    """
+    dataset_clean.to_pickle(Path.joinpath(project_dir, "data/processed/1_data.pickle"))
+    data_dictionary.to_pickle(Path.joinpath(project_dir, "data/processed/1_data_dictionary.pickle"))
+
+Cleaned Data Profile
+--------------------
+
+.. code:: ipython3
+
+    """ Create the data profile object and save it to an HTML file
+    """
+    profile = pandas_profiling.ProfileReport(dataset_clean, check_recoded=True)
+    profile.to_file(outputfile = Path.joinpath(project_dir,
+                                          "docs/_static/profile.html"))
+
+

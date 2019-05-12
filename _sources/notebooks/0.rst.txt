@@ -1,6 +1,6 @@
 
-1: Classifying based off the USDA Definition
-============================================
+Classifying based off the USDA Definition
+=========================================
 
    To qualify as a “low-access community,” at least 500 people and/or at
    least 33 percent of the census tract’s population must reside more
@@ -147,7 +147,7 @@ Add variables to Data Dictionary
 
 .. parsed-literal::
 
-    /anaconda3/envs/DS420/lib/python3.7/site-packages/pandas/core/indexing.py:1494: FutureWarning: 
+    /home/noah/Documents/DS420/venv/lib/python3.6/site-packages/pandas/core/indexing.py:1494: FutureWarning: 
     Passing list-likes to .loc or [] with any missing label will raise
     KeyError in the future, you can use .reindex() as an alternative.
     

@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Project Usage &#8212; Food Desert Classification</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Classifying based off the USDA Definition" href="notebooks/0.html" />
+    <link rel="prev" title="Project Proposal" href="outline.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Food Desert Classification</span></a></h1>
+        <h2 class="heading"><span>Project Usage</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="outline.html">Project Proposal</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="notebooks/0.html">1. Classifying based off the USDA Definition</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="project-usage">
+<h1>Project Usage<a class="headerlink" href="#project-usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="make">
+<h2>Make<a class="headerlink" href="#make" title="Permalink to this headline">¶</a></h2>
+<p>The Makefile contains the central entry points for common tasks related to this project.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 82%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>clean</p></td>
+<td><p>Delete all compiled Python files, Virtual Environments, and downloaded data</p></td>
+</tr>
+<tr class="row-odd"><td><p>project</p></td>
+<td><p>Builds the datasets, docs, and reports</p></td>
+</tr>
+<tr class="row-even"><td><p>notebooks</p></td>
+<td><p>Run notebooks and output rst to docs (RUN BEFORE DOCS)</p></td>
+</tr>
+<tr class="row-odd"><td><p>create_environment</p></td>
+<td><p>Set up python interpreter environment. Creates a virtual environment for project development.</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>Make Dataset. Downloads the food atlas data and parses it into pickles of pandas data frames.</p></td>
+</tr>
+<tr class="row-odd"><td><p>docs</p></td>
+<td><p>Make Docs. Output in HTML format in docs/html. Index link will be printed</p></td>
+</tr>
+<tr class="row-even"><td><p>lint</p></td>
+<td><p>Lint using flake8</p></td>
+</tr>
+<tr class="row-odd"><td><p>requirements</p></td>
+<td><p>Install Python Dependencies</p></td>
+</tr>
+<tr class="row-even"><td><p>test_environment</p></td>
+<td><p>Test python environment is setup correctly</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="project-structure">
+<h2>Project Structure<a class="headerlink" href="#project-structure" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>├── LICENSE
+├── Makefile           &lt;- Makefile with commands like <cite>make data</cite> or <cite>make train</cite>
+├── README.md          &lt;- The top-level README for developers using this project.
+├── data
+│   ├── external       &lt;- Data from third party sources.
+│   ├── interim        &lt;- Intermediate data that has been transformed.
+│   ├── processed      &lt;- The final, canonical data sets for modeling.
+│   └── raw            &lt;- The original, immutable data dump.
+│
+├── docs               &lt;- A default Sphinx project; see sphinx-doc.org for details
+│
+├── models             &lt;- Trained and serialized models, model predictions, or model summaries
+│
+├── notebooks          &lt;- Jupyter notebooks. Naming convention is a number (for ordering),
+│                         the creator’s initials, and a short <cite>-</cite> delimited description, e.g.
+│                         <cite>1.0-jqp-initial-data-exploration</cite>.
+│
+├── references         &lt;- Data dictionaries, manuals, and all other explanatory materials.
+│
+├── reports            &lt;- Generated analysis as HTML, PDF, LaTeX, etc.
+│   └── figures        &lt;- Generated graphics and figures to be used in reporting
+│
+├── requirements.txt   &lt;- The requirements file for reproducing the analysis environment, e.g.
+│                         generated with <cite>pip freeze &gt; requirements.txt</cite>
+│
+├── setup.py           &lt;- makes project pip installable (pip install -e .) so src can be imported
+├── src                &lt;- Source code for use in this project.
+│   ├── __init__.py    &lt;- Makes src a Python module
+│   │
+│   ├── data           &lt;- Scripts to download or generate data
+│   │   └── make_dataset.py
+│   │
+│   ├── features       &lt;- Scripts to turn raw data into features for modeling
+│   │   └── build_features.py
+│   │
+│   ├── models         &lt;- Scripts to train models and then use trained models to make
+│   │   │                 predictions
+│   │   ├── predict_model.py
+│   │   └── train_model.py
+│   │
+│   └── visualization  &lt;- Scripts to create exploratory and results oriented visualizations
+│       └── visualize.py
+│
+└── tox.ini            &lt;- tox file with settings for running tox; see tox.testrun.org</p>
+</div></blockquote>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="outline.html">Project Proposal</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="notebooks/0.html">1. Classifying based off the USDA Definition</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Noah B Johnson &amp; Tristan Shaffer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>
