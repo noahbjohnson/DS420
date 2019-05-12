@@ -40,7 +40,7 @@ notebooks:
 
 
 ## Make Docs
-docs: notebooks
+docs:
 	cd docs && make html && cd ..
 	echo "file://$(PWD)/docs/_build/html/index.html"
 
