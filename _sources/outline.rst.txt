@@ -2,7 +2,7 @@
 Project Proposal
 ****************
 
-**Food Desert Analysis**
+**Food Desert Classification and Analysis using USDA County-Level Data**
 
 *Completed by Noah B Johnson and Tristan Shaffer for DS420 (Machine Learning) at Luther College*
 
@@ -79,49 +79,3 @@ grocery store.(\ `from the ANA <http://americannutritionassociation.org/newslett
 
 Our goal is to see if we can build a model to predict this
 classification on a county level.
-
-Milestones
-#############
-
-Midterm
-********
-
-    [x]︎ Write a module to parse the food atlas data
-
-    [x]︎ Spot check data integrity
-
-    [x]︎ Classify data using USDA criteria
-
-    [] Visualize the USDA classification
-
-
-Final
-**********
-
-    [] Analyze the USDA classification
-
-    [] Model with the USDA classification as the response (basic logistic regression)
-
-    [] Assess model(s) fit and residuals
-
-    [] Analyze logistic model factors
-
-    [] Complex modeling:
-
-      [] Logistic regression with interactions
-
-      [] SVM (Linear SVC, SVC, nuSVC)
-      
-      [] Nearest neighbors
-      
-      [] SGD
-
-    [] Find a better classification (exploratory clustering)
-      
-      [] Mean shift
-      
-      [] K-Means
-      
-      [] GMM/Spectral clustering
-      
-    [] Synthesize final report from findings

@@ -4,49 +4,43 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>1. Classifying based off the USDA Definition &#8212; DS420 0.0.0 documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <title>1. 1: Classifying based off the USDA Definition &#8212; Food Desert Classification</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
-    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="2. Cleaning and Profiling" href="1.html" />
+    <link rel="next" title="2. 2: Cleaning and Profiling" href="1.html" />
     <link rel="prev" title="Project Proposal" href="../outline.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="1.html" title="2. Cleaning and Profiling"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../outline.html" title="Project Proposal"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">DS420 0.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../getting-started.html" accesskey="U">Project Overview</a> &#187;</li> 
-      </ul>
-    </div>  
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>Food Desert Classification</span></a></h1>
+        <h2 class="heading"><span>1. 1: Classifying based off the USDA Definition</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="../outline.html">Project Proposal</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="1.html">2. 2: Cleaning and Profiling</a>&#160;&#160;»
+        </p>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+      </div>
+      <div class="content">
+        
+        
   <div class="section" id="classifying-based-off-the-usda-definition">
-<h1>1. Classifying based off the USDA Definition<a class="headerlink" href="#classifying-based-off-the-usda-definition" title="Permalink to this headline">¶</a></h1>
+<h1>1. 1: Classifying based off the USDA Definition<a class="headerlink" href="#classifying-based-off-the-usda-definition" title="Permalink to this headline">¶</a></h1>
 <blockquote>
-<div><p>To qualify as a “low-access community,” at least 500 people and/or
-at least 33 percent of the census tract’s population must reside
-more than one mile from a supermarket or large grocery store.</p>
+<div><p>To qualify as a “low-access community,” at least 500 people and/or at
+least 33 percent of the census tract’s population must reside more
+than one mile from a supermarket or large grocery store.</p>
 </div></blockquote>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Notebook Setup/Imports</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -72,14 +66,18 @@ more than one mile from a supermarket or large grocery store.</p>
 <h3>1.1.1. Number of residents with low access<a class="headerlink" href="#number-of-residents-with-low-access" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>LACCESS_POP10 (2010)</p>
-<p>LACCESS_POP15 (2015)</p>
+</div></blockquote>
+<blockquote>
+<div><p>LACCESS_POP15 (2015)</p>
 </div></blockquote>
 </div>
 <div class="section" id="percent-of-residents-with-low-access">
 <h3>1.1.2. Percent of residents with low access<a class="headerlink" href="#percent-of-residents-with-low-access" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>PCT_LACCESS_POP10 (2010)</p>
-<p>PCT_LACCESS_POP15 (2015)</p>
+</div></blockquote>
+<blockquote>
+<div><p>PCT_LACCESS_POP15 (2015)</p>
 </div></blockquote>
 </div>
 </div>
@@ -171,7 +169,7 @@ further analysis.</p>
     <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">travis</span><span class="o">/</span><span class="n">virtualenv</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">dev</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">pandas</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">indexing</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1494</span><span class="p">:</span> <span class="ne">FutureWarning</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">DS420</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">pandas</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">indexing</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1494</span><span class="p">:</span> <span class="ne">FutureWarning</span><span class="p">:</span>
 <span class="n">Passing</span> <span class="nb">list</span><span class="o">-</span><span class="n">likes</span> <span class="n">to</span> <span class="o">.</span><span class="n">loc</span> <span class="ow">or</span> <span class="p">[]</span> <span class="k">with</span> <span class="nb">any</span> <span class="n">missing</span> <span class="n">label</span> <span class="n">will</span> <span class="k">raise</span>
 <span class="ne">KeyError</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">future</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">use</span> <span class="o">.</span><span class="n">reindex</span><span class="p">()</span> <span class="k">as</span> <span class="n">an</span> <span class="n">alternative</span><span class="o">.</span>
 
@@ -190,77 +188,22 @@ further analysis.</p>
 </div>
 
 
-          </div>
-        </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">1. Classifying based off the USDA Definition</a><ul>
-<li><a class="reference internal" href="#relevant-variables">1.1. Relevant Variables</a><ul>
-<li><a class="reference internal" href="#number-of-residents-with-low-access">1.1.1. Number of residents with low access</a></li>
-<li><a class="reference internal" href="#percent-of-residents-with-low-access">1.1.2. Percent of residents with low access</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#possible-models">1.2. Possible Models</a><ul>
-<li><a class="reference internal" href="#mask-information">1.2.1. Mask Information</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#initial-model">1.3. Initial Model</a></li>
-<li><a class="reference internal" href="#save-the-new-data">1.4. Save the new data</a></li>
-<li><a class="reference internal" href="#add-variables-to-data-dictionary">1.5. Add variables to Data Dictionary</a></li>
-<li><a class="reference internal" href="#save-updated-data-dictionary">1.6. Save Updated Data Dictionary</a></li>
-</ul>
-</li>
-</ul>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="../outline.html">Project Proposal</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="1.html">2. 2: Cleaning and Profiling</a>&#160;&#160;»
+        </p>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../outline.html"
-                        title="previous chapter">Project Proposal</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="1.html"
-                        title="next chapter">2. Cleaning and Profiling</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/notebooks/0.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="1.html" title="2. Cleaning and Profiling"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../outline.html" title="Project Proposal"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">DS420 0.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../getting-started.html" >Project Overview</a> &#187;</li> 
-      </ul>
-    </div>
+
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Noah B Johnson &amp; Tristan Shaffer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

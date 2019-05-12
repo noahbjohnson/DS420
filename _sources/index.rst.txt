@@ -3,15 +3,35 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-DS420 documentation!
-==============================================
+Food Desert Classification and Analysis using USDA County-Level Data
+===========================================================================
 
-Contents:
+:Authors:
+    Noah B Johnson,
+    Tristan Shaffer.
+:Version: 0.0 of May 2019.
+:Institution: Luther College. Decorah, IA.
+:Software License: https://opensource.org/licenses/MIT
+:Data License: https://creativecommons.org/publicdomain/zero/1.0/
+
+
+Project Information
+~~~~~~~~~~~~~~~~~~~~~~~~
+.. toctree::
+    :maxdepth: 1
+    
+    guidelines
+    outline
+    usage
+    
+Notebooks
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. toctree::
-   :maxdepth: 3
+    :glob:
+    :numbered:
 
-   getting-started
+    notebooks/*
 
 
 

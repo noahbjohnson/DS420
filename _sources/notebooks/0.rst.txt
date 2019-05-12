@@ -1,10 +1,10 @@
 
-Classifying based off the USDA Definition
-=========================================
+1: Classifying based off the USDA Definition
+============================================
 
-    To qualify as a “low-access community,” at least 500 people and/or
-    at least 33 percent of the census tract's population must reside
-    more than one mile from a supermarket or large grocery store.
+   To qualify as a “low-access community,” at least 500 people and/or at
+   least 33 percent of the census tract’s population must reside more
+   than one mile from a supermarket or large grocery store.
 
 .. code:: ipython3
 
@@ -31,16 +31,20 @@ Relevant Variables
 Number of residents with low access
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    LACCESS\_POP10 (2010)
+   LACCESS_POP10 (2010)
 
-    LACCESS\_POP15 (2015)
+..
+
+   LACCESS_POP15 (2015)
 
 Percent of residents with low access
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    PCT\_LACCESS\_POP10 (2010)
+   PCT_LACCESS_POP10 (2010)
 
-    PCT\_LACCESS\_POP15 (2015)
+..
+
+   PCT_LACCESS_POP15 (2015)
 
 Possible Models
 ---------------
@@ -91,24 +95,24 @@ Mask Information
 
 ::
 
-             - Only 500 people or more with low access
-                - There are 2848 FIPS codes that meet this criteria.
-             - Only 33% of the population or more with low access
-                - There are 568 FIPS codes that meet this criteria.
-             - Both 500 people or more and 33% of the population or more with low access
-                - There are 562 FIPS codes that meet this criteria.
-             - Either 500 people or more or 33% of the population or more with low access
-                - There are 2854 FIPS codes that meet this criteria.
+            - Only 500 people or more with low access
+               - There are 2848 FIPS codes that meet this criteria.
+            - Only 33% of the population or more with low access
+               - There are 568 FIPS codes that meet this criteria.
+            - Both 500 people or more and 33% of the population or more with low access
+               - There are 562 FIPS codes that meet this criteria.
+            - Either 500 people or more or 33% of the population or more with low access
+               - There are 2854 FIPS codes that meet this criteria.
 
 
 
 Initial Model
 -------------
 
-    We determined that the best initial model for the USDA definition of
-    food desert would be >=33% of the tract living more than a mile from
-    a grocery store. However, all possible models will be included for
-    further analysis.
+   We determined that the best initial model for the USDA definition of
+   food desert would be >=33% of the tract living more than a mile from
+   a grocery store. However, all possible models will be included for
+   further analysis.
 
 .. code:: ipython3
 
@@ -143,7 +147,7 @@ Add variables to Data Dictionary
 
 .. parsed-literal::
 
-    /home/travis/virtualenv/python3.7-dev/lib/python3.7/site-packages/pandas/core/indexing.py:1494: FutureWarning: 
+    /anaconda3/envs/DS420/lib/python3.7/site-packages/pandas/core/indexing.py:1494: FutureWarning: 
     Passing list-likes to .loc or [] with any missing label will raise
     KeyError in the future, you can use .reindex() as an alternative.
     

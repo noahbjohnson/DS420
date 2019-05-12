@@ -4,46 +4,40 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Project Proposal &#8212; DS420 0.0.0 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <title>Project Proposal &#8212; Food Desert Classification</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
-    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. Classifying based off the USDA Definition" href="notebooks/0.html" />
+    <link rel="next" title="1. 1: Classifying based off the USDA Definition" href="notebooks/0.html" />
     <link rel="prev" title="Applied Machine Learning (DS-420) Project Guidelines" href="guidelines.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="notebooks/0.html" title="1. Classifying based off the USDA Definition"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="guidelines.html" title="Applied Machine Learning (DS-420) Project Guidelines"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DS420 0.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="getting-started.html" accesskey="U">Project Overview</a> &#187;</li> 
-      </ul>
-    </div>  
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Food Desert Classification</span></a></h1>
+        <h2 class="heading"><span>Project Proposal</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="guidelines.html">Applied Machine Learning (DS-420) Project Guidelines</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="notebooks/0.html">1. 1: Classifying based off the USDA Definition</a>&#160;&#160;»
+        </p>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+      </div>
+      <div class="content">
+        
+        
   <div class="section" id="project-proposal">
 <h1>Project Proposal<a class="headerlink" href="#project-proposal" title="Permalink to this headline">¶</a></h1>
-<p><strong>Food Desert Analysis</strong></p>
+<p><strong>Food Desert Classification and Analysis using USDA County-Level Data</strong></p>
 <p><em>Completed by Noah B Johnson and Tristan Shaffer for DS420 (Machine Learning) at Luther College</em></p>
 <p>We will use the United States Department of Agriculture’s Economic
 Research Service <a class="reference external" href="https://www.ers.usda.gov/data-products/food-environment-atlas/data-access-and-documentation-downloads/">Food Environment
@@ -110,114 +104,25 @@ grocery store.(<a class="reference external" href="http://americannutritionassoc
 <p>Our goal is to see if we can build a model to predict this
 classification on a county level.</p>
 </div>
-<div class="section" id="milestones">
-<h2>Milestones<a class="headerlink" href="#milestones" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="midterm">
-<h3>Midterm<a class="headerlink" href="#midterm" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>[x]︎ Write a module to parse the food atlas data</p>
-<p>[x]︎ Spot check data integrity</p>
-<p>[x]︎ Classify data using USDA criteria</p>
-<p>[] Visualize the USDA classification</p>
-</div></blockquote>
-</div>
-<div class="section" id="final">
-<h3>Final<a class="headerlink" href="#final" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>[] Analyze the USDA classification</p>
-<p>[] Model with the USDA classification as the response (basic logistic regression)</p>
-<p>[] Assess model(s) fit and residuals</p>
-<p>[] Analyze logistic model factors</p>
-<p>[] Complex modeling:</p>
-<blockquote>
-<div><p>[] Logistic regression with interactions</p>
-<p>[] SVM (Linear SVC, SVC, nuSVC)</p>
-<p>[] Nearest neighbors</p>
-<p>[] SGD</p>
-</div></blockquote>
-<p>[] Find a better classification (exploratory clustering)</p>
-<blockquote>
-<div><p>[] Mean shift</p>
-<p>[] K-Means</p>
-<p>[] GMM/Spectral clustering</p>
-</div></blockquote>
-<p>[] Synthesize final report from findings</p>
-</div></blockquote>
-</div>
-</div>
 </div>
 
 
-          </div>
-        </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Project Proposal</a><ul>
-<li><a class="reference internal" href="#the-issue">The Issue</a></li>
-<li><a class="reference internal" href="#the-data">The Data</a><ul>
-<li><a class="reference internal" href="#atlas-data">Atlas Data</a></li>
-<li><a class="reference internal" href="#other-data">Other Data</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#the-classification">The Classification</a></li>
-<li><a class="reference internal" href="#milestones">Milestones</a><ul>
-<li><a class="reference internal" href="#midterm">Midterm</a></li>
-<li><a class="reference internal" href="#final">Final</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="guidelines.html">Applied Machine Learning (DS-420) Project Guidelines</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="notebooks/0.html">1. 1: Classifying based off the USDA Definition</a>&#160;&#160;»
+        </p>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="guidelines.html"
-                        title="previous chapter">Applied Machine Learning (DS-420) Project Guidelines</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="notebooks/0.html"
-                        title="next chapter">1. Classifying based off the USDA Definition</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/outline.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="notebooks/0.html" title="1. Classifying based off the USDA Definition"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="guidelines.html" title="Applied Machine Learning (DS-420) Project Guidelines"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DS420 0.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="getting-started.html" >Project Overview</a> &#187;</li> 
-      </ul>
-    </div>
+
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Noah B Johnson &amp; Tristan Shaffer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>
