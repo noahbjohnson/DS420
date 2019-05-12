@@ -20,7 +20,7 @@ endif
 #################################################################################
 
 ## Make Project (requirements, notebooks, docs)
-project: data docs
+project: data notebooks docs
 
 
 ## Install Python Dependencies
