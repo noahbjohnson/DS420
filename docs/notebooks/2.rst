@@ -1,0 +1,148 @@
+
+County Supplemental Data
+========================
+
+.. code:: ipython3
+
+    """ Notebook Setup/Imports
+    """
+    
+    # Project path setup
+    from pathlib import Path
+    project_dir = Path(__name__).resolve().parents[1]
+    
+    # Library import
+    import pandas as pd
+    import numpy as np
+    
+    # Print strings as markdown
+    from IPython.display import Markdown
+    
+    # Data variables from previous notebook
+    dataset = pd.read_pickle(Path.joinpath(project_dir, "data/processed/1_data.pickle"))
+    data_dictionary = pd.read_pickle(Path.joinpath(project_dir, "data/processed/1_data_dictionary.pickle"))
+
+Additional County Data
+----------------------
+
+   https://www.ers.usda.gov/data-products/county-level-data-sets/download-data/
+
+.. code:: ipython3
+
+    education = pd.read_csv("../data/external/Education.csv",
+                                     encoding='latin-1').set_index("FIPS Code")
+
+.. code:: ipython3
+
+    poverty = pd.read_csv("../data/external/PovertyEstimates.csv",
+                                     encoding='latin-1').set_index("FIPStxt")
+
+.. code:: ipython3
+
+    unemployment = pd.read_excel("../data/external/Unemployment.xls", skiprows=7,
+                                     encoding='latin-1').set_index("FIPStxt")
+
+.. code:: ipython3
+
+    ed_keep_cols = []
+    ed_cols = education.columns.values.tolist()
+    for col in ed_cols:
+        if (col.find("1970") < 0 and col.find("1980") < 0 
+            and col.find("1990") < 0 and col.find("2000") < 0
+           and col.find("2003") < 0 and col != 'State'
+           and col != "Area name" and col.find("2013 ") < 0
+           and col.find("Unnamed") < 0):
+            ed_keep_cols.append(col)
+
+.. code:: ipython3
+
+    education = education[ed_keep_cols]
+
+.. code:: ipython3
+
+    pov_keep_cols = []
+    pov_cols = poverty.columns.values.tolist()
+    for col in pov_cols:
+        if (col.find("1970") < 0 and col.find("1980") < 0 
+            and col.find("1990") < 0 and col.find("2000") < 0
+           and col.find("2003") < 0 and col != 'State'
+           and col.find("Area") < 0 and col.find("2013 ") < 0
+           and col.find("Unnamed") < 0 and col.find("_2013") < 0):
+            pov_keep_cols.append(col)
+
+.. code:: ipython3
+
+    poverty = poverty[pov_keep_cols]
+
+.. code:: ipython3
+
+    unemployment_keep_cols = []
+    unemployment_cols = unemployment.columns.values.tolist()
+    for col in unemployment_cols:
+        if (col.find("1970") < 0 and col.find("1980") < 0 
+            and col.find("1990") < 0 and col.find("2000") < 0
+           and col.find("2003") < 0 and col != 'State'
+           and col.find("Area") < 0 and col.find("2013 ") < 0
+           and col.find("Unnamed") < 0 and col.find("_2013") < 0
+           and col.find("_2007") < 0 and col.find("_2008") < 0
+           and col.find("_2009") < 0 and col.find("_2010") < 0
+           and col.find("_2011") < 0 and col.find("_2012") < 0
+           and col.find("_2014") < 0 and col.find("_2016") < 0
+           and col.find("_2017") < 0):
+            unemployment_keep_cols.append(col)
+
+.. code:: ipython3
+
+    unemployment = unemployment[unemployment_keep_cols]
+
+.. code:: ipython3
+
+    county_data = education.join(
+        poverty,rsuffix="_").join(
+        unemployment,rsuffix="_")
+
+.. code:: ipython3
+
+    full_dataset = dataset.join(county_data)
+
+.. code:: ipython3
+
+    pov_dd = pd.read_excel("../data/external/PovertyEstimates.xls",sheet_name=1).loc[:33]
+
+.. code:: ipython3
+
+    pov_dd = pov_dd.rename({
+        "Column variable name":"Variable Code",
+        "Description":"Variable Name"
+    },axis="columns").drop("Notes",axis="columns")
+
+.. code:: ipython3
+
+    data_dictionary = pd.concat([data_dictionary,pov_dd],sort=False)
+
+.. code:: ipython3
+
+    un_dd = pd.read_excel("../data/external/Unemployment.xls",sheet_name=1)
+
+.. code:: ipython3
+
+    un_dd = un_dd.loc[:51].rename({
+        "Variable":"Variable Code",
+        "Description":"Variable Name"
+    },axis="columns")
+
+.. code:: ipython3
+
+    data_dictionary = pd.concat([data_dictionary,un_dd],sort=False)
+
+.. code:: ipython3
+
+    # Save data
+    full_dataset.to_pickle("../data/production/data.pickle")
+    data_dictionary.to_pickle("../data/production/data_dictionary.pickle")
+
+.. code:: ipython3
+
+    # Save data
+    full_dataset.to_csv("../data/production/data.csv")
+    data_dictionary.to_csv("../data/production/data_dictionary.csv")
