@@ -34,10 +34,10 @@ data: requirements
 
 ## Make Notebooks
 notebooks:
-	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/0.ipynb --output ../docs/notebooks/0.rst
-	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/1.ipynb --output ../docs/notebooks/1.rst
-	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/2.ipynb --output ../docs/notebooks/2.rst
-
+	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/0.ipynb --output-dir ../docs/notebooks
+	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/1.ipynb --output-dir ../docs/notebooks
+	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/2.ipynb --output-dir ../docs/notebooks
+	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/3.ipynb --output-dir ../docs/notebooks
 
 ## Make Docs
 docs:
