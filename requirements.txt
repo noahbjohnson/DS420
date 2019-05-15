@@ -20,3 +20,6 @@ pyshp
 shapely
 plotly
 fancyimpute
+bayesian-optimization
+tensorflow
+keras
