@@ -1,0 +1,298 @@
+
+Model Assessment
+================
+
+.. code:: ipython3
+
+    from keras.models import load_model
+    import pickle
+    import pandas as pd
+    import numpy as np
+    from sklearn.metrics import confusion_matrix, precision_score, classification_report, roc_curve, auc, roc_auc_score
+    import matplotlib.pyplot as plt
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.linear_model import LogisticRegression
+    # fix rng seed
+    seed = 42
+    np.random.seed(seed)
+
+
+.. parsed-literal::
+
+    Using TensorFlow backend.
+
+
+.. code:: ipython3
+
+    dataset = pd.read_pickle("../data/production/imputed_dataset.pickle")
+    Y = dataset["USDA Model"]
+    X = dataset.drop("USDA Model", axis="columns")
+    x = X.values
+    # encode response as 1/0
+    encoded_Y = LabelEncoder().fit_transform(Y.values)
+
+Import Saved Models
+-------------------
+
+.. code:: ipython3
+
+    nadam = load_model("../models/nadam.h5")
+    adamax = load_model("../models/adamax.h5")
+    with open("../models/logreg.pickle", "rb") as modelfile:
+        logreg = pickle.load(modelfile)
+
+
+.. parsed-literal::
+
+    WARNING:tensorflow:From /opt/conda/lib/python3.7/site-packages/tensorflow/python/framework/op_def_library.py:263: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
+    Instructions for updating:
+    Colocations handled automatically by placer.
+    WARNING:tensorflow:From /opt/conda/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:3445: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+    Instructions for updating:
+    Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+    WARNING:tensorflow:From /opt/conda/lib/python3.7/site-packages/tensorflow/python/ops/math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+    Instructions for updating:
+    Use tf.cast instead.
+
+
+Logistic Regression
+-------------------
+
+.. code:: ipython3
+
+    logreg.score(X,Y)
+
+
+
+
+.. parsed-literal::
+
+    0.8238892466194462
+
+
+
+.. code:: ipython3
+
+    y_pred = logreg.predict(X)
+    confusion_matrix(encoded_Y, y_pred)
+
+
+
+
+.. parsed-literal::
+
+    array([[2505,   45],
+           [ 502,   54]])
+
+
+
+.. code:: ipython3
+
+    print(classification_report(encoded_Y, y_pred))
+
+
+.. parsed-literal::
+
+                  precision    recall  f1-score   support
+    
+               0       0.83      0.98      0.90      2550
+               1       0.55      0.10      0.16       556
+    
+        accuracy                           0.82      3106
+       macro avg       0.69      0.54      0.53      3106
+    weighted avg       0.78      0.82      0.77      3106
+    
+
+
+.. code:: ipython3
+
+    y_score = logreg.decision_function(X)
+    fpr, tpr, _ = roc_curve(Y,y_score)
+    roc_auc = auc(fpr, tpr)
+
+.. code:: ipython3
+
+    plt.figure()
+    lw = 2
+    plt.plot(fpr, tpr, color='darkorange',
+             lw=lw, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver operating characteristic example')
+    plt.legend(loc="lower right")
+    plt.show()
+
+
+
+.. image:: output_10_0.png
+
+
+.. code:: ipython3
+
+    dataset["Logistic Regression"] = y_pred
+
+Neural Networks
+---------------
+
+Adamax Optimizer
+~~~~~~~~~~~~~~~~
+
+.. code:: ipython3
+
+    ypred = adamax.predict(x).round()
+
+.. code:: ipython3
+
+    confusion_matrix(encoded_Y, ypred)
+
+
+
+
+.. parsed-literal::
+
+    array([[2512,   38],
+           [  60,  496]])
+
+
+
+.. code:: ipython3
+
+    precision_score(encoded_Y, ypred)
+
+
+
+
+.. parsed-literal::
+
+    0.9288389513108615
+
+
+
+.. code:: ipython3
+
+    print(classification_report(encoded_Y, ypred))
+
+
+.. parsed-literal::
+
+                  precision    recall  f1-score   support
+    
+               0       0.98      0.99      0.98      2550
+               1       0.93      0.89      0.91       556
+    
+        accuracy                           0.97      3106
+       macro avg       0.95      0.94      0.95      3106
+    weighted avg       0.97      0.97      0.97      3106
+    
+
+
+.. code:: ipython3
+
+    fpr, tpr, _ = roc_curve(encoded_Y, ypred)
+    roc_auc = auc(fpr, tpr)
+    plt.figure()
+    lw = 2
+    plt.plot(fpr, tpr, color='darkorange',
+             lw=lw, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver operating characteristic example')
+    plt.legend(loc="lower right")
+    plt.show()
+
+
+
+.. image:: output_17_0.png
+
+
+.. code:: ipython3
+
+    dataset["Adamax"] = ypred == 1
+
+Nadam Optimizer
+~~~~~~~~~~~~~~~
+
+.. code:: ipython3
+
+    ypred2 = nadam.predict(x).round()
+
+.. code:: ipython3
+
+    confusion_matrix(encoded_Y, ypred2)
+
+
+
+
+.. parsed-literal::
+
+    array([[2526,   24],
+           [  69,  487]])
+
+
+
+.. code:: ipython3
+
+    precision_score(encoded_Y, ypred2)
+
+
+
+
+.. parsed-literal::
+
+    0.9530332681017613
+
+
+
+.. code:: ipython3
+
+    print(classification_report(encoded_Y, ypred2))
+
+
+.. parsed-literal::
+
+                  precision    recall  f1-score   support
+    
+               0       0.97      0.99      0.98      2550
+               1       0.95      0.88      0.91       556
+    
+        accuracy                           0.97      3106
+       macro avg       0.96      0.93      0.95      3106
+    weighted avg       0.97      0.97      0.97      3106
+    
+
+
+.. code:: ipython3
+
+    fpr, tpr, _ = roc_curve(encoded_Y, ypred)
+    roc_auc = auc(fpr, tpr)
+    plt.figure()
+    lw = 2
+    plt.plot(fpr, tpr, color='darkorange',
+             lw=lw, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver operating characteristic example')
+    plt.legend(loc="lower right")
+    plt.show()
+
+
+
+.. image:: output_24_0.png
+
+
+.. code:: ipython3
+
+    dataset["Nadam"] = ypred2 == 1
+
+.. code:: ipython3
+
+    dataset.to_pickle("../models/predictions.pickle")
