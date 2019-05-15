@@ -1,0 +1,648 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>4. Supplemental Data Cleaning &#8212; Food Desert Classification</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. Impute The Full Dataset" href="4.html" />
+    <link rel="prev" title="3. County Supplemental Data" href="2.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>Food Desert Classification</span></a></h1>
+        <h2 class="heading"><span>4. Supplemental Data Cleaning</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="2.html">3. County Supplemental Data</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="4.html">5. Impute The Full Dataset</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="supplemental-data-cleaning">
+<h1>4. Supplemental Data Cleaning<a class="headerlink" href="#supplemental-data-cleaning" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Notebook Setup/Imports</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Project path setup</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="n">project_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Library import</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Print strings as markdown</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">Markdown</span>
+
+<span class="c1"># Data variables from previous notebook</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/production/data.pickle&quot;</span><span class="p">))</span>
+<span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/production/data_dictionary.pickle&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="section" id="missing-data">
+<h2>4.1. Missing Data<a class="headerlink" href="#missing-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="puerto-rico">
+<h3>4.1.1. Puerto Rico<a class="headerlink" href="#puerto-rico" title="Permalink to this headline">¶</a></h3>
+<p>The only data we have for PR is unemployment. We’ll have to drop those
+records (state fips 72xxx)</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">72000</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;POV04_2017&quot;</span><span class="p">,</span> <span class="s2">&quot;CI90LB04_2017&quot;</span><span class="p">,</span> <span class="s2">&quot;CI90UB04_2017&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">des</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="n">missing</span> <span class="o">=</span> <span class="n">des</span><span class="p">[</span><span class="n">des</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3100</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span><span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">missing</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>mean</th>
+      <th>std</th>
+      <th>min</th>
+      <th>25%</th>
+      <th>50%</th>
+      <th>75%</th>
+      <th>max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>CI90UB04P_2017</th>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>PCTPOV04_2017</th>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>School Breakfast Program participants, FY 2012</th>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>School Breakfast Program participants FY 2011</th>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>CI90LB04P_2017</th>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>PCH_GHVEG_SQFT_07_12</th>
+      <td>340.0</td>
+      <td>293.407765</td>
+      <td>1552.882709</td>
+      <td>-100.0</td>
+      <td>5.136883</td>
+      <td>91.526644</td>
+      <td>247.162519</td>
+      <td>27641.176471</td>
+    </tr>
+    <tr>
+      <th>PCH_FRESHVEG_ACRES_07_12</th>
+      <td>1050.0</td>
+      <td>18.500991</td>
+      <td>137.106529</td>
+      <td>-100.0</td>
+      <td>-43.138924</td>
+      <td>-6.832298</td>
+      <td>38.374335</td>
+      <td>1933.333333</td>
+    </tr>
+    <tr>
+      <th>PCH_GHVEG_FARMS_07_12</th>
+      <td>1198.0</td>
+      <td>93.698960</td>
+      <td>201.700770</td>
+      <td>-100.0</td>
+      <td>-25.000000</td>
+      <td>50.000000</td>
+      <td>166.666667</td>
+      <td>1900.000000</td>
+    </tr>
+    <tr>
+      <th>PCH_AGRITRSM_RCT_07_12</th>
+      <td>1265.0</td>
+      <td>232.446302</td>
+      <td>1026.854679</td>
+      <td>-100.0</td>
+      <td>-40.782828</td>
+      <td>22.767857</td>
+      <td>146.756757</td>
+      <td>20557.142857</td>
+    </tr>
+    <tr>
+      <th>PCH_BERRY_ACRES_07_12</th>
+      <td>1271.0</td>
+      <td>55.640862</td>
+      <td>222.514271</td>
+      <td>-100.0</td>
+      <td>-30.602007</td>
+      <td>4.317959</td>
+      <td>66.666667</td>
+      <td>4400.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># drop &lt;500</span>
+<span class="n">cols_to_drop</span> <span class="o">=</span> <span class="n">missing</span><span class="p">[</span><span class="n">missing</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">500</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">cols_to_drop</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">des</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="n">missing</span> <span class="o">=</span> <span class="n">des</span><span class="p">[</span><span class="n">des</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3100</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span><span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">missing</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>mean</th>
+      <th>std</th>
+      <th>min</th>
+      <th>25%</th>
+      <th>50%</th>
+      <th>75%</th>
+      <th>max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>PCH_FRESHVEG_ACRES_07_12</th>
+      <td>1050.0</td>
+      <td>18.500991</td>
+      <td>137.106529</td>
+      <td>-100.0</td>
+      <td>-43.138924</td>
+      <td>-6.832298</td>
+      <td>38.374335</td>
+      <td>1933.333333</td>
+    </tr>
+    <tr>
+      <th>PCH_GHVEG_FARMS_07_12</th>
+      <td>1198.0</td>
+      <td>93.698960</td>
+      <td>201.700770</td>
+      <td>-100.0</td>
+      <td>-25.000000</td>
+      <td>50.000000</td>
+      <td>166.666667</td>
+      <td>1900.000000</td>
+    </tr>
+    <tr>
+      <th>PCH_AGRITRSM_RCT_07_12</th>
+      <td>1265.0</td>
+      <td>232.446302</td>
+      <td>1026.854679</td>
+      <td>-100.0</td>
+      <td>-40.782828</td>
+      <td>22.767857</td>
+      <td>146.756757</td>
+      <td>20557.142857</td>
+    </tr>
+    <tr>
+      <th>PCH_BERRY_ACRES_07_12</th>
+      <td>1271.0</td>
+      <td>55.640862</td>
+      <td>222.514271</td>
+      <td>-100.0</td>
+      <td>-30.602007</td>
+      <td>4.317959</td>
+      <td>66.666667</td>
+      <td>4400.000000</td>
+    </tr>
+    <tr>
+      <th>FRESHVEG_ACRESPTH07</th>
+      <td>1840.0</td>
+      <td>19.919106</td>
+      <td>102.498308</td>
+      <td>0.0</td>
+      <td>0.315125</td>
+      <td>1.440052</td>
+      <td>4.833024</td>
+      <td>1831.927101</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">missing_ratios</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span> <span class="p">(</span><span class="n">missing</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span>
+<span class="n">missing</span><span class="p">[</span><span class="s2">&quot;missing_ratio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">missing_ratios</span>
+<span class="n">missing</span> <span class="o">=</span> <span class="n">missing</span><span class="p">[[</span><span class="s2">&quot;count&quot;</span><span class="p">,</span><span class="s2">&quot;missing_ratio&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Columns missing more than 1/3 of the data</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">[</span><span class="n">missing</span><span class="p">[</span><span class="s1">&#39;missing_ratio&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">.</span><span class="mi">33</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">17</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># drop &lt;2/3</span>
+<span class="n">cols_to_drop</span> <span class="o">=</span> <span class="n">missing</span><span class="p">[</span><span class="n">missing</span><span class="p">[</span><span class="s1">&#39;missing_ratio&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">.</span><span class="mi">33</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">cols_to_drop</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="meta-or-unneeded-variables">
+<h2>4.2. Meta or Unneeded Variables<a class="headerlink" href="#meta-or-unneeded-variables" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;index&#39;</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="clean-up-data-dictionary-orphans">
+<h3>4.2.1. Clean up Data Dictionary Orphans<a class="headerlink" href="#clean-up-data-dictionary-orphans" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">remaining_columns</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">dd_columns</span> <span class="o">=</span> <span class="n">data_dictionary</span><span class="p">[</span><span class="s1">&#39;Variable Code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">orphans</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># columns in dataset not in the data dictionary</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">remaining_columns</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dd_columns</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+        <span class="n">orphans</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2010</span> <span class="n">Census</span> <span class="n">Population</span>
+<span class="n">LACCESS_CHILD_10_15</span>
+<span class="n">StateFIPS</span>
+<span class="n">WIC</span> <span class="n">participants</span> <span class="n">FY</span> <span class="mi">2009</span>
+<span class="n">National</span> <span class="n">School</span> <span class="n">Lunch</span> <span class="n">Program</span> <span class="n">participants</span> <span class="n">FY</span> <span class="mi">2009</span>
+<span class="n">School</span> <span class="n">Breakfast</span> <span class="n">Program</span> <span class="n">participants</span> <span class="n">FY</span> <span class="mi">2009</span>
+<span class="n">Child</span> <span class="ow">and</span> <span class="n">Adult</span> <span class="n">Care</span> <span class="n">particpants</span> <span class="n">FY</span> <span class="mi">2009</span>
+<span class="n">Summer</span> <span class="n">Food</span> <span class="n">particpants</span> <span class="n">FY</span> <span class="mi">2009</span>
+<span class="n">State</span> <span class="n">Population</span><span class="p">,</span> <span class="mi">2009</span>
+<span class="n">USDA</span> <span class="n">Model</span>
+<span class="n">Less</span> <span class="n">than</span> <span class="n">a</span> <span class="n">high</span> <span class="n">school</span> <span class="n">diploma</span><span class="p">,</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">17</span>
+<span class="n">High</span> <span class="n">school</span> <span class="n">diploma</span> <span class="n">only</span><span class="p">,</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">17</span>
+<span class="n">Some</span> <span class="n">college</span> <span class="ow">or</span> <span class="n">associate</span><span class="s1">&#39;s degree, 2013-17</span>
+<span class="n">Bachelor</span><span class="s1">&#39;s degree or higher, 2013-17</span>
+<span class="n">Percent</span> <span class="n">of</span> <span class="n">adults</span> <span class="k">with</span> <span class="n">less</span> <span class="n">than</span> <span class="n">a</span> <span class="n">high</span> <span class="n">school</span> <span class="n">diploma</span><span class="p">,</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">17</span>
+<span class="n">Percent</span> <span class="n">of</span> <span class="n">adults</span> <span class="k">with</span> <span class="n">a</span> <span class="n">high</span> <span class="n">school</span> <span class="n">diploma</span> <span class="n">only</span><span class="p">,</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">17</span>
+<span class="n">Percent</span> <span class="n">of</span> <span class="n">adults</span> <span class="n">completing</span> <span class="n">some</span> <span class="n">college</span> <span class="ow">or</span> <span class="n">associate</span><span class="s1">&#39;s degree, 2013-17</span>
+<span class="n">Percent</span> <span class="n">of</span> <span class="n">adults</span> <span class="k">with</span> <span class="n">a</span> <span class="n">bachelor</span><span class="s1">&#39;s degree or higher, 2013-17</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Drop state info from 2009</span>
+<span class="n">o_nine_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WIC participants FY 2009&#39;</span><span class="p">,</span>
+<span class="s1">&#39;National School Lunch Program participants FY 2009&#39;</span><span class="p">,</span>
+<span class="s1">&#39;School Breakfast Program participants FY 2009&#39;</span><span class="p">,</span>
+<span class="s1">&#39;Child and Adult Care particpants FY 2009&#39;</span><span class="p">,</span>
+<span class="s1">&#39;Summer Food particpants FY 2009&#39;</span><span class="p">,</span>
+<span class="s1">&#39;State Population, 2009&#39;</span><span class="p">]</span>
+
+<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">o_nine_columns</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># add self-explainitory columns to dictionary</span>
+<span class="n">edu_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;&#39;Less than a high school diploma, 2013-17&#39;&#39;&#39;</span><span class="p">,</span>
+            <span class="sd">&#39;&#39;&#39;High school diploma only, 2013-17&#39;&#39;&#39;</span><span class="p">,</span>
+            <span class="sd">&#39;&#39;&#39;Some college or associate&#39;s degree, 2013-17&#39;&#39;&#39;</span><span class="p">,</span>
+            <span class="sd">&#39;&#39;&#39;Bachelor&#39;s degree or higher, 2013-17&#39;&#39;&#39;</span><span class="p">,</span>
+            <span class="sd">&#39;&#39;&#39;Percent of adults with less than a high school diploma, 2013-17&#39;&#39;&#39;</span><span class="p">,</span>
+            <span class="sd">&#39;&#39;&#39;Percent of adults with a high school diploma only, 2013-17&#39;&#39;&#39;</span><span class="p">,</span>
+            <span class="sd">&#39;&#39;&#39;Percent of adults completing some college or associate&#39;s degree, 2013-17&#39;&#39;&#39;</span><span class="p">,</span>
+            <span class="sd">&#39;&#39;&#39;Percent of adults with a bachelor&#39;s degree or higher, 2013-17&#39;&#39;&#39;</span><span class="p">,</span>
+            <span class="sd">&#39;&#39;&#39;2010 Census Population&#39;&#39;&#39;</span><span class="p">]</span>
+<span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data_dictionary</span><span class="p">,</span>
+                           <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                               <span class="s1">&#39;Variable Name&#39;</span><span class="p">:</span> <span class="n">edu_cols</span><span class="p">,</span>
+                               <span class="s1">&#39;Variable Code&#39;</span><span class="p">:</span> <span class="n">edu_cols</span>
+                           <span class="p">})],</span><span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">remaining_columns</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">dd_columns</span> <span class="o">=</span> <span class="n">data_dictionary</span><span class="p">[</span><span class="s1">&#39;Variable Code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">orphans</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># columns in dataset not in the data dictionary</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">remaining_columns</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dd_columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="o">!=</span> <span class="s2">&quot;USDA Model&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+            <span class="n">orphans</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LACCESS_CHILD_10_15</span>
+<span class="n">StateFIPS</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Drop orphans</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">orphans</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove unneeded entries from the data_dictionary</span>
+<span class="n">remaining_columns</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">dd_in_dataset_mask</span> <span class="o">=</span> <span class="n">data_dictionary</span><span class="p">[</span><span class="s1">&#39;Variable Code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">remaining_columns</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There are </span><span class="si">{}</span><span class="s2"> columns in the dictionary that are not in the dataset. </span><span class="se">\n\</span>
+<span class="s2">There are </span><span class="si">{}</span><span class="s2"> columns in the dictionary that ARE in the dataset&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="nb">sum</span><span class="p">(</span><span class="o">~</span><span class="n">dd_in_dataset_mask</span><span class="p">),</span><span class="nb">sum</span><span class="p">(</span><span class="n">dd_in_dataset_mask</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">There are </span><span class="si">{}</span><span class="s2"> columns in the dataset, and </span><span class="si">{}</span><span class="s2"> matches in the data dictionary.</span><span class="se">\n\</span>
+<span class="s2">There should be a difference of one for the response variable&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span><span class="nb">sum</span><span class="p">(</span><span class="n">dd_in_dataset_mask</span><span class="p">)))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">There</span> <span class="n">are</span> <span class="mi">125</span> <span class="n">columns</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dictionary</span> <span class="n">that</span> <span class="n">are</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dataset</span><span class="o">.</span>
+<span class="n">There</span> <span class="n">are</span> <span class="mi">251</span> <span class="n">columns</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dictionary</span> <span class="n">that</span> <span class="n">ARE</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dataset</span>
+
+<span class="n">There</span> <span class="n">are</span> <span class="mi">252</span> <span class="n">columns</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dataset</span><span class="p">,</span> <span class="ow">and</span> <span class="mi">251</span> <span class="n">matches</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">data</span> <span class="n">dictionary</span><span class="o">.</span>
+<span class="n">There</span> <span class="n">should</span> <span class="n">be</span> <span class="n">a</span> <span class="n">difference</span> <span class="n">of</span> <span class="n">one</span> <span class="k">for</span> <span class="n">the</span> <span class="n">response</span> <span class="n">variable</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">data_dictionary</span><span class="p">[</span><span class="n">dd_in_dataset_mask</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="year-based-data-outside-of-the-target-range-2015">
+<h2>4.3. Year-based data outside of the target range (2015)<a class="headerlink" href="#year-based-data-outside-of-the-target-range-2015" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_of_range_cols</span> <span class="o">=</span> <span class="p">[</span>
+<span class="s2">&quot;PCH_GROC_09_14&quot;</span><span class="p">,</span>
+<span class="s2">&quot;GROCPTH09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SUPERC09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_SUPERC_09_14&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SUPERCPTH09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;CONVS09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_CONVS_09_14&quot;</span><span class="p">,</span>
+<span class="s2">&quot;CONVSPTH09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SPECS09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_SPECS_09_14&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SPECSPTH09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SNAPS12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_SNAPS_12_16&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SNAPSPTH12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;WICS08&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_WICS_08_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;WICSPTH08&quot;</span><span class="p">,</span>
+<span class="s2">&quot;FFR09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_FFR_09_14&quot;</span><span class="p">,</span>
+<span class="s2">&quot;FFRPTH09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;FSR09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_FSR_09_14&quot;</span><span class="p">,</span>
+<span class="s2">&quot;FSRPTH09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PC_FFRSALES07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PC_FSRSALES07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;REDEMP_SNAPS12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_REDEMP_SNAPS_12_16&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_SNAP12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_SNAP_12_16&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PC_SNAPBEN10&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_PC_SNAPBEN_10_15&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SNAP_PART_RATE08&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SNAP_OAPP09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SNAP_CAP09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SNAP_BBCE09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SNAP_REPORTSIMPLE09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_NSLP09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_NSLP_09_15&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_FREE_LUNCH09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_REDUCED_LUNCH09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_SBP09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_SBP_09_15&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_SFSP09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_SFSP_09_15&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_WIC09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_WIC_09_15&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_CACFP09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_CACFP_09_15&quot;</span><span class="p">,</span>
+<span class="s2">&quot;FOODINSEC_10_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;CH_FOODINSEC_12_15&quot;</span><span class="p">,</span>
+<span class="s2">&quot;VLFOODSEC_10_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;CH_VLFOODSEC_12_15&quot;</span><span class="p">,</span>
+<span class="s2">&quot;FOODINSEC_CHILD_01_07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;FOODINSEC_CHILD_03_11&quot;</span><span class="p">,</span>
+<span class="s2">&quot;MILK_PRICE10&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SODA_PRICE10&quot;</span><span class="p">,</span>
+<span class="s2">&quot;MILK_SODA_PRICE10&quot;</span><span class="p">,</span>
+<span class="s2">&quot;DIRSALES_FARMS07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;DIRSALES_FARMS12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_DIRSALES_FARMS_07_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_LOCLFARM07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_LOCLFARM12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_LOCLSALE07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_LOCLSALE12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;DIRSALES07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;DIRSALES12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_DIRSALES_07_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PC_DIRSALES07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PC_DIRSALES12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;FMRKT09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_FMRKT_09_16&quot;</span><span class="p">,</span>
+<span class="s2">&quot;FMRKTPTH09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;VEG_FARMS07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_VEG_FARMS_07_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;VEG_ACRES07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;VEG_ACRESPTH07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_VEG_ACRESPTH_07_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;FRESHVEG_FARMS07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_FRESHVEG_FARMS_07_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;ORCHARD_FARMS07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_ORCHARD_FARMS_07_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;ORCHARD_ACRES07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;ORCHARD_ACRESPTH07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;BERRY_FARMS07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_BERRY_FARMS_07_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;BERRY_ACRES07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;BERRY_ACRESPTH07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;SLHOUSE07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_SLHOUSE_07_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;GHVEG_FARMS07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;GHVEG_SQFT07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;GHVEG_SQFTPTH07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;CSA07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_CSA_07_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;AGRITRSM_OPS07&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCH_AGRITRSM_OPS_07_12&quot;</span><span class="p">,</span>
+<span class="s2">&quot;FARM_TO_SCHOOL09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_DIABETES_ADULTS08&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PCT_OBESE_ADULTS08&quot;</span><span class="p">,</span>
+<span class="s2">&quot;RECFAC09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;RECFACPTH09&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PERPOV10&quot;</span><span class="p">,</span>
+<span class="s2">&quot;PERCHLDPOV10&quot;</span><span class="p">,</span>
+<span class="s2">&quot;CI90UB517P_2017&quot;</span><span class="p">,</span>
+<span class="s2">&quot;POPLOSS10&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">out_of_range_cols</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sparse-rows">
+<h2>4.4. Sparse Rows<a class="headerlink" href="#sparse-rows" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">nulls_ratio</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">/</span><span class="n">n_cols</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nulls_ratio</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/output_28_0.png" src="../_images/output_28_0.png" />
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">get_proportion_nulls</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nulls_ratio</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">missing_prop</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">null_prop</span> <span class="o">=</span> <span class="n">get_proportion_nulls</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">null_prop</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">missing_prop</span><span class="p">[</span><span class="n">i</span><span class="o">/</span><span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="n">null_prop</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">missing_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">missing_prop</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Threshold for ratio of missing values&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Ratio of records removed&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/output_30_0.png" src="../_images/output_30_0.png" />
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">nulls_ratio</span> <span class="o">&lt;</span> <span class="o">.</span><span class="mi">175</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fix-types">
+<h2>4.5. Fix types<a class="headerlink" href="#fix-types" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="mi">1001</span><span class="p">])</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">dataset</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">dataset</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">get_dtype_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">bool</span>         <span class="mi">1</span>
+<span class="n">float64</span>    <span class="mi">146</span>
+<span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="split-low-access-variables-from-dataset">
+<h2>4.6. Split Low Access Variables from Dataset<a class="headerlink" href="#split-low-access-variables-from-dataset" title="Permalink to this headline">¶</a></h2>
+<p>These may be interesting for further modeling, but they’re bound to be
+highly correlated with the response and other deographics.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">access_columns</span> <span class="o">=</span> <span class="n">data_dictionary</span><span class="p">[</span><span class="n">data_dictionary</span><span class="p">[</span><span class="s1">&#39;Category Code&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ACCESS&quot;</span><span class="p">][</span><span class="s1">&#39;Variable Code&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">access_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">access_columns</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">access_columns</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="save-data">
+<h2>4.7. Save data<a class="headerlink" href="#save-data" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../data/production/clean_dataset.csv&quot;</span><span class="p">)</span>
+<span class="n">access_dataset</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../data/production/clean_access_dataset.csv&quot;</span><span class="p">)</span>
+<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../data/production/clean_data_dictionary.csv&quot;</span><span class="p">)</span>
+
+<span class="n">dataset</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/clean_dataset.pickle&quot;</span><span class="p">)</span>
+<span class="n">access_dataset</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/clean_access_dataset.pickle&quot;</span><span class="p">)</span>
+<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/clean_data_dictionary.pickle&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="2.html">3. County Supplemental Data</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="4.html">5. Impute The Full Dataset</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Noah B Johnson &amp; Tristan Shaffer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

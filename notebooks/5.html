@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>6. Machine Learning Modeling &#8212; Food Desert Classification</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7. Deep Learning Modeling" href="6.html" />
+    <link rel="prev" title="5. Impute The Full Dataset" href="4.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>Food Desert Classification</span></a></h1>
+        <h2 class="heading"><span>6. Machine Learning Modeling</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="4.html">5. Impute The Full Dataset</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="6.html">7. Deep Learning Modeling</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="machine-learning-modeling">
+<h1>6. Machine Learning Modeling<a class="headerlink" href="#machine-learning-modeling" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plot</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">confusion_matrix</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">classification_report</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/imputed_dataset.pickle&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>2010 Census Population</th>
+      <th>GROC09</th>
+      <th>GROCPTH14</th>
+      <th>SUPERCPTH14</th>
+      <th>CONVSPTH14</th>
+      <th>SPECSPTH14</th>
+      <th>SNAPSPTH16</th>
+      <th>WICSPTH12</th>
+      <th>FFRPTH14</th>
+      <th>FSRPTH14</th>
+      <th>...</th>
+      <th>CI90UB517_2017</th>
+      <th>PCTPOV517_2017</th>
+      <th>CI90LB517P_2017</th>
+      <th>MEDHHINC_2017</th>
+      <th>CI90LBINC_2017</th>
+      <th>CI90UBINC_2017</th>
+      <th>Civilian_labor_force_2015</th>
+      <th>Employed_2015</th>
+      <th>Unemployed_2015</th>
+      <th>Unemployment_rate_2015</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1001</th>
+      <td>54571.0</td>
+      <td>6.0</td>
+      <td>0.072209</td>
+      <td>0.018052</td>
+      <td>0.541565</td>
+      <td>0.036104</td>
+      <td>0.760911</td>
+      <td>0.090067</td>
+      <td>0.649878</td>
+      <td>0.523513</td>
+      <td>...</td>
+      <td>2192.0</td>
+      <td>18.6</td>
+      <td>15.1</td>
+      <td>58343.0</td>
+      <td>52121.0</td>
+      <td>64565.0</td>
+      <td>25602.0</td>
+      <td>24272.0</td>
+      <td>1330.0</td>
+      <td>5.2</td>
+    </tr>
+    <tr>
+      <th>1003</th>
+      <td>182265.0</td>
+      <td>24.0</td>
+      <td>0.144920</td>
+      <td>0.029983</td>
+      <td>0.589673</td>
+      <td>0.129928</td>
+      <td>0.949753</td>
+      <td>0.141517</td>
+      <td>0.659634</td>
+      <td>1.104387</td>
+      <td>...</td>
+      <td>6101.0</td>
+      <td>14.3</td>
+      <td>10.7</td>
+      <td>56607.0</td>
+      <td>52439.0</td>
+      <td>60775.0</td>
+      <td>87705.0</td>
+      <td>82843.0</td>
+      <td>4862.0</td>
+      <td>5.5</td>
+    </tr>
+    <tr>
+      <th>1005</th>
+      <td>27457.0</td>
+      <td>5.0</td>
+      <td>0.185963</td>
+      <td>0.037193</td>
+      <td>0.706661</td>
+      <td>0.074385</td>
+      <td>1.354387</td>
+      <td>0.257344</td>
+      <td>0.818239</td>
+      <td>0.557890</td>
+      <td>...</td>
+      <td>2148.0</td>
+      <td>48.8</td>
+      <td>42.6</td>
+      <td>32490.0</td>
+      <td>29218.0</td>
+      <td>35762.0</td>
+      <td>8609.0</td>
+      <td>7844.0</td>
+      <td>765.0</td>
+      <td>8.9</td>
+    </tr>
+    <tr>
+      <th>1007</th>
+      <td>22915.0</td>
+      <td>6.0</td>
+      <td>0.222163</td>
+      <td>0.044433</td>
+      <td>0.666489</td>
+      <td>0.044433</td>
+      <td>0.864874</td>
+      <td>0.221268</td>
+      <td>0.222163</td>
+      <td>0.222163</td>
+      <td>...</td>
+      <td>1099.0</td>
+      <td>26.8</td>
+      <td>19.8</td>
+      <td>45795.0</td>
+      <td>40924.0</td>
+      <td>50666.0</td>
+      <td>8572.0</td>
+      <td>8005.0</td>
+      <td>567.0</td>
+      <td>6.6</td>
+    </tr>
+    <tr>
+      <th>1009</th>
+      <td>57322.0</td>
+      <td>6.0</td>
+      <td>0.103952</td>
+      <td>0.017325</td>
+      <td>0.467784</td>
+      <td>0.000000</td>
+      <td>0.815946</td>
+      <td>0.103760</td>
+      <td>0.363832</td>
+      <td>0.259880</td>
+      <td>...</td>
+      <td>2219.0</td>
+      <td>17.7</td>
+      <td>13.1</td>
+      <td>48253.0</td>
+      <td>43784.0</td>
+      <td>52722.0</td>
+      <td>24473.0</td>
+      <td>23152.0</td>
+      <td>1321.0</td>
+      <td>5.4</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 112 columns</p>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1001</span>    <span class="kc">False</span>
+<span class="mi">1003</span>    <span class="kc">False</span>
+<span class="mi">1005</span>    <span class="kc">False</span>
+<span class="mi">1007</span>    <span class="kc">False</span>
+<span class="mi">1009</span>    <span class="kc">False</span>
+<span class="n">Name</span><span class="p">:</span> <span class="n">USDA</span> <span class="n">Model</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xTest</span><span class="p">,</span> <span class="n">xTrain</span><span class="p">,</span> <span class="n">yTest</span><span class="p">,</span> <span class="n">yTrain</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="logistic-regression">
+<h2>6.1. Logistic Regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logreg</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="n">logreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">xTrain</span><span class="p">,</span> <span class="n">yTrain</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">conda</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">sklearn</span><span class="o">/</span><span class="n">linear_model</span><span class="o">/</span><span class="n">logistic</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">432</span><span class="p">:</span> <span class="ne">FutureWarning</span><span class="p">:</span> <span class="n">Default</span> <span class="n">solver</span> <span class="n">will</span> <span class="n">be</span> <span class="n">changed</span> <span class="n">to</span> <span class="s1">&#39;lbfgs&#39;</span> <span class="ow">in</span> <span class="mf">0.22</span><span class="o">.</span> <span class="n">Specify</span> <span class="n">a</span> <span class="n">solver</span> <span class="n">to</span> <span class="n">silence</span> <span class="n">this</span> <span class="n">warning</span><span class="o">.</span>
+  <span class="ne">FutureWarning</span><span class="p">)</span>
+<span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">conda</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">sklearn</span><span class="o">/</span><span class="n">svm</span><span class="o">/</span><span class="n">base</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">929</span><span class="p">:</span> <span class="n">ConvergenceWarning</span><span class="p">:</span> <span class="n">Liblinear</span> <span class="n">failed</span> <span class="n">to</span> <span class="n">converge</span><span class="p">,</span> <span class="n">increase</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">iterations</span><span class="o">.</span>
+  <span class="s2">&quot;the number of iterations.&quot;</span><span class="p">,</span> <span class="n">ConvergenceWarning</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">class_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fit_intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                   <span class="n">intercept_scaling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">l1_ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                   <span class="n">multi_class</span><span class="o">=</span><span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span>
+                   <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                   <span class="n">warm_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">yPred</span> <span class="o">=</span> <span class="n">logreg</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">xTest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Accuracy of logistic regression classifier on test set: </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">logreg</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">xTest</span><span class="p">,</span> <span class="n">yTest</span><span class="p">)))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Accuracy</span> <span class="n">of</span> <span class="n">logistic</span> <span class="n">regression</span> <span class="n">classifier</span> <span class="n">on</span> <span class="n">test</span> <span class="nb">set</span><span class="p">:</span> <span class="mf">0.82</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">yTest</span><span class="p">,</span> <span class="n">yPred</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">confusion</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="mi">754</span>  <span class="mi">13</span><span class="p">]</span>
+ <span class="p">[</span><span class="mi">150</span>  <span class="mi">14</span><span class="p">]]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">yTest</span><span class="p">,</span> <span class="n">yPred</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
+
+       <span class="kc">False</span>       <span class="mf">0.83</span>      <span class="mf">0.98</span>      <span class="mf">0.90</span>       <span class="mi">767</span>
+        <span class="kc">True</span>       <span class="mf">0.52</span>      <span class="mf">0.09</span>      <span class="mf">0.15</span>       <span class="mi">164</span>
+
+    <span class="n">accuracy</span>                           <span class="mf">0.82</span>       <span class="mi">931</span>
+   <span class="n">macro</span> <span class="n">avg</span>       <span class="mf">0.68</span>      <span class="mf">0.53</span>      <span class="mf">0.52</span>       <span class="mi">931</span>
+<span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.78</span>      <span class="mf">0.82</span>      <span class="mf">0.77</span>       <span class="mi">931</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="4.html">5. Impute The Full Dataset</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="6.html">7. Deep Learning Modeling</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Noah B Johnson &amp; Tristan Shaffer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

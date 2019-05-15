@@ -1,0 +1,293 @@
+
+Machine Learning Modeling
+=========================
+
+.. code:: ipython3
+
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plot
+    from sklearn import metrics
+    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import classification_report
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+
+.. code:: ipython3
+
+    df = pd.read_pickle("../data/production/imputed_dataset.pickle")
+
+.. code:: ipython3
+
+    x = df.iloc[:, :-1]
+    y = df.iloc[:, -1]
+
+.. code:: ipython3
+
+    x.head(5)
+
+
+
+
+.. raw:: html
+
+    <div>
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
+    
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
+    
+        .dataframe thead th {
+            text-align: right;
+        }
+    </style>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>2010 Census Population</th>
+          <th>GROC09</th>
+          <th>GROCPTH14</th>
+          <th>SUPERCPTH14</th>
+          <th>CONVSPTH14</th>
+          <th>SPECSPTH14</th>
+          <th>SNAPSPTH16</th>
+          <th>WICSPTH12</th>
+          <th>FFRPTH14</th>
+          <th>FSRPTH14</th>
+          <th>...</th>
+          <th>CI90UB517_2017</th>
+          <th>PCTPOV517_2017</th>
+          <th>CI90LB517P_2017</th>
+          <th>MEDHHINC_2017</th>
+          <th>CI90LBINC_2017</th>
+          <th>CI90UBINC_2017</th>
+          <th>Civilian_labor_force_2015</th>
+          <th>Employed_2015</th>
+          <th>Unemployed_2015</th>
+          <th>Unemployment_rate_2015</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>1001</th>
+          <td>54571.0</td>
+          <td>6.0</td>
+          <td>0.072209</td>
+          <td>0.018052</td>
+          <td>0.541565</td>
+          <td>0.036104</td>
+          <td>0.760911</td>
+          <td>0.090067</td>
+          <td>0.649878</td>
+          <td>0.523513</td>
+          <td>...</td>
+          <td>2192.0</td>
+          <td>18.6</td>
+          <td>15.1</td>
+          <td>58343.0</td>
+          <td>52121.0</td>
+          <td>64565.0</td>
+          <td>25602.0</td>
+          <td>24272.0</td>
+          <td>1330.0</td>
+          <td>5.2</td>
+        </tr>
+        <tr>
+          <th>1003</th>
+          <td>182265.0</td>
+          <td>24.0</td>
+          <td>0.144920</td>
+          <td>0.029983</td>
+          <td>0.589673</td>
+          <td>0.129928</td>
+          <td>0.949753</td>
+          <td>0.141517</td>
+          <td>0.659634</td>
+          <td>1.104387</td>
+          <td>...</td>
+          <td>6101.0</td>
+          <td>14.3</td>
+          <td>10.7</td>
+          <td>56607.0</td>
+          <td>52439.0</td>
+          <td>60775.0</td>
+          <td>87705.0</td>
+          <td>82843.0</td>
+          <td>4862.0</td>
+          <td>5.5</td>
+        </tr>
+        <tr>
+          <th>1005</th>
+          <td>27457.0</td>
+          <td>5.0</td>
+          <td>0.185963</td>
+          <td>0.037193</td>
+          <td>0.706661</td>
+          <td>0.074385</td>
+          <td>1.354387</td>
+          <td>0.257344</td>
+          <td>0.818239</td>
+          <td>0.557890</td>
+          <td>...</td>
+          <td>2148.0</td>
+          <td>48.8</td>
+          <td>42.6</td>
+          <td>32490.0</td>
+          <td>29218.0</td>
+          <td>35762.0</td>
+          <td>8609.0</td>
+          <td>7844.0</td>
+          <td>765.0</td>
+          <td>8.9</td>
+        </tr>
+        <tr>
+          <th>1007</th>
+          <td>22915.0</td>
+          <td>6.0</td>
+          <td>0.222163</td>
+          <td>0.044433</td>
+          <td>0.666489</td>
+          <td>0.044433</td>
+          <td>0.864874</td>
+          <td>0.221268</td>
+          <td>0.222163</td>
+          <td>0.222163</td>
+          <td>...</td>
+          <td>1099.0</td>
+          <td>26.8</td>
+          <td>19.8</td>
+          <td>45795.0</td>
+          <td>40924.0</td>
+          <td>50666.0</td>
+          <td>8572.0</td>
+          <td>8005.0</td>
+          <td>567.0</td>
+          <td>6.6</td>
+        </tr>
+        <tr>
+          <th>1009</th>
+          <td>57322.0</td>
+          <td>6.0</td>
+          <td>0.103952</td>
+          <td>0.017325</td>
+          <td>0.467784</td>
+          <td>0.000000</td>
+          <td>0.815946</td>
+          <td>0.103760</td>
+          <td>0.363832</td>
+          <td>0.259880</td>
+          <td>...</td>
+          <td>2219.0</td>
+          <td>17.7</td>
+          <td>13.1</td>
+          <td>48253.0</td>
+          <td>43784.0</td>
+          <td>52722.0</td>
+          <td>24473.0</td>
+          <td>23152.0</td>
+          <td>1321.0</td>
+          <td>5.4</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>5 rows × 112 columns</p>
+    </div>
+
+
+
+.. code:: ipython3
+
+    y.head(5)
+
+
+
+
+.. parsed-literal::
+
+    1001    False
+    1003    False
+    1005    False
+    1007    False
+    1009    False
+    Name: USDA Model, dtype: bool
+
+
+
+.. code:: ipython3
+
+    xTest, xTrain, yTest, yTrain = train_test_split(x, y, test_size=0.7, random_state=0)
+
+Logistic Regression
+-------------------
+
+.. code:: ipython3
+
+    logreg = LogisticRegression()
+    logreg.fit(xTrain, yTrain)
+
+
+.. parsed-literal::
+
+    /opt/conda/lib/python3.7/site-packages/sklearn/linear_model/logistic.py:432: FutureWarning: Default solver will be changed to 'lbfgs' in 0.22. Specify a solver to silence this warning.
+      FutureWarning)
+    /opt/conda/lib/python3.7/site-packages/sklearn/svm/base.py:929: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+      "the number of iterations.", ConvergenceWarning)
+
+
+
+
+.. parsed-literal::
+
+    LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+                       intercept_scaling=1, l1_ratio=None, max_iter=100,
+                       multi_class='warn', n_jobs=None, penalty='l2',
+                       random_state=None, solver='warn', tol=0.0001, verbose=0,
+                       warm_start=False)
+
+
+
+.. code:: ipython3
+
+    yPred = logreg.predict(xTest)
+    print('Accuracy of logistic regression classifier on test set: {:.2f}'.format(logreg.score(xTest, yTest)))
+
+
+.. parsed-literal::
+
+    Accuracy of logistic regression classifier on test set: 0.82
+
+
+.. code:: ipython3
+
+    confusion = confusion_matrix(yTest, yPred)
+    print(confusion)
+
+
+.. parsed-literal::
+
+    [[754  13]
+     [150  14]]
+
+
+.. code:: ipython3
+
+    print(classification_report(yTest, yPred))
+
+
+.. parsed-literal::
+
+                  precision    recall  f1-score   support
+    
+           False       0.83      0.98      0.90       767
+            True       0.52      0.09      0.15       164
+    
+        accuracy                           0.82       931
+       macro avg       0.68      0.53      0.52       931
+    weighted avg       0.78      0.82      0.77       931
+    
+

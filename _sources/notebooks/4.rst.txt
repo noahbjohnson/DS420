@@ -1,0 +1,49 @@
+
+Impute The Full Dataset
+=======================
+
+.. code:: ipython3
+
+    import numpy as np
+    from fancyimpute import IterativeImputer
+    import pandas as pd
+
+
+.. parsed-literal::
+
+    Using TensorFlow backend.
+
+
+.. code:: ipython3
+
+    df = pd.read_pickle("../data/production/clean_dataset.pickle")
+    model = df['USDA Model']
+    df.drop('USDA Model', axis='columns', inplace=True)
+
+.. code:: ipython3
+
+    XY_incomplete = df.values
+    
+    XY_completed = []
+    for i in [435789,36,345668,43432546,327256]:
+        imputer = IterativeImputer(n_iter=5, sample_posterior=True, random_state=i)
+        XY_completed.append(imputer.fit_transform(XY_incomplete))
+    
+    XY_completed_mean = np.mean(XY_completed, 0)
+    XY_completed_std = np.std(XY_completed, 0)
+
+.. code:: ipython3
+
+    df.loc[:] = XY_completed_mean
+
+.. code:: ipython3
+
+    df['USDA Model'] = model
+
+.. code:: ipython3
+
+    df.to_pickle("../data/production/imputed_dataset.pickle")
+
+.. code:: ipython3
+
+    df.to_csv("../data/production/imputed_dataset.csv")
