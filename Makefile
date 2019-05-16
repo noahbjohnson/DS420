@@ -1,4 +1,4 @@
-.PHONY: clean data lint requirements docs notebooks
+.PHONY: clean data lint requirements docs
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -31,14 +31,6 @@ requirements: test_environment
 ## Make Dataset
 data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py
-
-## Make Notebooks
-notebooks:
-    echo "notebooks pre rendered"
-#	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/0.ipynb --output-dir ../docs/notebooks
-#	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/1.ipynb --output-dir ../docs/notebooks
-#	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/2.ipynb --output-dir ../docs/notebooks
-#	jupyter nbconvert --ExecutePreprocessor.timeout=600 --execute --to rst notebooks/3.ipynb --output-dir ../docs/notebooks
 
 ## Make Docs
 docs:
