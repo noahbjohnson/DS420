@@ -24,6 +24,11 @@ Project Information
     outline
     usage
     
+Data Profile
+~~~~~~~~~~~~~~~~~~~~~~~~
+`Final Dataset Profile 
+</_static/final_profile.html>`_
+    
 Notebooks
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
