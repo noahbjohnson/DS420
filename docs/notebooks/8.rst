@@ -1,0 +1,124 @@
+
+Model Visualization
+===================
+
+.. code:: ipython3
+
+    """ Notebook Setup/Imports
+    """
+    !pip install -U altair vega_datasets vega pandas-profiling
+    # Project path setup
+    from pathlib import Path
+    project_dir = Path(__name__).resolve().parents[1]
+    
+    # Library import
+    import pandas as pd
+    import numpy as np
+    
+    # Print strings as markdown
+    from IPython.display import Markdown, HTML
+    
+    # Data variables from previous notebook
+    models_df = pd.read_pickle("../models/predictions.pickle")
+    
+    # Plotting libraries
+    import altair as alt
+    from vega_datasets import data
+    alt.renderers.enable('default')
+    
+    from pandas_profiling import ProfileReport
+
+
+.. parsed-literal::
+
+    Requirement already up-to-date: altair in /opt/conda/lib/python3.7/site-packages (3.0.1)
+    Requirement already up-to-date: vega_datasets in /opt/conda/lib/python3.7/site-packages (0.7.0)
+    Requirement already up-to-date: vega in /opt/conda/lib/python3.7/site-packages (2.1.0)
+    Requirement already up-to-date: pandas-profiling in /opt/conda/lib/python3.7/site-packages (1.4.2)
+    Requirement already satisfied, skipping upgrade: jinja2 in /opt/conda/lib/python3.7/site-packages (from altair) (2.10.1)
+    Requirement already satisfied, skipping upgrade: pandas in /opt/conda/lib/python3.7/site-packages (from altair) (0.24.2)
+    Requirement already satisfied, skipping upgrade: six in /opt/conda/lib/python3.7/site-packages (from altair) (1.12.0)
+    Requirement already satisfied, skipping upgrade: toolz in /opt/conda/lib/python3.7/site-packages (from altair) (0.9.0)
+    Requirement already satisfied, skipping upgrade: numpy in /opt/conda/lib/python3.7/site-packages (from altair) (1.16.3)
+    Requirement already satisfied, skipping upgrade: entrypoints in /opt/conda/lib/python3.7/site-packages (from altair) (0.3)
+    Requirement already satisfied, skipping upgrade: jsonschema in /opt/conda/lib/python3.7/site-packages (from altair) (3.0.1)
+    Requirement already satisfied, skipping upgrade: matplotlib>=1.4 in /opt/conda/lib/python3.7/site-packages (from pandas-profiling) (3.0.3)
+    Requirement already satisfied, skipping upgrade: MarkupSafe>=0.23 in /opt/conda/lib/python3.7/site-packages (from jinja2->altair) (1.1.1)
+    Requirement already satisfied, skipping upgrade: pytz>=2011k in /opt/conda/lib/python3.7/site-packages (from pandas->altair) (2019.1)
+    Requirement already satisfied, skipping upgrade: python-dateutil>=2.5.0 in /opt/conda/lib/python3.7/site-packages (from pandas->altair) (2.8.0)
+    Requirement already satisfied, skipping upgrade: attrs>=17.4.0 in /opt/conda/lib/python3.7/site-packages (from jsonschema->altair) (19.1.0)
+    Requirement already satisfied, skipping upgrade: pyrsistent>=0.14.0 in /opt/conda/lib/python3.7/site-packages (from jsonschema->altair) (0.14.11)
+    Requirement already satisfied, skipping upgrade: setuptools in /opt/conda/lib/python3.7/site-packages (from jsonschema->altair) (41.0.0)
+    Requirement already satisfied, skipping upgrade: cycler>=0.10 in /opt/conda/lib/python3.7/site-packages (from matplotlib>=1.4->pandas-profiling) (0.10.0)
+    Requirement already satisfied, skipping upgrade: kiwisolver>=1.0.1 in /opt/conda/lib/python3.7/site-packages (from matplotlib>=1.4->pandas-profiling) (1.1.0)
+    Requirement already satisfied, skipping upgrade: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /opt/conda/lib/python3.7/site-packages (from matplotlib>=1.4->pandas-profiling) (2.4.0)
+
+
+.. code:: ipython3
+
+    counties = alt.topo_feature(data.us_10m.url, 'counties')
+    source = models_df.reset_index()
+    
+    alt.Chart(counties).mark_geoshape().encode(
+        color='USDA Model:Q'
+    ).transform_lookup(
+        lookup='id',
+        from_=alt.LookupData(source, 'index', ['USDA Model'])
+    ).project(
+        type='albersUsa'
+    ).properties(
+        width=500,
+        height=300
+    ).save("usda.html")
+
+models_df
+
+.. code:: ipython3
+
+    alt.Chart(counties).mark_geoshape().encode(
+        color='Logistic Regression:Q'
+    ).transform_lookup(
+        lookup='id',
+        from_=alt.LookupData(source, 'index', ['Logistic Regression'])
+    ).project(
+        type='albersUsa'
+    ).properties(
+        width=500,
+        height=300
+    ).save("logreg.html")
+
+.. code:: ipython3
+
+    alt.Chart(counties).mark_geoshape().encode(
+        color='Adamax:Q'
+    ).transform_lookup(
+        lookup='id',
+        from_=alt.LookupData(source, 'index', ['Adamax'])
+    ).project(
+        type='albersUsa'
+    ).properties(
+        width=500,
+        height=300
+    ).save("adamax.html")
+
+.. code:: ipython3
+
+    alt.Chart(counties).mark_geoshape().encode(
+        color='Nadam:Q'
+    ).transform_lookup(
+        lookup='id',
+        from_=alt.LookupData(source, 'index', ['Nadam'])
+    ).project(
+        type='albersUsa'
+    ).properties(
+        width=500,
+        height=300
+    ).save("nadam.html")
+
+.. code:: ipython3
+
+    profile = ProfileReport(models_df)
+
+.. code:: ipython3
+
+    profile.to_file("../reports/profile.html")
