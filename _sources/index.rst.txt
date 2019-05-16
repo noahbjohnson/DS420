@@ -33,10 +33,13 @@ Model Maps
 ~~~~~~~~~~~~~~~~~~~~~~~~
 * `USDA 
 <_static/usda.html>`_
+
 * `Logistic Regression 
 <_static/logreg.html>`_
+
 * `Adamax Neural Network 
 <_static/adamax.html>`_
+
 * `Nadam Neural Network 
 <_static/nadam.html>`_
 
