@@ -31,17 +31,13 @@ Data Profile
 
 Model Maps
 ~~~~~~~~~~~~~~~~~~~~~~~~
-* `USDA 
-<_static/usda.html>`_
+* `USDA <_static/usda.html>`_
 
-* `Logistic Regression 
-<_static/logreg.html>`_
+* `Logistic Regression <_static/logreg.html>`_
 
-* `Adamax Neural Network 
-<_static/adamax.html>`_
+* `Adamax Neural Network <_static/adamax.html>`_
 
-* `Nadam Neural Network 
-<_static/nadam.html>`_
+* `Nadam Neural Network <_static/nadam.html>`_
 
 Notebooks
 ~~~~~~~~~~~~~~~~~~~~~~~~
