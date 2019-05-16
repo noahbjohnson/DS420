@@ -37,7 +37,7 @@
         
   <div class="section" id="deep-learning-modeling">
 <h1>7. Deep Learning Modeling<a class="headerlink" href="#deep-learning-modeling" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install git+https://github.com/heartfelt-tech/BayesianOptimization.git
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!pip install git+https://github.com/heartfelt-tech/BayesianOptimization.git
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Collecting git+https://github.com/heartfelt-tech/BayesianOptimization.git
@@ -52,108 +52,108 @@ Building wheels for collected packages: bayesian-optimization
 Successfully built bayesian-optimization
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">precision_score</span>
-<span class="kn">from</span> <span class="nn">keras.callbacks</span> <span class="k">import</span> <span class="n">Callback</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="k">import</span> <span class="n">Dense</span><span class="p">,</span><span class="n">Dropout</span><span class="p">,</span><span class="n">Activation</span><span class="p">,</span><span class="n">BatchNormalization</span><span class="p">,</span><span class="n">RepeatVector</span><span class="p">,</span><span class="n">GaussianDropout</span><span class="p">,</span><span class="n">ActivityRegularization</span>
-<span class="kn">from</span> <span class="nn">keras.models</span> <span class="k">import</span> <span class="n">Sequential</span>
-<span class="kn">from</span> <span class="nn">keras.regularizers</span> <span class="k">import</span> <span class="n">l2</span><span class="p">,</span><span class="n">l1</span>
-<span class="kn">import</span> <span class="nn">keras.losses</span> <span class="k">as</span> <span class="nn">losses</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">cross_val_score</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">LabelEncoder</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">StratifiedKFold</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
-<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
-<span class="kn">from</span> <span class="nn">keras.wrappers.scikit_learn</span> <span class="k">import</span> <span class="n">KerasClassifier</span>
-<span class="c1"># fix rng seed</span>
-<span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn.metrics import confusion_matrix, precision_score
+from keras.callbacks import Callback
+from sklearn.model_selection import train_test_split
+from keras.layers import Dense,Dropout,Activation,BatchNormalization,RepeatVector,GaussianDropout,ActivityRegularization
+from keras.models import Sequential
+from keras.regularizers import l2,l1
+import keras.losses as losses
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import cross_val_score
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import StratifiedKFold
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from keras.wrappers.scikit_learn import KerasClassifier
+# fix rng seed
+seed = 42
+np.random.seed(seed)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Using</span> <span class="n">TensorFlow</span> <span class="n">backend</span><span class="o">.</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/imputed_dataset.pickle&quot;</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;USDA Model&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;USDA Model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = pd.read_pickle(&quot;../data/production/imputed_dataset.pickle&quot;)
+x = df.drop(&quot;USDA Model&quot;, axis=&quot;columns&quot;).values
+y = df[&quot;USDA Model&quot;].values
 
-<span class="c1"># encode response as 1/0</span>
-<span class="n">encoder</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
-<span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-<span class="n">encoded_Y</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+# encode response as 1/0
+encoder = LabelEncoder()
+encoder.fit(y)
+encoded_Y = encoder.transform(y)
 
-<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">encoded_Y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+x_train, x_test, y_train, y_test = train_test_split(x,encoded_Y, test_size=0.1, random_state=seed)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PrintDot</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">on_epoch_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">logs</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="mi">50</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class PrintDot(Callback):
+  def on_epoch_end(self, epoch, logs):
+    if epoch % 50 == 0: print(&#39;&#39;)
+    print(&#39;.&#39;, end=&#39;&#39;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">confusion</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span><span class="n">predicted</span><span class="p">):</span>
-    <span class="n">exp_series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
-    <span class="n">pred_series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">predicted</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">exp_series</span><span class="p">,</span> <span class="n">pred_series</span><span class="p">,</span> <span class="n">rownames</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Actual&#39;</span><span class="p">],</span> <span class="n">colnames</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Predicted&#39;</span><span class="p">],</span><span class="n">margins</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def confusion(expected,predicted):
+    exp_series = pd.Series(expected)
+    pred_series = pd.Series(predicted)
+    return pd.crosstab(exp_series, pred_series, rownames=[&#39;Actual&#39;], colnames=[&#39;Predicted&#39;],margins=True)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span> <span class="n">use_train_test</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">dot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=.</span><span class="mi">15</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">dot</span><span class="p">:</span>
-        <span class="n">callbacks</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span><span class="n">PrintDot</span><span class="p">()]</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
-              <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
-              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">use_train_test</span><span class="p">:</span>
-        <span class="n">model_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span><span class="n">validation_data</span><span class="o">=</span><span class="p">[</span><span class="n">x_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">],</span><span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">model_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">encoded_Y</span><span class="p">,</span><span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span><span class="n">validation_split</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span><span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def train_model(model, optimizer=&#39;adam&#39;, use_train_test=True, batch_size=100, epochs=50, dot=True, verbose=0, ratio=.15):
+    if dot:
+        callbacks = []
+    else:
+        callbacks = [PrintDot()]
+    model.compile(optimizer=optimizer,
+              loss=&#39;binary_crossentropy&#39;,
+              metrics=[&#39;accuracy&#39;])
+    if use_train_test:
+        model_output = model.fit(x_train,y_train,epochs=epochs,batch_size=batch_size,verbose=verbose,validation_data=[x_test,y_test],callbacks=callbacks)
+    else:
+        model_output = model.fit(x,encoded_Y,epochs=epochs,batch_size=batch_size,verbose=verbose,validation_split=ratio,callbacks=callbacks)
 
-    <span class="k">return</span> <span class="n">model_output</span>
+    return model_output
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_model</span><span class="p">(</span><span class="n">model_output</span><span class="p">):</span>
-    <span class="c1">#scores</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training Accuracy : &#39;</span> <span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">model_output</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;acc&quot;</span><span class="p">]))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Validation Accuracy : &#39;</span> <span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">model_output</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;val_acc&quot;</span><span class="p">]))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def plot_model(model_output):
+    #scores
+    print(&#39;Training Accuracy : &#39; , np.mean(model_output.history[&quot;acc&quot;]))
+    print(&#39;Validation Accuracy : &#39; , np.mean(model_output.history[&quot;val_acc&quot;]))
 
-    <span class="c1"># Plot training &amp; validation accuracy values</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model_output</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;acc&#39;</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model_output</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_acc&#39;</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Model accuracy&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Train&#39;</span><span class="p">,</span> <span class="s1">&#39;Test&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    # Plot training &amp; validation accuracy values
+    plt.plot(model_output.history[&#39;acc&#39;])
+    plt.plot(model_output.history[&#39;val_acc&#39;])
+    plt.title(&#39;Model accuracy&#39;)
+    plt.ylabel(&#39;Accuracy&#39;)
+    plt.xlabel(&#39;Epoch&#39;)
+    plt.legend([&#39;Train&#39;, &#39;Test&#39;], loc=&#39;upper left&#39;)
+    plt.show()
 
-    <span class="c1"># Plot training &amp; validation loss values</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model_output</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model_output</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_loss&#39;</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;model_output loss&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Loss&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Train&#39;</span><span class="p">,</span> <span class="s1">&#39;Test&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    # Plot training &amp; validation loss values
+    plt.plot(model_output.history[&#39;loss&#39;])
+    plt.plot(model_output.history[&#39;val_loss&#39;])
+    plt.title(&#39;model_output loss&#39;)
+    plt.ylabel(&#39;Loss&#39;)
+    plt.xlabel(&#39;Epoch&#39;)
+    plt.legend([&#39;Train&#39;, &#39;Test&#39;], loc=&#39;upper left&#39;)
+    plt.show()
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">model_confusion</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
-    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
-    <span class="n">rounded</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y_pred</span><span class="p">]</span>
-    <span class="n">y_pred1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rounded</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def model_confusion(model):
+    y_pred = model.predict(x_test)
+    rounded = [round(x[0]) for x in y_pred]
+    y_pred1 = np.array(rounded,dtype=&#39;int64&#39;)
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Precision Score: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">y_pred1</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="n">confusion</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">y_pred1</span><span class="p">)</span>
+    print(&quot;Precision Score: {}&quot;.format(precision_score(y_test,y_pred1)))
+    return confusion(y_test,y_pred1)
 </pre></div>
 </div>
 <div class="section" id="single-layer-model">
 <h2>7.1. Single-Layer Model<a class="headerlink" href="#single-layer-model" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">slm</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-<span class="n">slm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">168</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">112</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-<span class="n">slm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>slm = Sequential()
+slm.add(Dense(168, input_dim=112, activation=&#39;relu&#39;))
+slm.add(Dense(1, activation=&#39;sigmoid&#39;))
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">WARNING</span><span class="p">:</span><span class="n">tensorflow</span><span class="p">:</span><span class="n">From</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">conda</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">tensorflow</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">framework</span><span class="o">/</span><span class="n">op_def_library</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">263</span><span class="p">:</span> <span class="n">colocate_with</span> <span class="p">(</span><span class="kn">from</span> <span class="nn">tensorflow.python.framework.ops</span><span class="p">)</span> <span class="ow">is</span> <span class="n">deprecated</span> <span class="ow">and</span> <span class="n">will</span> <span class="n">be</span> <span class="n">removed</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">future</span> <span class="n">version</span><span class="o">.</span>
@@ -161,8 +161,8 @@ Successfully built bayesian-optimization
 <span class="n">Colocations</span> <span class="n">handled</span> <span class="n">automatically</span> <span class="n">by</span> <span class="n">placer</span><span class="o">.</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">slm</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
-<span class="n">slm_res</span> <span class="o">=</span> <span class="n">slm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">validation_data</span><span class="o">=</span><span class="p">[</span><span class="n">x_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">],</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">PrintDot</span><span class="p">()])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>slm.compile(optimizer=&#39;adam&#39;,loss=&#39;binary_crossentropy&#39;,metrics=[&#39;accuracy&#39;])
+slm_res = slm.fit(x_train,y_train,epochs=100,batch_size=100,verbose=0,validation_data=[x_test,y_test],callbacks=[PrintDot()])
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">WARNING</span><span class="p">:</span><span class="n">tensorflow</span><span class="p">:</span><span class="n">From</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">conda</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">tensorflow</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">ops</span><span class="o">/</span><span class="n">math_ops</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">3066</span><span class="p">:</span> <span class="n">to_int32</span> <span class="p">(</span><span class="kn">from</span> <span class="nn">tensorflow.python.ops.math_ops</span><span class="p">)</span> <span class="ow">is</span> <span class="n">deprecated</span> <span class="ow">and</span> <span class="n">will</span> <span class="n">be</span> <span class="n">removed</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">future</span> <span class="n">version</span><span class="o">.</span>
@@ -173,7 +173,7 @@ Successfully built bayesian-optimization
 <span class="o">..................................................</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_model</span><span class="p">(</span><span class="n">slm_res</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_model(slm_res)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Training</span> <span class="n">Accuracy</span> <span class="p">:</span>  <span class="mf">0.8209910533487904</span>
@@ -182,7 +182,7 @@ Successfully built bayesian-optimization
 </div>
 <img alt="../_images/output_12_1.png" src="../_images/output_12_1.png" />
 <img alt="../_images/output_12_2.png" src="../_images/output_12_2.png" />
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_confusion</span><span class="p">(</span><span class="n">slm</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model_confusion(slm)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Precision</span> <span class="n">Score</span><span class="p">:</span> <span class="mf">0.0</span>
@@ -245,21 +245,21 @@ The model has very low precision, simply selecting 0 for every case</div>
 <div class="section" id="normalized-single-layer">
 <h2>7.2. Normalized Single-Layer<a class="headerlink" href="#normalized-single-layer" title="Permalink to this headline">¶</a></h2>
 <p>Normalizing the input should help the precision</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nslm</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-<span class="n">nslm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-<span class="n">nslm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">168</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">112</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-<span class="n">nslm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nslm = Sequential()
+nslm.add(BatchNormalization())
+nslm.add(Dense(168, input_dim=112, activation=&#39;relu&#39;))
+nslm.add(Dense(1, activation=&#39;sigmoid&#39;))
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nslm</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
-<span class="n">nslm_res</span> <span class="o">=</span> <span class="n">nslm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">validation_data</span><span class="o">=</span><span class="p">[</span><span class="n">x_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">],</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">PrintDot</span><span class="p">()])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nslm.compile(optimizer=&#39;adam&#39;,loss=&#39;binary_crossentropy&#39;,metrics=[&#39;accuracy&#39;])
+nslm_res = nslm.fit(x_train,y_train,epochs=100,batch_size=100,verbose=0,validation_data=[x_test,y_test],callbacks=[PrintDot()])
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..................................................</span>
 <span class="o">..................................................</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_model</span><span class="p">(</span><span class="n">nslm_res</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_model(nslm_res)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Training</span> <span class="n">Accuracy</span> <span class="p">:</span>  <span class="mf">0.9535062653391434</span>
@@ -268,7 +268,7 @@ The model has very low precision, simply selecting 0 for every case</div>
 </div>
 <img alt="../_images/output_18_1.png" src="../_images/output_18_1.png" />
 <img alt="../_images/output_18_2.png" src="../_images/output_18_2.png" />
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_confusion</span><span class="p">(</span><span class="n">nslm</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model_confusion(nslm)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Precision</span> <span class="n">Score</span><span class="p">:</span> <span class="mf">0.42857142857142855</span>
@@ -331,22 +331,22 @@ The model has very low precision, simply selecting 0 for every case</div>
 With normalization, the model is significantly better than always 0</div>
 <div class="section" id="two-layers-with-normalization">
 <h2>7.3. Two Layers with Normalization<a class="headerlink" href="#two-layers-with-normalization" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tlm</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-<span class="n">tlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-<span class="n">tlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">168</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">112</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-<span class="n">tlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-<span class="n">tlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>tlm = Sequential()
+tlm.add(BatchNormalization())
+tlm.add(Dense(168, input_dim=112, activation=&#39;relu&#39;))
+tlm.add(Dense(64, activation=&#39;relu&#39;))
+tlm.add(Dense(1, activation=&#39;sigmoid&#39;))
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tlm</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
-<span class="n">tlm_res</span> <span class="o">=</span> <span class="n">tlm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">validation_data</span><span class="o">=</span><span class="p">[</span><span class="n">x_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">],</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">PrintDot</span><span class="p">()])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>tlm.compile(optimizer=&#39;adam&#39;,loss=&#39;binary_crossentropy&#39;,metrics=[&#39;accuracy&#39;])
+tlm_res = tlm.fit(x_train,y_train,epochs=100,batch_size=100,verbose=0,validation_data=[x_test,y_test],callbacks=[PrintDot()])
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..................................................</span>
 <span class="o">..................................................</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_model</span><span class="p">(</span><span class="n">tlm_res</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_model(tlm_res)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Training</span> <span class="n">Accuracy</span> <span class="p">:</span>  <span class="mf">0.972962436490494</span>
@@ -355,7 +355,7 @@ With normalization, the model is significantly better than always 0</div>
 </div>
 <img alt="../_images/output_24_1.png" src="../_images/output_24_1.png" />
 <img alt="../_images/output_24_2.png" src="../_images/output_24_2.png" />
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_confusion</span><span class="p">(</span><span class="n">tlm</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model_confusion(tlm)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Precision</span> <span class="n">Score</span><span class="p">:</span> <span class="mf">0.45161290322580644</span>
@@ -420,16 +420,16 @@ recall precision is less skewed.</div>
 <div class="section" id="two-layers-with-normalization-and-dropout">
 <h2>7.4. Two-Layers with Normalization and Dropout<a class="headerlink" href="#two-layers-with-normalization-and-dropout" title="Permalink to this headline">¶</a></h2>
 <p>Adding a dropout layer will help protect against overfitting</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dlm</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-<span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-<span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">168</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">112</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-<span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-<span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
-<span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dlm = Sequential()
+dlm.add(BatchNormalization())
+dlm.add(Dense(168, input_dim=112, activation=&#39;relu&#39;))
+dlm.add(Dense(64, activation=&#39;relu&#39;))
+dlm.add(Dropout(0.1))
+dlm.add(Dense(1, activation=&#39;sigmoid&#39;))
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dlm</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
-<span class="n">dlm_res</span> <span class="o">=</span> <span class="n">dlm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">validation_data</span><span class="o">=</span><span class="p">[</span><span class="n">x_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">],</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">PrintDot</span><span class="p">()])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dlm.compile(optimizer=&#39;adam&#39;,loss=&#39;binary_crossentropy&#39;,metrics=[&#39;accuracy&#39;])
+dlm_res = dlm.fit(x_train,y_train,epochs=100,batch_size=100,verbose=0,validation_data=[x_test,y_test],callbacks=[PrintDot()])
 </pre></div>
 </div>
 <pre class="literal-block">WARNING:tensorflow:From /opt/conda/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:3445: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
@@ -438,7 +438,7 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
 
 ..................................................
 ..................................................</pre>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_model</span><span class="p">(</span><span class="n">dlm_res</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_model(dlm_res)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Training</span> <span class="n">Accuracy</span> <span class="p">:</span>  <span class="mf">0.9690661944803485</span>
@@ -447,7 +447,7 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
 </div>
 <img alt="../_images/output_30_1.png" src="../_images/output_30_1.png" />
 <img alt="../_images/output_30_2.png" src="../_images/output_30_2.png" />
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_confusion</span><span class="p">(</span><span class="n">dlm</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model_confusion(dlm)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Precision</span> <span class="n">Score</span><span class="p">:</span> <span class="mf">0.5</span>
@@ -506,63 +506,63 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
 </div></div>
 <div class="section" id="hyperparameter-optimization-dropout-and-learning-rate">
 <h2>7.5. Hyperparameter Optimization (Dropout and Learning Rate)<a class="headerlink" href="#hyperparameter-optimization-dropout-and-learning-rate" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="k">import</span> <span class="n">Adam</span><span class="p">,</span> <span class="n">Nadam</span>
-<span class="kn">from</span> <span class="nn">bayes_opt</span> <span class="k">import</span> <span class="n">BayesianOptimization</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from keras.optimizers import Adam, Nadam
+from bayes_opt import BayesianOptimization
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="n">dropout_rate</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">):</span>
-    <span class="c1"># create model</span>
-    <span class="n">dlm</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">168</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">112</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="n">dropout_rate</span><span class="p">))</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">dlm</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_model(dropout_rate = 0.1):
+    # create model
+    dlm = Sequential()
+    dlm.add(BatchNormalization())
+    dlm.add(Dense(168, input_dim=112, activation=&#39;relu&#39;))
+    dlm.add(Dense(64, activation=&#39;relu&#39;))
+    dlm.add(Dropout(dropout_rate))
+    dlm.add(Dense(1, activation=&#39;sigmoid&#39;))
+    return dlm
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit_with</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="n">dropout_rate</span><span class="p">,</span> <span class="n">lr</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def fit_with(verbose, dropout_rate, lr):
 
-    <span class="c1"># Create the model using a specified hyperparameters.</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">get_model</span><span class="p">(</span><span class="n">dropout_rate</span><span class="p">)</span>
+    # Create the model using a specified hyperparameters.
+    model = get_model(dropout_rate)
 
-    <span class="c1"># Train the model for a specified number of epochs.</span>
-    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
-                  <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
-                  <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
+    # Train the model for a specified number of epochs.
+    optimizer = Adam(lr=lr)
+    model.compile(loss=&#39;binary_crossentropy&#39;,
+                  optimizer=optimizer,
+                  metrics=[&#39;accuracy&#39;])
 
-    <span class="c1"># Train the model with the train dataset.</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-              <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+    # Train the model with the train dataset.
+    model.fit(x_train, y_train, epochs=10,
+              batch_size=100, verbose=verbose)
 
-    <span class="c1"># Evaluate the model with the eval dataset.</span>
-    <span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_test</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="c1">#     print(&#39;Test loss:&#39;, score[0])</span>
-<span class="c1">#     print(&#39;Test accuracy:&#39;, score[1])</span>
+    # Evaluate the model with the eval dataset.
+    score = model.evaluate(x=x_test,y=y_test, steps=10, verbose=0)
+#     print(&#39;Test loss:&#39;, score[0])
+#     print(&#39;Test accuracy:&#39;, score[1])
 
-    <span class="c1"># Return the accuracy.</span>
+    # Return the accuracy.
 
-    <span class="k">return</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    return score[1]
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
-<span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">fit_with_partial</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">fit_with</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from functools import partial
+verbose = 0
+fit_with_partial = partial(fit_with, verbose)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bounded region of parameter space</span>
-<span class="n">pbounds</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;dropout_rate&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">)}</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">BayesianOptimization</span><span class="p">(</span>
-    <span class="n">f</span><span class="o">=</span><span class="n">fit_with_partial</span><span class="p">,</span>
-    <span class="n">pbounds</span><span class="o">=</span><span class="n">pbounds</span><span class="p">,</span>
-    <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># verbose = 1 prints only when a maximum is observed, verbose = 0 is silent</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Bounded region of parameter space
+pbounds = {&#39;dropout_rate&#39;: (0.1, 0.5), &#39;lr&#39;: (1e-4, 1e-2)}
+optimizer = BayesianOptimization(
+    f=fit_with_partial,
+    pbounds=pbounds,
+    verbose=2,  # verbose = 1 prints only when a maximum is observed, verbose = 0 is silent
+    random_state=seed,
+)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">maximize</span><span class="p">(</span><span class="n">init_points</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">optimizer</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>optimizer.maximize(init_points=10, n_iter=10,)
+print(optimizer.max)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>|   iter    |  target   | dropou... |    lr     |
@@ -594,64 +594,64 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
 </div>
 <div class="section" id="hyperparameter-optimization-2-dimensions">
 <h2>7.6. Hyperparameter Optimization 2 (Dimensions)<a class="headerlink" href="#hyperparameter-optimization-2-dimensions" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
-    <span class="c1"># create model</span>
-    <span class="n">dlm</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.11</span><span class="p">))</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">dlm</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_model(dim):
+    # create model
+    dlm = Sequential()
+    dlm.add(BatchNormalization())
+    dlm.add(Dense(dim, activation=&#39;relu&#39;))
+    dlm.add(Dense(64, activation=&#39;relu&#39;))
+    dlm.add(Dropout(0.11))
+    dlm.add(Dense(1, activation=&#39;sigmoid&#39;))
+    return dlm
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit_with</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def fit_with(verbose, dim):
 
-    <span class="c1"># Create the model using a specified hyperparameters.</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">get_model</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span>
+    # Create the model using a specified hyperparameters.
+    model = get_model(int(dim))
 
-    <span class="c1"># Train the model for a specified number of epochs.</span>
-    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mi">01</span><span class="p">)</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
-                  <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
-                  <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
+    # Train the model for a specified number of epochs.
+    optimizer = Adam(lr=.01)
+    model.compile(loss=&#39;binary_crossentropy&#39;,
+                  optimizer=optimizer,
+                  metrics=[&#39;accuracy&#39;])
 
-    <span class="c1"># Train the model with the train dataset.</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-              <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+    # Train the model with the train dataset.
+    model.fit(x_train, y_train, epochs=10,
+              batch_size=100, verbose=verbose)
 
-    <span class="c1"># Evaluate the model with the eval dataset.</span>
-    <span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_test</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="c1">#     print(&#39;Test loss:&#39;, score[0])</span>
-<span class="c1">#     print(&#39;Test accuracy:&#39;, score[1])</span>
+    # Evaluate the model with the eval dataset.
+    score = model.evaluate(x=x_test,y=y_test, steps=10, verbose=0)
+#     print(&#39;Test loss:&#39;, score[0])
+#     print(&#39;Test accuracy:&#39;, score[1])
 
-    <span class="c1"># Return the accuracy.</span>
+    # Return the accuracy.
 
-    <span class="k">return</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    return score[1]
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
-<span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">fit_with_partial</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">fit_with</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from functools import partial
+verbose = 0
+fit_with_partial = partial(fit_with, verbose)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bounded region of parameter space</span>
-<span class="n">pbounds</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;dim&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2048</span><span class="p">)}</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">BayesianOptimization</span><span class="p">(</span>
-    <span class="n">f</span><span class="o">=</span><span class="n">fit_with_partial</span><span class="p">,</span>
-    <span class="n">pbounds</span><span class="o">=</span><span class="n">pbounds</span><span class="p">,</span>
-    <span class="n">ptypes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dim&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">},</span>
-    <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># verbose = 1 prints only when a maximum is observed, verbose = 0 is silent</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Bounded region of parameter space
+pbounds = {&#39;dim&#39;: (1, 2048)}
+optimizer = BayesianOptimization(
+    f=fit_with_partial,
+    pbounds=pbounds,
+    ptypes={&#39;dim&#39;: int},
+    verbose=2,  # verbose = 1 prints only when a maximum is observed, verbose = 0 is silent
+    random_state=seed,
+)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">maximize</span><span class="p">(</span><span class="n">init_points</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">3</span><span class="p">,)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>optimizer.maximize(init_points=10, n_iter=3,)
 
-<span class="c1"># for i, res in enumerate(optimizer.res):</span>
-<span class="c1">#     print(&quot;Iteration {}: \n\t{}&quot;.format(i, res))</span>
+# for i, res in enumerate(optimizer.res):
+#     print(&quot;Iteration {}: \n\t{}&quot;.format(i, res))
 
-<span class="nb">print</span><span class="p">(</span><span class="n">optimizer</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+print(optimizer.max)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>|   iter    |  target   |    dim    |
@@ -673,11 +673,11 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
 {&#39;target&#39;: 0.852090060710907, &#39;params&#39;: {&#39;dim&#39;: 1131.0}}
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">set_bounds</span><span class="p">(</span><span class="n">new_bounds</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dim&#39;</span><span class="p">:(</span><span class="mi">800</span><span class="p">,</span><span class="mi">1500</span><span class="p">)})</span>
-<span class="n">optimizer</span><span class="o">.</span><span class="n">maximize</span><span class="p">(</span>
-    <span class="n">init_points</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">n_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>optimizer.set_bounds(new_bounds={&#39;dim&#39;:(800,1500)})
+optimizer.maximize(
+    init_points=0,
+    n_iter=5,
+)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>|   iter    |  target   |    dim    |
@@ -690,64 +690,64 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
 =====================================
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
-    <span class="c1"># create model</span>
-    <span class="n">dlm</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1131</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.11</span><span class="p">))</span>
-    <span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">dlm</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_model(dim):
+    # create model
+    dlm = Sequential()
+    dlm.add(BatchNormalization())
+    dlm.add(Dense(1131, activation=&#39;relu&#39;))
+    dlm.add(Dense(dim, activation=&#39;relu&#39;))
+    dlm.add(Dropout(0.11))
+    dlm.add(Dense(1, activation=&#39;sigmoid&#39;))
+    return dlm
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit_with</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def fit_with(verbose, dim):
 
-    <span class="c1"># Create the model using a specified hyperparameters.</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">get_model</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span>
+    # Create the model using a specified hyperparameters.
+    model = get_model(int(dim))
 
-    <span class="c1"># Train the model for a specified number of epochs.</span>
-    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=.</span><span class="mi">01</span><span class="p">)</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
-                  <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
-                  <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
+    # Train the model for a specified number of epochs.
+    optimizer = Adam(lr=.01)
+    model.compile(loss=&#39;binary_crossentropy&#39;,
+                  optimizer=optimizer,
+                  metrics=[&#39;accuracy&#39;])
 
-    <span class="c1"># Train the model with the train dataset.</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-              <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+    # Train the model with the train dataset.
+    model.fit(x_train, y_train, epochs=10,
+              batch_size=100, verbose=verbose)
 
-    <span class="c1"># Evaluate the model with the eval dataset.</span>
-    <span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_test</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="c1">#     print(&#39;Test loss:&#39;, score[0])</span>
-<span class="c1">#     print(&#39;Test accuracy:&#39;, score[1])</span>
+    # Evaluate the model with the eval dataset.
+    score = model.evaluate(x=x_test,y=y_test, steps=10, verbose=0)
+#     print(&#39;Test loss:&#39;, score[0])
+#     print(&#39;Test accuracy:&#39;, score[1])
 
-    <span class="c1"># Return the accuracy.</span>
+    # Return the accuracy.
 
-    <span class="k">return</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    return score[1]
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
-<span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">fit_with_partial</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">fit_with</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from functools import partial
+verbose = 0
+fit_with_partial = partial(fit_with, verbose)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bounded region of parameter space</span>
-<span class="n">pbounds</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;dim&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2048</span><span class="p">)}</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">BayesianOptimization</span><span class="p">(</span>
-    <span class="n">f</span><span class="o">=</span><span class="n">fit_with_partial</span><span class="p">,</span>
-    <span class="n">pbounds</span><span class="o">=</span><span class="n">pbounds</span><span class="p">,</span>
-    <span class="n">ptypes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dim&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">},</span>
-    <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># verbose = 1 prints only when a maximum is observed, verbose = 0 is silent</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Bounded region of parameter space
+pbounds = {&#39;dim&#39;: (1, 2048)}
+optimizer = BayesianOptimization(
+    f=fit_with_partial,
+    pbounds=pbounds,
+    ptypes={&#39;dim&#39;: int},
+    verbose=2,  # verbose = 1 prints only when a maximum is observed, verbose = 0 is silent
+    random_state=seed,
+)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">maximize</span><span class="p">(</span><span class="n">init_points</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>optimizer.maximize(init_points=10, n_iter=5,)
 
-<span class="c1"># for i, res in enumerate(optimizer.res):</span>
-<span class="c1">#     print(&quot;Iteration {}: \n\t{}&quot;.format(i, res))</span>
+# for i, res in enumerate(optimizer.res):
+#     print(&quot;Iteration {}: \n\t{}&quot;.format(i, res))
 
-<span class="nb">print</span><span class="p">(</span><span class="n">optimizer</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+print(optimizer.max)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>|   iter    |  target   |    dim    |
@@ -771,11 +771,11 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
 {&#39;target&#39;: 0.8167202472686768, &#39;params&#39;: {&#39;dim&#39;: 1127.0}}
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">set_bounds</span><span class="p">(</span><span class="n">new_bounds</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dim&#39;</span><span class="p">:(</span><span class="mi">1</span><span class="p">,</span><span class="mi">128</span><span class="p">)})</span>
-<span class="n">optimizer</span><span class="o">.</span><span class="n">maximize</span><span class="p">(</span>
-    <span class="n">init_points</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">n_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>optimizer.set_bounds(new_bounds={&#39;dim&#39;:(1,128)})
+optimizer.maximize(
+    init_points=0,
+    n_iter=5,
+)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>|   iter    |  target   |    dim    |
@@ -788,11 +788,11 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
 =====================================
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">set_bounds</span><span class="p">(</span><span class="n">new_bounds</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dim&#39;</span><span class="p">:(</span><span class="mi">64</span><span class="p">,</span><span class="mi">128</span><span class="p">)})</span>
-<span class="n">optimizer</span><span class="o">.</span><span class="n">maximize</span><span class="p">(</span>
-    <span class="n">init_points</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">n_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>optimizer.set_bounds(new_bounds={&#39;dim&#39;:(64,128)})
+optimizer.maximize(
+    init_points=0,
+    n_iter=5,
+)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>|   iter    |  target   |    dim    |
@@ -808,23 +808,23 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
 </div>
 <div class="section" id="optimized-hyperparameters">
 <h2>7.7. Optimized Hyperparameters<a class="headerlink" href="#optimized-hyperparameters" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dlm</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-<span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-<span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1131</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">112</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-<span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-<span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.11</span><span class="p">))</span>
-<span class="n">dlm</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dlm = Sequential()
+dlm.add(BatchNormalization())
+dlm.add(Dense(1131, input_dim=112, activation=&#39;relu&#39;))
+dlm.add(Dense(64, activation=&#39;relu&#39;))
+dlm.add(Dropout(0.11))
+dlm.add(Dense(1, activation=&#39;sigmoid&#39;))
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dlm</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">),</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
-<span class="n">dlm_res</span> <span class="o">=</span> <span class="n">dlm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">validation_data</span><span class="o">=</span><span class="p">[</span><span class="n">x_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">],</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">PrintDot</span><span class="p">()])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dlm.compile(optimizer=Adam(lr=0.01),loss=&#39;binary_crossentropy&#39;,metrics=[&#39;accuracy&#39;])
+dlm_res = dlm.fit(x_train,y_train,epochs=100,batch_size=100,verbose=0,validation_data=[x_test,y_test],callbacks=[PrintDot()])
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..................................................</span>
 <span class="o">..................................................</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_model</span><span class="p">(</span><span class="n">dlm_res</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_model(dlm_res)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Training</span> <span class="n">Accuracy</span> <span class="p">:</span>  <span class="mf">0.9526905245655124</span>
@@ -833,7 +833,7 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
 </div>
 <img alt="../_images/output_56_1.png" src="../_images/output_56_1.png" />
 <img alt="../_images/output_56_2.png" src="../_images/output_56_2.png" />
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_confusion</span><span class="p">(</span><span class="n">dlm</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model_confusion(dlm)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Precision</span> <span class="n">Score</span><span class="p">:</span> <span class="mf">0.46808510638297873</span>
@@ -892,19 +892,19 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
 </div></div>
 <div class="section" id="optimizer-selection">
 <h2>7.8. Optimizer Selection<a class="headerlink" href="#optimizer-selection" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_rlm</span><span class="p">():</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1131</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">112</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.11</span><span class="p">))</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">model</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_rlm():
+    model = Sequential()
+    model.add(BatchNormalization())
+    model.add(Dense(1131, input_dim=112, activation=&#39;relu&#39;))
+    model.add(Dense(64, activation=&#39;relu&#39;))
+    model.add(Dropout(0.11))
+    model.add(Dense(1, activation=&#39;sigmoid&#39;))
+    return model
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adamax</span> <span class="o">=</span> <span class="n">get_rlm</span><span class="p">()</span>
-<span class="n">adamax_res</span> <span class="o">=</span> <span class="n">train_model</span><span class="p">(</span><span class="n">adamax</span><span class="p">,</span> <span class="n">use_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adamax&#39;</span><span class="p">)</span>
-<span class="n">model_confusion</span><span class="p">(</span><span class="n">adamax</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>adamax = get_rlm()
+adamax_res = train_model(adamax, use_train_test=False, optimizer=&#39;adamax&#39;)
+model_confusion(adamax)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Precision</span> <span class="n">Score</span><span class="p">:</span> <span class="mf">0.8813559322033898</span>
@@ -960,9 +960,9 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
     </tr>
   </tbody>
 </table>
-</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nadam</span> <span class="o">=</span> <span class="n">get_rlm</span><span class="p">()</span>
-<span class="n">nadam_res</span> <span class="o">=</span> <span class="n">train_model</span><span class="p">(</span><span class="n">nadam</span><span class="p">,</span> <span class="n">use_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;nadam&#39;</span><span class="p">)</span>
-<span class="n">model_confusion</span><span class="p">(</span><span class="n">nadam</span><span class="p">)</span>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nadam = get_rlm()
+nadam_res = train_model(nadam, use_train_test=False, optimizer=&#39;nadam&#39;)
+model_confusion(nadam)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Precision</span> <span class="n">Score</span><span class="p">:</span> <span class="mf">0.9444444444444444</span>
@@ -1018,9 +1018,9 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
     </tr>
   </tbody>
 </table>
-</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sgd</span> <span class="o">=</span> <span class="n">get_rlm</span><span class="p">()</span>
-<span class="n">sgd_res</span> <span class="o">=</span> <span class="n">train_model</span><span class="p">(</span><span class="n">sgd</span><span class="p">,</span> <span class="n">use_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;sgd&#39;</span><span class="p">)</span>
-<span class="n">model_confusion</span><span class="p">(</span><span class="n">sgd</span><span class="p">)</span>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sgd = get_rlm()
+sgd_res = train_model(sgd, use_train_test=False, optimizer=&#39;sgd&#39;)
+model_confusion(sgd)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Precision</span> <span class="n">Score</span><span class="p">:</span> <span class="mf">0.7241379310344828</span>
@@ -1076,8 +1076,8 @@ Please use <cite>rate</cite> instead of <cite>keep_prob</cite>. Rate should be s
     </tr>
   </tbody>
 </table>
-</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nadam</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;../models/nadam.h5&quot;</span><span class="p">)</span>
-<span class="n">adamax</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;../models/adamax.h5&quot;</span><span class="p">)</span>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nadam.save(&quot;../models/nadam.h5&quot;)
+adamax.save(&quot;../models/adamax.h5&quot;)
 </pre></div>
 </div>
 </div>

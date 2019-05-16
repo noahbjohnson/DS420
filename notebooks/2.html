@@ -37,23 +37,23 @@
         
   <div class="section" id="county-supplemental-data">
 <h1>3. County Supplemental Data<a class="headerlink" href="#county-supplemental-data" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Notebook Setup/Imports</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; Notebook Setup/Imports
+&quot;&quot;&quot;
 
-<span class="c1"># Project path setup</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="n">project_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+# Project path setup
+from pathlib import Path
+project_dir = Path(__name__).resolve().parents[1]
 
-<span class="c1"># Library import</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+# Library import
+import pandas as pd
+import numpy as np
 
-<span class="c1"># Print strings as markdown</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">Markdown</span>
+# Print strings as markdown
+from IPython.display import Markdown
 
-<span class="c1"># Data variables from previous notebook</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data.pickle&quot;</span><span class="p">))</span>
-<span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data_dictionary.pickle&quot;</span><span class="p">))</span>
+# Data variables from previous notebook
+dataset = pd.read_pickle(Path.joinpath(project_dir, &quot;data/processed/1_data.pickle&quot;))
+data_dictionary = pd.read_pickle(Path.joinpath(project_dir, &quot;data/processed/1_data_dictionary.pickle&quot;))
 </pre></div>
 </div>
 <div class="section" id="additional-county-data">
@@ -61,105 +61,105 @@
 <blockquote>
 <div><p><a class="reference external" href="https://www.ers.usda.gov/data-products/county-level-data-sets/download-data/">https://www.ers.usda.gov/data-products/county-level-data-sets/download-data/</a></p>
 </div></blockquote>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">education</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/external/Education.csv&quot;</span><span class="p">,</span>
-                                 <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin-1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;FIPS Code&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>education = pd.read_csv(&quot;../data/external/Education.csv&quot;,
+                                 encoding=&#39;latin-1&#39;).set_index(&quot;FIPS Code&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">poverty</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/external/PovertyEstimates.csv&quot;</span><span class="p">,</span>
-                                 <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin-1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;FIPStxt&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>poverty = pd.read_csv(&quot;../data/external/PovertyEstimates.csv&quot;,
+                                 encoding=&#39;latin-1&#39;).set_index(&quot;FIPStxt&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unemployment</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;../data/external/Unemployment.xls&quot;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
-                                 <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin-1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;FIPStxt&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>unemployment = pd.read_excel(&quot;../data/external/Unemployment.xls&quot;, skiprows=7,
+                                 encoding=&#39;latin-1&#39;).set_index(&quot;FIPStxt&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ed_keep_cols</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">ed_cols</span> <span class="o">=</span> <span class="n">education</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">ed_cols</span><span class="p">:</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1970&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1980&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-        <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1990&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2000&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2003&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span> <span class="o">!=</span> <span class="s1">&#39;State&#39;</span>
-       <span class="ow">and</span> <span class="n">col</span> <span class="o">!=</span> <span class="s2">&quot;Area name&quot;</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2013 &quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Unnamed&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">ed_keep_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ed_keep_cols = []
+ed_cols = education.columns.values.tolist()
+for col in ed_cols:
+    if (col.find(&quot;1970&quot;) &lt; 0 and col.find(&quot;1980&quot;) &lt; 0
+        and col.find(&quot;1990&quot;) &lt; 0 and col.find(&quot;2000&quot;) &lt; 0
+       and col.find(&quot;2003&quot;) &lt; 0 and col != &#39;State&#39;
+       and col != &quot;Area name&quot; and col.find(&quot;2013 &quot;) &lt; 0
+       and col.find(&quot;Unnamed&quot;) &lt; 0):
+        ed_keep_cols.append(col)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">education</span> <span class="o">=</span> <span class="n">education</span><span class="p">[</span><span class="n">ed_keep_cols</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>education = education[ed_keep_cols]
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pov_keep_cols</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">pov_cols</span> <span class="o">=</span> <span class="n">poverty</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">pov_cols</span><span class="p">:</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1970&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1980&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-        <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1990&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2000&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2003&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span> <span class="o">!=</span> <span class="s1">&#39;State&#39;</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2013 &quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Unnamed&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2013&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">pov_keep_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pov_keep_cols = []
+pov_cols = poverty.columns.values.tolist()
+for col in pov_cols:
+    if (col.find(&quot;1970&quot;) &lt; 0 and col.find(&quot;1980&quot;) &lt; 0
+        and col.find(&quot;1990&quot;) &lt; 0 and col.find(&quot;2000&quot;) &lt; 0
+       and col.find(&quot;2003&quot;) &lt; 0 and col != &#39;State&#39;
+       and col.find(&quot;Area&quot;) &lt; 0 and col.find(&quot;2013 &quot;) &lt; 0
+       and col.find(&quot;Unnamed&quot;) &lt; 0 and col.find(&quot;_2013&quot;) &lt; 0):
+        pov_keep_cols.append(col)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">poverty</span> <span class="o">=</span> <span class="n">poverty</span><span class="p">[</span><span class="n">pov_keep_cols</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>poverty = poverty[pov_keep_cols]
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unemployment_keep_cols</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">unemployment_cols</span> <span class="o">=</span> <span class="n">unemployment</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">unemployment_cols</span><span class="p">:</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1970&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1980&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-        <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;1990&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2000&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2003&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span> <span class="o">!=</span> <span class="s1">&#39;State&#39;</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;2013 &quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Unnamed&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2013&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2007&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2008&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2009&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2010&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2011&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2012&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2014&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2016&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
-       <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_2017&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">unemployment_keep_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>unemployment_keep_cols = []
+unemployment_cols = unemployment.columns.values.tolist()
+for col in unemployment_cols:
+    if (col.find(&quot;1970&quot;) &lt; 0 and col.find(&quot;1980&quot;) &lt; 0
+        and col.find(&quot;1990&quot;) &lt; 0 and col.find(&quot;2000&quot;) &lt; 0
+       and col.find(&quot;2003&quot;) &lt; 0 and col != &#39;State&#39;
+       and col.find(&quot;Area&quot;) &lt; 0 and col.find(&quot;2013 &quot;) &lt; 0
+       and col.find(&quot;Unnamed&quot;) &lt; 0 and col.find(&quot;_2013&quot;) &lt; 0
+       and col.find(&quot;_2007&quot;) &lt; 0 and col.find(&quot;_2008&quot;) &lt; 0
+       and col.find(&quot;_2009&quot;) &lt; 0 and col.find(&quot;_2010&quot;) &lt; 0
+       and col.find(&quot;_2011&quot;) &lt; 0 and col.find(&quot;_2012&quot;) &lt; 0
+       and col.find(&quot;_2014&quot;) &lt; 0 and col.find(&quot;_2016&quot;) &lt; 0
+       and col.find(&quot;_2017&quot;) &lt; 0):
+        unemployment_keep_cols.append(col)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unemployment</span> <span class="o">=</span> <span class="n">unemployment</span><span class="p">[</span><span class="n">unemployment_keep_cols</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>unemployment = unemployment[unemployment_keep_cols]
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">county_data</span> <span class="o">=</span> <span class="n">education</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">poverty</span><span class="p">,</span><span class="n">rsuffix</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">unemployment</span><span class="p">,</span><span class="n">rsuffix</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>county_data = education.join(
+    poverty,rsuffix=&quot;_&quot;).join(
+    unemployment,rsuffix=&quot;_&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">full_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">county_data</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>full_dataset = dataset.join(county_data)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pov_dd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;../data/external/PovertyEstimates.xls&quot;</span><span class="p">,</span><span class="n">sheet_name</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">33</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pov_dd = pd.read_excel(&quot;../data/external/PovertyEstimates.xls&quot;,sheet_name=1).loc[:33]
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pov_dd</span> <span class="o">=</span> <span class="n">pov_dd</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span>
-    <span class="s2">&quot;Column variable name&quot;</span><span class="p">:</span><span class="s2">&quot;Variable Code&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Description&quot;</span><span class="p">:</span><span class="s2">&quot;Variable Name&quot;</span>
-<span class="p">},</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Notes&quot;</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pov_dd = pov_dd.rename({
+    &quot;Column variable name&quot;:&quot;Variable Code&quot;,
+    &quot;Description&quot;:&quot;Variable Name&quot;
+},axis=&quot;columns&quot;).drop(&quot;Notes&quot;,axis=&quot;columns&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data_dictionary</span><span class="p">,</span><span class="n">pov_dd</span><span class="p">],</span><span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data_dictionary = pd.concat([data_dictionary,pov_dd],sort=False)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">un_dd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;../data/external/Unemployment.xls&quot;</span><span class="p">,</span><span class="n">sheet_name</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>un_dd = pd.read_excel(&quot;../data/external/Unemployment.xls&quot;,sheet_name=1)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">un_dd</span> <span class="o">=</span> <span class="n">un_dd</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">51</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span>
-    <span class="s2">&quot;Variable&quot;</span><span class="p">:</span><span class="s2">&quot;Variable Code&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Description&quot;</span><span class="p">:</span><span class="s2">&quot;Variable Name&quot;</span>
-<span class="p">},</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>un_dd = un_dd.loc[:51].rename({
+    &quot;Variable&quot;:&quot;Variable Code&quot;,
+    &quot;Description&quot;:&quot;Variable Name&quot;
+},axis=&quot;columns&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data_dictionary</span><span class="p">,</span><span class="n">un_dd</span><span class="p">],</span><span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data_dictionary = pd.concat([data_dictionary,un_dd],sort=False)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save data</span>
-<span class="n">full_dataset</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/data.pickle&quot;</span><span class="p">)</span>
-<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/data_dictionary.pickle&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Save data
+full_dataset.to_pickle(&quot;../data/production/data.pickle&quot;)
+data_dictionary.to_pickle(&quot;../data/production/data_dictionary.pickle&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save data</span>
-<span class="n">full_dataset</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../data/production/data.csv&quot;</span><span class="p">)</span>
-<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../data/production/data_dictionary.csv&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Save data
+full_dataset.to_csv(&quot;../data/production/data.csv&quot;)
+data_dictionary.to_csv(&quot;../data/production/data_dictionary.csv&quot;)
 </pre></div>
 </div>
 </div>

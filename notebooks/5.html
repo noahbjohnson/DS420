@@ -37,24 +37,24 @@
         
   <div class="section" id="machine-learning-modeling">
 <h1>6. Machine Learning Modeling<a class="headerlink" href="#machine-learning-modeling" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plot</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">metrics</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">confusion_matrix</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">classification_report</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plot
+from sklearn import metrics
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/imputed_dataset.pickle&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = pd.read_pickle(&quot;../data/production/imputed_dataset.pickle&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x = df.iloc[:, :-1]
+y = df.iloc[:, -1]
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x.head(5)
 </pre></div>
 </div>
 <div>
@@ -222,7 +222,7 @@
   </tbody>
 </table>
 <p>5 rows × 112 columns</p>
-</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>y.head(5)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1001</span>    <span class="kc">False</span>
@@ -233,13 +233,13 @@
 <span class="n">Name</span><span class="p">:</span> <span class="n">USDA</span> <span class="n">Model</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">bool</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xTest</span><span class="p">,</span> <span class="n">xTrain</span><span class="p">,</span> <span class="n">yTest</span><span class="p">,</span> <span class="n">yTrain</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>xTest, xTrain, yTest, yTrain = train_test_split(x, y, test_size=0.7, random_state=0)
 </pre></div>
 </div>
 <div class="section" id="logistic-regression">
 <h2>6.1. Logistic Regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logreg</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
-<span class="n">logreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">xTrain</span><span class="p">,</span> <span class="n">yTrain</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>logreg = LogisticRegression()
+logreg.fit(xTrain, yTrain)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">conda</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">sklearn</span><span class="o">/</span><span class="n">linear_model</span><span class="o">/</span><span class="n">logistic</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">432</span><span class="p">:</span> <span class="ne">FutureWarning</span><span class="p">:</span> <span class="n">Default</span> <span class="n">solver</span> <span class="n">will</span> <span class="n">be</span> <span class="n">changed</span> <span class="n">to</span> <span class="s1">&#39;lbfgs&#39;</span> <span class="ow">in</span> <span class="mf">0.22</span><span class="o">.</span> <span class="n">Specify</span> <span class="n">a</span> <span class="n">solver</span> <span class="n">to</span> <span class="n">silence</span> <span class="n">this</span> <span class="n">warning</span><span class="o">.</span>
@@ -255,22 +255,22 @@
                    <span class="n">warm_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">yPred</span> <span class="o">=</span> <span class="n">logreg</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">xTest</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Accuracy of logistic regression classifier on test set: </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">logreg</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">xTest</span><span class="p">,</span> <span class="n">yTest</span><span class="p">)))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>yPred = logreg.predict(xTest)
+print(&#39;Accuracy of logistic regression classifier on test set: {:.2f}&#39;.format(logreg.score(xTest, yTest)))
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Accuracy</span> <span class="n">of</span> <span class="n">logistic</span> <span class="n">regression</span> <span class="n">classifier</span> <span class="n">on</span> <span class="n">test</span> <span class="nb">set</span><span class="p">:</span> <span class="mf">0.82</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">yTest</span><span class="p">,</span> <span class="n">yPred</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">confusion</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>confusion = confusion_matrix(yTest, yPred)
+print(confusion)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="mi">754</span>  <span class="mi">13</span><span class="p">]</span>
  <span class="p">[</span><span class="mi">150</span>  <span class="mi">14</span><span class="p">]]</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">yTest</span><span class="p">,</span> <span class="n">yPred</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(classification_report(yTest, yPred))
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>

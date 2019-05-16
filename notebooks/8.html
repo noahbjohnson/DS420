@@ -34,29 +34,29 @@
         
   <div class="section" id="model-visualization">
 <h1>9. Model Visualization<a class="headerlink" href="#model-visualization" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Notebook Setup/Imports</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="o">!</span>pip install -U altair vega_datasets vega pandas-profiling
-<span class="c1"># Project path setup</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="n">project_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; Notebook Setup/Imports
+&quot;&quot;&quot;
+!pip install -U altair vega_datasets vega pandas-profiling
+# Project path setup
+from pathlib import Path
+project_dir = Path(__name__).resolve().parents[1]
 
-<span class="c1"># Library import</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+# Library import
+import pandas as pd
+import numpy as np
 
-<span class="c1"># Print strings as markdown</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">HTML</span>
+# Print strings as markdown
+from IPython.display import Markdown, HTML
 
-<span class="c1"># Data variables from previous notebook</span>
-<span class="n">models_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s2">&quot;../models/predictions.pickle&quot;</span><span class="p">)</span>
+# Data variables from previous notebook
+models_df = pd.read_pickle(&quot;../models/predictions.pickle&quot;)
 
-<span class="c1"># Plotting libraries</span>
-<span class="kn">import</span> <span class="nn">altair</span> <span class="k">as</span> <span class="nn">alt</span>
-<span class="kn">from</span> <span class="nn">vega_datasets</span> <span class="k">import</span> <span class="n">data</span>
-<span class="n">alt</span><span class="o">.</span><span class="n">renderers</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">)</span>
+# Plotting libraries
+import altair as alt
+from vega_datasets import data
+alt.renderers.enable(&#39;default&#39;)
 
-<span class="kn">from</span> <span class="nn">pandas_profiling</span> <span class="k">import</span> <span class="n">ProfileReport</span>
+from pandas_profiling import ProfileReport
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Requirement</span> <span class="n">already</span> <span class="n">up</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">date</span><span class="p">:</span> <span class="n">altair</span> <span class="ow">in</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">conda</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span> <span class="p">(</span><span class="mf">3.0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
@@ -82,66 +82,66 @@
 <span class="n">Requirement</span> <span class="n">already</span> <span class="n">satisfied</span><span class="p">,</span> <span class="n">skipping</span> <span class="n">upgrade</span><span class="p">:</span> <span class="n">pyparsing</span><span class="o">!=</span><span class="mf">2.0</span><span class="o">.</span><span class="mi">4</span><span class="p">,</span><span class="o">!=</span><span class="mf">2.1</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span><span class="o">!=</span><span class="mf">2.1</span><span class="o">.</span><span class="mi">6</span><span class="p">,</span><span class="o">&gt;=</span><span class="mf">2.0</span><span class="o">.</span><span class="mi">1</span> <span class="ow">in</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">conda</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span> <span class="p">(</span><span class="kn">from</span> <span class="nn">matplotlib</span><span class="o">&gt;=</span><span class="mf">1.4</span><span class="o">-&gt;</span><span class="n">pandas</span><span class="o">-</span><span class="n">profiling</span><span class="p">)</span> <span class="p">(</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">counties</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">topo_feature</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">us_10m</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;counties&#39;</span><span class="p">)</span>
-<span class="n">source</span> <span class="o">=</span> <span class="n">models_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>counties = alt.topo_feature(data.us_10m.url, &#39;counties&#39;)
+source = models_df.reset_index()
 
-<span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">counties</span><span class="p">)</span><span class="o">.</span><span class="n">mark_geoshape</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
-    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;USDA Model:Q&#39;</span>
-<span class="p">)</span><span class="o">.</span><span class="n">transform_lookup</span><span class="p">(</span>
-    <span class="n">lookup</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">,</span>
-    <span class="n">from_</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">LookupData</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;USDA Model&#39;</span><span class="p">])</span>
-<span class="p">)</span><span class="o">.</span><span class="n">project</span><span class="p">(</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;albersUsa&#39;</span>
-<span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span>
-    <span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-    <span class="n">height</span><span class="o">=</span><span class="mi">300</span>
-<span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;usda.html&quot;</span><span class="p">)</span>
+alt.Chart(counties).mark_geoshape().encode(
+    color=&#39;USDA Model:Q&#39;
+).transform_lookup(
+    lookup=&#39;id&#39;,
+    from_=alt.LookupData(source, &#39;index&#39;, [&#39;USDA Model&#39;])
+).project(
+    type=&#39;albersUsa&#39;
+).properties(
+    width=500,
+    height=300
+).save(&quot;usda.html&quot;)
 </pre></div>
 </div>
 <p>models_df</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">counties</span><span class="p">)</span><span class="o">.</span><span class="n">mark_geoshape</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
-    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Logistic Regression:Q&#39;</span>
-<span class="p">)</span><span class="o">.</span><span class="n">transform_lookup</span><span class="p">(</span>
-    <span class="n">lookup</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">,</span>
-    <span class="n">from_</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">LookupData</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Logistic Regression&#39;</span><span class="p">])</span>
-<span class="p">)</span><span class="o">.</span><span class="n">project</span><span class="p">(</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;albersUsa&#39;</span>
-<span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span>
-    <span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-    <span class="n">height</span><span class="o">=</span><span class="mi">300</span>
-<span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;logreg.html&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>alt.Chart(counties).mark_geoshape().encode(
+    color=&#39;Logistic Regression:Q&#39;
+).transform_lookup(
+    lookup=&#39;id&#39;,
+    from_=alt.LookupData(source, &#39;index&#39;, [&#39;Logistic Regression&#39;])
+).project(
+    type=&#39;albersUsa&#39;
+).properties(
+    width=500,
+    height=300
+).save(&quot;logreg.html&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">counties</span><span class="p">)</span><span class="o">.</span><span class="n">mark_geoshape</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
-    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Adamax:Q&#39;</span>
-<span class="p">)</span><span class="o">.</span><span class="n">transform_lookup</span><span class="p">(</span>
-    <span class="n">lookup</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">,</span>
-    <span class="n">from_</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">LookupData</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Adamax&#39;</span><span class="p">])</span>
-<span class="p">)</span><span class="o">.</span><span class="n">project</span><span class="p">(</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;albersUsa&#39;</span>
-<span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span>
-    <span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-    <span class="n">height</span><span class="o">=</span><span class="mi">300</span>
-<span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;adamax.html&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>alt.Chart(counties).mark_geoshape().encode(
+    color=&#39;Adamax:Q&#39;
+).transform_lookup(
+    lookup=&#39;id&#39;,
+    from_=alt.LookupData(source, &#39;index&#39;, [&#39;Adamax&#39;])
+).project(
+    type=&#39;albersUsa&#39;
+).properties(
+    width=500,
+    height=300
+).save(&quot;adamax.html&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">counties</span><span class="p">)</span><span class="o">.</span><span class="n">mark_geoshape</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
-    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Nadam:Q&#39;</span>
-<span class="p">)</span><span class="o">.</span><span class="n">transform_lookup</span><span class="p">(</span>
-    <span class="n">lookup</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">,</span>
-    <span class="n">from_</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">LookupData</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Nadam&#39;</span><span class="p">])</span>
-<span class="p">)</span><span class="o">.</span><span class="n">project</span><span class="p">(</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;albersUsa&#39;</span>
-<span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span>
-    <span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-    <span class="n">height</span><span class="o">=</span><span class="mi">300</span>
-<span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;nadam.html&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>alt.Chart(counties).mark_geoshape().encode(
+    color=&#39;Nadam:Q&#39;
+).transform_lookup(
+    lookup=&#39;id&#39;,
+    from_=alt.LookupData(source, &#39;index&#39;, [&#39;Nadam&#39;])
+).project(
+    type=&#39;albersUsa&#39;
+).properties(
+    width=500,
+    height=300
+).save(&quot;nadam.html&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">profile</span> <span class="o">=</span> <span class="n">ProfileReport</span><span class="p">(</span><span class="n">models_df</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>profile = ProfileReport(models_df)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">profile</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s2">&quot;../reports/profile.html&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>profile.to_file(&quot;../reports/profile.html&quot;)
 </pre></div>
 </div>
 </div>

@@ -37,32 +37,32 @@
         
   <div class="section" id="cleaning-and-profiling">
 <h1>2. Cleaning and Profiling<a class="headerlink" href="#cleaning-and-profiling" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Notebook Setup/Imports</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; Notebook Setup/Imports
+&quot;&quot;&quot;
 
-<span class="c1"># Project path setup</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="n">project_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+# Project path setup
+from pathlib import Path
+project_dir = Path(__name__).resolve().parents[1]
 
-<span class="c1"># Library import</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas_profiling</span>
+# Library import
+import pandas as pd
+import numpy as np
+import pandas_profiling
 
-<span class="c1"># Print strings as markdown</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">Markdown</span>
+# Print strings as markdown
+from IPython.display import Markdown
 
-<span class="c1"># Data variables from previous notebook</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/0_data.pickle&quot;</span><span class="p">))</span>
-<span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/0_data_dictionary.pickle&quot;</span><span class="p">))</span>
+# Data variables from previous notebook
+dataset = pd.read_pickle(Path.joinpath(project_dir, &quot;data/processed/0_data.pickle&quot;))
+data_dictionary = pd.read_pickle(Path.joinpath(project_dir, &quot;data/processed/0_data_dictionary.pickle&quot;))
 </pre></div>
 </div>
 <div class="section" id="data-type-validation-cleaning">
 <h2>2.1. Data Type Validation &amp; Cleaning<a class="headerlink" href="#data-type-validation-cleaning" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Get the count for data types in the dataset</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">d</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">dtypes</span>
-<span class="n">dataset</span><span class="o">.</span><span class="n">get_dtype_counts</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; Get the count for data types in the dataset
+&quot;&quot;&quot;
+d = dataset.dtypes
+dataset.get_dtype_counts()
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">bool</span>         <span class="mi">4</span>
@@ -71,25 +71,25 @@
 <span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Find columns as strings or other objects</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">object_columns</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">d</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">object_columns</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; Find columns as strings or other objects
+&quot;&quot;&quot;
+object_columns = d[d == &#39;object&#39;].index.to_list()
+print(object_columns)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;2010 Census Population&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2011&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2012&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2013&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2014&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2015&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Estimate, 2016&#39;</span><span class="p">,</span> <span class="s1">&#39;School Breakfast Program participants FY 2011&#39;</span><span class="p">,</span> <span class="s1">&#39;School Breakfast Program participants, FY 2012&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Parse objects to float</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">object_columns</span><span class="p">:</span>
-    <span class="n">sub</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
-    <span class="n">dataset</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; Parse objects to float
+&quot;&quot;&quot;
+for column in object_columns:
+    sub = dataset[column].str.replace(&quot;,&quot;,&quot;&quot;).str.replace(&quot;-&quot;,&quot;&quot;).str.strip().apply(lambda x: np.nan if x == &quot;&quot; else x)
+    dataset[column] = sub.astype(float)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Check types</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">dataset</span><span class="o">.</span><span class="n">get_dtype_counts</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; Check types
+&quot;&quot;&quot;
+dataset.get_dtype_counts()
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">bool</span>         <span class="mi">4</span>
@@ -100,25 +100,25 @@
 </div>
 <div class="section" id="variable-selection">
 <h2>2.2. Variable Selection<a class="headerlink" href="#variable-selection" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Create a list of rejected variables with &gt; .975 correlation from the profile analysis</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">profile</span> <span class="o">=</span> <span class="n">pandas_profiling</span><span class="o">.</span><span class="n">ProfileReport</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">check_recoded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">rejected_variables</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_rejected_variables</span><span class="p">(</span><span class="o">.</span><span class="mi">975</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; Create a list of rejected variables with &gt; .975 correlation from the profile analysis
+&quot;&quot;&quot;
+profile = pandas_profiling.ProfileReport(dataset, check_recoded=True)
+rejected_variables = profile.get_rejected_variables(.975)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; List of columns to keep</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">keep_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rejected_variables</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; List of columns to keep
+&quot;&quot;&quot;
+keep_columns = [x for x in dataset.columns if x not in rejected_variables]
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; New dataframe with the columns to keep</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">dataset_clean</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">keep_columns</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; New dataframe with the columns to keep
+&quot;&quot;&quot;
+dataset_clean = dataset[keep_columns]
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Set the USDA Model to the percentage</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">dataset_clean</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;USDA Model Count&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; Set the USDA Model to the percentage
+&quot;&quot;&quot;
+dataset_clean.drop(&quot;USDA Model Count&quot;, axis=&quot;columns&quot;, inplace=True)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">noah</span><span class="o">/</span><span class="n">Documents</span><span class="o">/</span><span class="n">DS420</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">6</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">pandas</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">frame</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">3940</span><span class="p">:</span> <span class="n">SettingWithCopyWarning</span><span class="p">:</span>
@@ -128,7 +128,7 @@
   <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset_clean</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s2">&quot;USDA Model Percent&quot;</span><span class="p">:</span><span class="s2">&quot;USDA Model&quot;</span><span class="p">},</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset_clean.rename({&quot;USDA Model Percent&quot;:&quot;USDA Model&quot;},axis=&quot;columns&quot;,inplace=True)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">noah</span><span class="o">/</span><span class="n">Documents</span><span class="o">/</span><span class="n">DS420</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">6</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">pandas</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">frame</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4025</span><span class="p">:</span> <span class="n">SettingWithCopyWarning</span><span class="p">:</span>
@@ -138,20 +138,20 @@
   <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">DataFrame</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Save the cleaned data</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">dataset_clean</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data.pickle&quot;</span><span class="p">))</span>
-<span class="n">data_dictionary</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data/processed/1_data_dictionary.pickle&quot;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; Save the cleaned data
+&quot;&quot;&quot;
+dataset_clean.to_pickle(Path.joinpath(project_dir, &quot;data/processed/1_data.pickle&quot;))
+data_dictionary.to_pickle(Path.joinpath(project_dir, &quot;data/processed/1_data_dictionary.pickle&quot;))
 </pre></div>
 </div>
 </div>
 <div class="section" id="cleaned-data-profile">
 <h2>2.3. Cleaned Data Profile<a class="headerlink" href="#cleaned-data-profile" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Create the data profile object and save it to an HTML file</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">profile</span> <span class="o">=</span> <span class="n">pandas_profiling</span><span class="o">.</span><span class="n">ProfileReport</span><span class="p">(</span><span class="n">dataset_clean</span><span class="p">,</span> <span class="n">check_recoded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">profile</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">outputfile</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span>
-                                      <span class="s2">&quot;docs/_static/profile.html&quot;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>&quot;&quot;&quot; Create the data profile object and save it to an HTML file
+&quot;&quot;&quot;
+profile = pandas_profiling.ProfileReport(dataset_clean, check_recoded=True)
+profile.to_file(outputfile = Path.joinpath(project_dir,
+                                      &quot;docs/_static/profile.html&quot;))
 </pre></div>
 </div>
 </div>

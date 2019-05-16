@@ -37,36 +37,36 @@
         
   <div class="section" id="model-assessment">
 <h1>8. Model Assessment<a class="headerlink" href="#model-assessment" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.models</span> <span class="k">import</span> <span class="n">load_model</span>
-<span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">auc</span><span class="p">,</span> <span class="n">roc_auc_score</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">LabelEncoder</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
-<span class="c1"># fix rng seed</span>
-<span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from keras.models import load_model
+import pickle
+import pandas as pd
+import numpy as np
+from sklearn.metrics import confusion_matrix, precision_score, classification_report, roc_curve, auc, roc_auc_score
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
+from sklearn.linear_model import LogisticRegression
+# fix rng seed
+seed = 42
+np.random.seed(seed)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Using</span> <span class="n">TensorFlow</span> <span class="n">backend</span><span class="o">.</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/imputed_dataset.pickle&quot;</span><span class="p">)</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;USDA Model&quot;</span><span class="p">]</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;USDA Model&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">values</span>
-<span class="c1"># encode response as 1/0</span>
-<span class="n">encoded_Y</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset = pd.read_pickle(&quot;../data/production/imputed_dataset.pickle&quot;)
+Y = dataset[&quot;USDA Model&quot;]
+X = dataset.drop(&quot;USDA Model&quot;, axis=&quot;columns&quot;)
+x = X.values
+# encode response as 1/0
+encoded_Y = LabelEncoder().fit_transform(Y.values)
 </pre></div>
 </div>
 <div class="section" id="import-saved-models">
 <h2>8.1. Import Saved Models<a class="headerlink" href="#import-saved-models" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nadam</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="s2">&quot;../models/nadam.h5&quot;</span><span class="p">)</span>
-<span class="n">adamax</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="s2">&quot;../models/adamax.h5&quot;</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;../models/logreg.pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">modelfile</span><span class="p">:</span>
-    <span class="n">logreg</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">modelfile</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nadam = load_model(&quot;../models/nadam.h5&quot;)
+adamax = load_model(&quot;../models/adamax.h5&quot;)
+with open(&quot;../models/logreg.pickle&quot;, &quot;rb&quot;) as modelfile:
+    logreg = pickle.load(modelfile)
 </pre></div>
 </div>
 <pre class="literal-block">WARNING:tensorflow:From /opt/conda/lib/python3.7/site-packages/tensorflow/python/framework/op_def_library.py:263: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
@@ -81,21 +81,21 @@ Use tf.cast instead.</pre>
 </div>
 <div class="section" id="logistic-regression">
 <h2>8.2. Logistic Regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logreg</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>logreg.score(X,Y)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">0.8238892466194462</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">logreg</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="n">confusion_matrix</span><span class="p">(</span><span class="n">encoded_Y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>y_pred = logreg.predict(X)
+confusion_matrix(encoded_Y, y_pred)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mi">2505</span><span class="p">,</span>   <span class="mi">45</span><span class="p">],</span>
        <span class="p">[</span> <span class="mi">502</span><span class="p">,</span>   <span class="mi">54</span><span class="p">]])</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">encoded_Y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(classification_report(encoded_Y, y_pred))
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
@@ -108,27 +108,27 @@ Use tf.cast instead.</pre>
 <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.78</span>      <span class="mf">0.82</span>      <span class="mf">0.77</span>      <span class="mi">3106</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_score</span> <span class="o">=</span> <span class="n">logreg</span><span class="o">.</span><span class="n">decision_function</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">y_score</span><span class="p">)</span>
-<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>y_score = logreg.decision_function(X)
+fpr, tpr, _ = roc_curve(Y,y_score)
+roc_auc = auc(fpr, tpr)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span>
-         <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ROC curve (area = </span><span class="si">%0.2f</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">roc_auc</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Receiver operating characteristic example&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure()
+lw = 2
+plt.plot(fpr, tpr, color=&#39;darkorange&#39;,
+         lw=lw, label=&#39;ROC curve (area = %0.2f)&#39; % roc_auc)
+plt.plot([0, 1], [0, 1], color=&#39;navy&#39;, lw=lw, linestyle=&#39;--&#39;)
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel(&#39;False Positive Rate&#39;)
+plt.ylabel(&#39;True Positive Rate&#39;)
+plt.title(&#39;Receiver operating characteristic example&#39;)
+plt.legend(loc=&quot;lower right&quot;)
+plt.show()
 </pre></div>
 </div>
 <img alt="../_images/output_10_0.png" src="../_images/output_10_0.png" />
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;Logistic Regression&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset[&quot;Logistic Regression&quot;] = y_pred
 </pre></div>
 </div>
 </div>
@@ -136,23 +136,23 @@ Use tf.cast instead.</pre>
 <h2>8.3. Neural Networks<a class="headerlink" href="#neural-networks" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="adamax-optimizer">
 <h3>8.3.1. Adamax Optimizer<a class="headerlink" href="#adamax-optimizer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ypred</span> <span class="o">=</span> <span class="n">adamax</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ypred = adamax.predict(x).round()
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">encoded_Y</span><span class="p">,</span> <span class="n">ypred</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>confusion_matrix(encoded_Y, ypred)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mi">2512</span><span class="p">,</span>   <span class="mi">38</span><span class="p">],</span>
        <span class="p">[</span>  <span class="mi">60</span><span class="p">,</span>  <span class="mi">496</span><span class="p">]])</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">precision_score</span><span class="p">(</span><span class="n">encoded_Y</span><span class="p">,</span> <span class="n">ypred</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>precision_score(encoded_Y, ypred)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">0.9288389513108615</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">encoded_Y</span><span class="p">,</span> <span class="n">ypred</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(classification_report(encoded_Y, ypred))
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
@@ -165,46 +165,46 @@ Use tf.cast instead.</pre>
 <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.97</span>      <span class="mf">0.97</span>      <span class="mf">0.97</span>      <span class="mi">3106</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">encoded_Y</span><span class="p">,</span> <span class="n">ypred</span><span class="p">)</span>
-<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span>
-         <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ROC curve (area = </span><span class="si">%0.2f</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">roc_auc</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Receiver operating characteristic example&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fpr, tpr, _ = roc_curve(encoded_Y, ypred)
+roc_auc = auc(fpr, tpr)
+plt.figure()
+lw = 2
+plt.plot(fpr, tpr, color=&#39;darkorange&#39;,
+         lw=lw, label=&#39;ROC curve (area = %0.2f)&#39; % roc_auc)
+plt.plot([0, 1], [0, 1], color=&#39;navy&#39;, lw=lw, linestyle=&#39;--&#39;)
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel(&#39;False Positive Rate&#39;)
+plt.ylabel(&#39;True Positive Rate&#39;)
+plt.title(&#39;Receiver operating characteristic example&#39;)
+plt.legend(loc=&quot;lower right&quot;)
+plt.show()
 </pre></div>
 </div>
 <img alt="../_images/output_17_0.png" src="../_images/output_17_0.png" />
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;Adamax&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ypred</span> <span class="o">==</span> <span class="mi">1</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset[&quot;Adamax&quot;] = ypred == 1
 </pre></div>
 </div>
 </div>
 <div class="section" id="nadam-optimizer">
 <h3>8.3.2. Nadam Optimizer<a class="headerlink" href="#nadam-optimizer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ypred2</span> <span class="o">=</span> <span class="n">nadam</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ypred2 = nadam.predict(x).round()
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">encoded_Y</span><span class="p">,</span> <span class="n">ypred2</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>confusion_matrix(encoded_Y, ypred2)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mi">2526</span><span class="p">,</span>   <span class="mi">24</span><span class="p">],</span>
        <span class="p">[</span>  <span class="mi">69</span><span class="p">,</span>  <span class="mi">487</span><span class="p">]])</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">precision_score</span><span class="p">(</span><span class="n">encoded_Y</span><span class="p">,</span> <span class="n">ypred2</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>precision_score(encoded_Y, ypred2)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">0.9530332681017613</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">encoded_Y</span><span class="p">,</span> <span class="n">ypred2</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(classification_report(encoded_Y, ypred2))
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              <span class="n">precision</span>    <span class="n">recall</span>  <span class="n">f1</span><span class="o">-</span><span class="n">score</span>   <span class="n">support</span>
@@ -217,27 +217,27 @@ Use tf.cast instead.</pre>
 <span class="n">weighted</span> <span class="n">avg</span>       <span class="mf">0.97</span>      <span class="mf">0.97</span>      <span class="mf">0.97</span>      <span class="mi">3106</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">encoded_Y</span><span class="p">,</span> <span class="n">ypred</span><span class="p">)</span>
-<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span>
-         <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ROC curve (area = </span><span class="si">%0.2f</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">roc_auc</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Receiver operating characteristic example&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fpr, tpr, _ = roc_curve(encoded_Y, ypred)
+roc_auc = auc(fpr, tpr)
+plt.figure()
+lw = 2
+plt.plot(fpr, tpr, color=&#39;darkorange&#39;,
+         lw=lw, label=&#39;ROC curve (area = %0.2f)&#39; % roc_auc)
+plt.plot([0, 1], [0, 1], color=&#39;navy&#39;, lw=lw, linestyle=&#39;--&#39;)
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel(&#39;False Positive Rate&#39;)
+plt.ylabel(&#39;True Positive Rate&#39;)
+plt.title(&#39;Receiver operating characteristic example&#39;)
+plt.legend(loc=&quot;lower right&quot;)
+plt.show()
 </pre></div>
 </div>
 <img alt="../_images/output_24_0.png" src="../_images/output_24_0.png" />
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;Nadam&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ypred2</span> <span class="o">==</span> <span class="mi">1</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset[&quot;Nadam&quot;] = ypred2 == 1
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="s2">&quot;../models/predictions.pickle&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset.to_pickle(&quot;../models/predictions.pickle&quot;)
 </pre></div>
 </div>
 </div>

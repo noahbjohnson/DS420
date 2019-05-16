@@ -37,40 +37,40 @@
         
   <div class="section" id="impute-the-full-dataset">
 <h1>5. Impute The Full Dataset<a class="headerlink" href="#impute-the-full-dataset" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">fancyimpute</span> <span class="k">import</span> <span class="n">IterativeImputer</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from fancyimpute import IterativeImputer
+import pandas as pd
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Using</span> <span class="n">TensorFlow</span> <span class="n">backend</span><span class="o">.</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/clean_dataset.pickle&quot;</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;USDA Model&#39;</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;USDA Model&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = pd.read_pickle(&quot;../data/production/clean_dataset.pickle&quot;)
+model = df[&#39;USDA Model&#39;]
+df.drop(&#39;USDA Model&#39;, axis=&#39;columns&#39;, inplace=True)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">XY_incomplete</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">values</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>XY_incomplete = df.values
 
-<span class="n">XY_completed</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">435789</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="mi">345668</span><span class="p">,</span><span class="mi">43432546</span><span class="p">,</span><span class="mi">327256</span><span class="p">]:</span>
-    <span class="n">imputer</span> <span class="o">=</span> <span class="n">IterativeImputer</span><span class="p">(</span><span class="n">n_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sample_posterior</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">XY_completed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">imputer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">XY_incomplete</span><span class="p">))</span>
+XY_completed = []
+for i in [435789,36,345668,43432546,327256]:
+    imputer = IterativeImputer(n_iter=5, sample_posterior=True, random_state=i)
+    XY_completed.append(imputer.fit_transform(XY_incomplete))
 
-<span class="n">XY_completed_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">XY_completed</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">XY_completed_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">XY_completed</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+XY_completed_mean = np.mean(XY_completed, 0)
+XY_completed_std = np.std(XY_completed, 0)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">XY_completed_mean</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df.loc[:] = XY_completed_mean
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;USDA Model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df[&#39;USDA Model&#39;] = model
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="s2">&quot;../data/production/imputed_dataset.pickle&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df.to_pickle(&quot;../data/production/imputed_dataset.pickle&quot;)
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;../data/production/imputed_dataset.csv&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df.to_csv(&quot;../data/production/imputed_dataset.csv&quot;)
 </pre></div>
 </div>
 </div>
