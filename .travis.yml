@@ -6,8 +6,8 @@ python:
   - "3.7-dev"
 install:
   - sudo apt-get install pandoc
-  - make requirements
   - make data
+  - pip install Pandoc Sphinx nbsphinx 
 script:
   - make docs
 deploy:
